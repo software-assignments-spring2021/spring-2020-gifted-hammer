@@ -26,7 +26,7 @@ function Discover(props) {
                     {/* <input value={textValue} onChange={handleChange} type="text"></input> */}
                     <Input
                     inputType={"text"}
-                    title={"Search Artist or Track:"}
+                    title={"Find new Music:"}
                     placeholder={"Enter Song Name or Track Name"}
                     handleChange={handleChange}
                     />
