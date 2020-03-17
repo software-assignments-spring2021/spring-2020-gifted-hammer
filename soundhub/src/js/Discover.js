@@ -20,7 +20,6 @@ function Discover(props) {
 
     return (
         <div className='Discover'>
-            <AppHeader pageTitle='DISCOVER' />
             <div className="discoverBody">
                 <form className="searchForm" onSubmit={handleSubmit}>
                     {/* <input value={textValue} onChange={handleChange} type="text"></input> */}
@@ -31,6 +30,7 @@ function Discover(props) {
                     handleChange={handleChange}
                     />
                 </form>
+
                 {userSearched ? <Filters /> : null}
                 {userSearched ? <div className="tracks">
                     <Track artist="Michael Jackson" title="Bad" length="2:45"></Track>
@@ -62,10 +62,6 @@ function Discover(props) {
                 </div> : null}
 
             </div>
-
-
-            <AppFooter />
-
         </div>
     )
 }

@@ -15,6 +15,8 @@ function Filters(props) {
         e.persist();
         setSliderValues({ ...sliderValues, [e.target.id]: parseFloat(e.target.value) })
     }
+
+    
     return (
         <div className="Filters">
             <div className="filterSliderPair">

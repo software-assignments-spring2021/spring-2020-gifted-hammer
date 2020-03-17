@@ -24,6 +24,7 @@
     display: inline-block;
     width: 80%;
     height: auto;
+    max-height: 100%;
 }
 
 .buttonContainer {
@@ -35,4 +36,7 @@
 .spotifyButton {
     background: #1db954;
     height: 40%;
+}
+.divider{
+    width: 85%;
 }

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Discover from './js/Discover'
 import Analytics from './js/Analytics'
+import AppHeader from './js/AppHeader'
+import AppFooter from './js/AppFooter'
 
 import {
   BrowserRouter as Router,
@@ -11,20 +13,23 @@ import {
 } from "react-router-dom";
 
 function App() {
+  const [pageTitle, setPageTitle] = useState('DISCOVER');
+
   return (
     <Router>
       <Redirect from="/" to="/discover" />
-
       <div className="App">
         <Switch>
           <Route path="/discover">
+            <AppHeader key='header' pageTitle='DISCOVER' />
             <Discover />
           </Route>
           <Route path="/analytics">
+            <AppHeader key='header' pageTitle='ANALYTICS' />
             <Analytics />
           </Route>
         </Switch>
-
+        <AppFooter />
       </div>
 
     </Router>
