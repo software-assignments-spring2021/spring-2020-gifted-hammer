@@ -4,7 +4,8 @@ import {
     Link
 } from "react-router-dom";
 
-function AppFooter(props) {
+const AppFooter = (props) =>
+{
     return (
         <div className="AppFooter">
             <Link className="footerLink" to='/discover'>Discover</Link>
@@ -12,5 +13,4 @@ function AppFooter(props) {
         </div>
     )
 }
-
 export default AppFooter;

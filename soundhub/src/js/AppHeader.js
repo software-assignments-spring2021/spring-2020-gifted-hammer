@@ -3,7 +3,8 @@ import '../css/AppHeader.css'
 
 import logo from '../logo512.png';
 // import logo from '../logo.svg'
-function AppHeader(props) {
+let AppHeader = (props) =>
+{
     return (
         <div className="AppHeader">
             <div className='logoContainer'>
