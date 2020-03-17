@@ -1,0 +1,17 @@
+.AppFooter{
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    background: white;
+}
+
+.footerLink{
+    height: 100%;
+    border-style: solid;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}

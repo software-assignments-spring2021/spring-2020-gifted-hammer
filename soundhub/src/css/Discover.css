@@ -1,0 +1,27 @@
+.Discover{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    /* background: #123163; */
+    /* color: white; */
+}
+
+.searchForm{
+
+    padding: 0;
+    width: 85%;
+    height: 5vh;
+    margin: auto;
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+.searchForm > input{
+    padding: 0; 
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
