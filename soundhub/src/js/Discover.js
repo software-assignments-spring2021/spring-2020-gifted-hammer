@@ -55,6 +55,10 @@ function Discover(props) {
                     <Track artist="Michael Jackson" title="Bad" length="2:45"></Track>
                     <Track artist="Michael Jackson" title="Bad" length="2:45"></Track>
                     <Track artist="Michael Jackson" title="Bad" length="2:45"></Track>
+                    <Track artist="Michael Jackson" title="Bad" length="2:45"></Track>
+                    <Track artist="Michael Jackson" title="Bad" length="2:45"></Track>
+                    <Track artist="Michael Jackson" title="Bad" length="2:45"></Track>
+
                 </div> : null}
 
             </div>
