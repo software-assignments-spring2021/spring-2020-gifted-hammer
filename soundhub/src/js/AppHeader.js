@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/AppHeader.css'
 
-import logo from '../logo512.png';
+import logo from '../assets/logo512.png';
 function AppHeader(props) {
     return (
         <>

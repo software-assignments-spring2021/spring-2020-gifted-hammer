@@ -1,12 +1,12 @@
 import React from 'react';
-import album from '../album_cover.png'
+import album from '../assets/album_cover.png'
 import '../css/Track.css'
 
 function Track(props) {
     return (
         <div className='Track'>
             <div className="albumArtContainer">
-                <img className="albumArt" src={album} alt="album art"></img>
+                <img className="albumArt" src={props.art} alt="album art"></img>
             </div>
             <div className="trackTextInfo">
                 <div className="artistSong">
