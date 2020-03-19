@@ -14,7 +14,7 @@ function AppHeader(props) {
                 </div>
                 <h1 className='pageTitle'>{props.pageTitle}</h1>
             </div>
-            <hr className="divider"/>
+            {/* <hr className="divider"/> */}
         </>
     )
 }

@@ -13,6 +13,7 @@ function Discover(props) {
     const [userSearched, setUserSearched] = useState(false);
     const [textValue, setTextValue] = useState('Search Artist or Track');
     const [tracks, setTracks] = useState([]);
+    const [selectedTrack, setSelectedTrack] = useState(-1);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -46,11 +47,18 @@ function Discover(props) {
         setTextValue(e.target.value)
     }
 
+    const handleTrackClick = trackNum => {
+        if (trackNum == selectedTrack)
+            setSelectedTrack(-1);
+        else
+            setSelectedTrack(trackNum);
+    }
+
     const createTracks = () => {
         return (<div className='tracks'>
             {
                 tracks.map((track, index) => (
-                    <Track key={index} artist={track.artist} title={track.title} length={track.length} art={track.art} />
+                    <Track key={index} index={index} selected={(index == selectedTrack) ? true : false} handleTrackClick={handleTrackClick} artist={track.artist} title={track.title} length={track.length} art={track.art} />
                 ))
             }
 
@@ -69,7 +77,7 @@ function Discover(props) {
                     />
                 </form>
 
-                {userSearched ? <Filters /> : null}
+                <Filters />
                 {userSearched ? createTracks() : null}
 
             </div>

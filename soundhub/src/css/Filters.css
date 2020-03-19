@@ -4,16 +4,39 @@
     flex-wrap: wrap;
     width: 85%;
     margin: auto;
-    border-style: solid;
     padding: 10px;
+    margin-top: 10vh;
+    border-radius: 5px;
 }
 
+.Filters.visible{
+    border: solid white 1px;
+}
+
+.filterSliders{
+    width: 85vw;
+    height: 0px;
+    visibility: hidden;
+    transition: height 0.1s linear;
+
+}
+
+.filterSliders.visible{
+    visibility: visible;
+    width: 85vw;
+    height: 50vh;
+    transition: height 0.2s linear;
+
+}
+
+
 .filterSliderPair{
+    height: 0;
     display: flex;
     flex-direction: column;
     height: 8vh;
     margin: 0;
-    width: 50%;
+    width: 100%;
 }
 
 .filterSliderPair > p{
@@ -21,5 +44,12 @@
 }
 
 .filterSlider{
-    width: 85%;
+    width: 100%;
+}
+
+.filterButton{
+    margin-left: 0px;
+    display: block;
+    max-width: 7vh;
+    max-height: 50%;
 }
