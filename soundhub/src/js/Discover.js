@@ -14,10 +14,15 @@ function Discover(props) {
     const [textValue, setTextValue] = useState('Search Artist or Track');
     const [tracks, setTracks] = useState([]);
     const [selectedTrack, setSelectedTrack] = useState(-1);
+    const [parameterValues, setParameterValues] = useState({});
 
     const handleSubmit = e => {
         e.preventDefault();
         setUserSearched(true);
+        getTracks();
+    }
+
+    const getTracks = () => {        
         http.get('https://my.api.mockaroo.com/spotify.json?key=997893d0', res => {
             res.setEncoding('utf8');
             let rawData = '';
@@ -38,9 +43,7 @@ function Discover(props) {
         for (let i = 0; i < data.length; i++) {
             newTracks.push(data[i]);
         }
-        setTracks(newTracks);
-        console.log(newTracks[0].art);
-        
+        setTracks(newTracks);        
     }
 
     const handleChange = e => {
@@ -54,6 +57,11 @@ function Discover(props) {
             setSelectedTrack(trackNum);
     }
 
+    const sliderValueChanged = e =>{
+        setParameterValues({...parameterValues, [e.target.id]: e.target.value});
+        getTracks();
+    }
+
     const createTracks = () => {
         return (<div className='tracks'>
             {
@@ -61,7 +69,6 @@ function Discover(props) {
                     <Track key={index} index={index} selected={(index == selectedTrack) ? true : false} handleTrackClick={handleTrackClick} artist={track.artist} title={track.title} length={track.length} art={track.art} />
                 ))
             }
-
         </div>);
     }
 
@@ -77,7 +84,7 @@ function Discover(props) {
                     />
                 </form>
 
-                <Filters />
+                <Filters sliderValueChanged={sliderValueChanged}/>
                 {userSearched ? createTracks() : null}
 
             </div>

@@ -3,6 +3,7 @@ import '../css/Filters.css'
 import filterButton from '../assets/filters.svg'
 import { Slider, Handles, Tracks } from 'react-compound-slider'
 
+const filterNames = ['popularity', 'tempo', 'energy', 'danceable', 'vocals', 'mood'];
 function Filters(props) {
     const [sliderValues, setSliderValues] = useState({
         popularity: 50,
@@ -20,41 +21,33 @@ function Filters(props) {
         setSliderValues({ ...sliderValues, [e.target.id]: parseFloat(e.target.value) })
     }
 
+    let createSliders = () => {
+        return (
+            <div className={visible ? 'filterSliders visible' : 'filterSliders'}>
+                {
+                    filterNames.map((filter, index) => (
+                        <div className="filterSliderPair">
+                            <p>{filter}</p>
+                            <input className="filterSlider"
+                                id={filter}
+                                onChange={handleChange}
+                                onMouseUp={props.sliderValueChanged}
+                                onTouchEnd={props.sliderValueChanged}
+                                value={sliderValues[index]}
+                                type="range" min="1" max="100">
+                            </input>
+
+                        </div>
+                    ))
+                }
+            </div>
+        )
+    }
+
     return (
         <div className={visible ? 'Filters visible' : 'Filters'}>
             <img className='filterButton' src={filterButton} onClick={e => setVisible(!visible)} />
-            <div className={visible ? 'filterSliders visible' : 'filterSliders'}>
-                <div className="filterSliderPair">
-                    <p>popularity</p>
-                    <input className="filterSlider" id="popularity" onChange={handleChange} value={sliderValues['popularity']} type="range" min="1" max="100"></input>
-                </div>
-
-                <div className="filterSliderPair">
-                    <p>tempo</p>
-                    <input className="filterSlider" id="tempo" onChange={handleChange} value={sliderValues['tempo']} type="range" min="1" max="100"></input>
-                </div>
-
-                <div className="filterSliderPair">
-                    <p>energy</p>
-                    <input className="filterSlider" id="energy" onChange={handleChange} value={sliderValues['energy']} type="range" min="1" max="100"></input>
-                </div>
-
-                <div className="filterSliderPair">
-                    <p>danceable</p>
-                    <input className="filterSlider" id="danceable" onChange={handleChange} value={sliderValues['danceable']} type="range" min="1" max="100"></input>
-                </div>
-
-                <div className="filterSliderPair">
-                    <p>vocals</p>
-                    <input className="filterSlider" id="vocals" onChange={handleChange} value={sliderValues['vocals']} type="range" min="1" max="100"></input>
-                </div>
-
-                <div className="filterSliderPair">
-                    <p>mood</p>
-                    <input className="filterSlider" id="mood" onChange={handleChange} value={sliderValues['mood']} type="range" min="1" max="100"></input>
-                </div>
-            </div>
-
+            {createSliders()}
         </div>
     )
 }
