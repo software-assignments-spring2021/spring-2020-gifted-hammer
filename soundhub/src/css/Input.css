@@ -12,6 +12,8 @@ label {
 ::placeholder{
     color: #887cf5;
     font-family: Barlow,sans-serif;
+    font-weight: bold;
+    font-size: 15pt;
 }
 
 
