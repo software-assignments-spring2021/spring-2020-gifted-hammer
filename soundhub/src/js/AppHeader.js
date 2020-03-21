@@ -9,6 +9,7 @@ function AppHeader(props) {
             <div className="AppHeader">
                 <div className='logoContainer'>
                     <img className="logo" src={logo}></img>
+                    <p> SoundHub</p>
                 </div>
                 <div className="buttonContainer">
                     <a class= "spotify_container" href="https://www.spotify.com/us/">
