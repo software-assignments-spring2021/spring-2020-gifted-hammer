@@ -11,11 +11,13 @@
     box-shadow: 7px 7px 5px black;
     border-radius: 5px;
     
+    
 }
 .Track.selected{
     height: 20vh;
     color: black;
     transition: height 0.2s linear;
+    
 
 
 }
@@ -30,28 +32,60 @@
     margin-left: 10px;
 }
 
+
 .albumArtContainer {
+    width: 68px;
+    height: 68px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 10%;
+    flex-direction:row;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-right: 10px;
+    border-radius: 5px;
+    position: relative;
 }
 
 .albumArt {
     display: inline-block;
-    height: auto;
+    height: 80px;
+    width: 80px;
     max-height: 85%;
     max-width: 85%;
 }
 
 .trackTextInfo {
     width: 85%;
+    padding: 4px 6px 7px;
+    overflow: hidden;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-
-.length {
-    /* position: relative; */
-    /* right: 5px; */
+.title{
+    display: flex;
+    font-size: 20px;
+    color: rgb(238, 95, 95);
+    font-family: Barlow,sans-serif;
+    font-weight: 800;
 }
+.artist{
+    margin: 0;
+    padding: 0;
+    height: 20px;
+    display: block;
+    color: rgb(144, 102, 241);
+}
+
+.length{
+    font-size: 14px;
+    height: 25px;
+    color: rgb(82, 2, 102);
+    display: block;
+}
+
+
+
+/* .length {
+    position: relative; */
+    /* right: 5px;
+} */
