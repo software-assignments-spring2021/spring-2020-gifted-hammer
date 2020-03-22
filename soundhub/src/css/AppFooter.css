@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    background: black;
+    background: linear-gradient(328deg, rgb(87, 6, 6) 0%,  rgb(8, 13, 71) 100%)
     /* background: linear-gradient(180deg, rgba(253,253,253,1) 0%, rgba(201,201,203,1) 100%); */
     /*visibility: hidden;*/
 }

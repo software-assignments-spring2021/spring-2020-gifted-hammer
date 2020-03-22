@@ -3,7 +3,7 @@ html, body, #root, .App {
     height: 100%;
     margin: 0;
     overflow-x: hidden;
-    background: linear-gradient(328deg, rgba(194, 199, 255, 1) 0%, rgba(255, 131, 131, 1) 100%);
+    background: linear-gradient(328deg, rgb(78, 91, 233) 0%, rgb(236, 84, 84) 100%);
     font-family: 'Baloo Chettan 2', cursive;
     min-height: 100vh;
     color: white;
