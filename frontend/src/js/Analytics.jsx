@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import '../css/Analytics.css'
-import Filters from './Filters'
-import Track from './Track'
-import App from '../App';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, PieChart, Pie, Tooltip,
 } from 'recharts';

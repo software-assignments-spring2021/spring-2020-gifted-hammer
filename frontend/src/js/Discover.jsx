@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import '../css/Discover.css';
-import AppHeader from './AppHeader';
-import AppFooter from './AppFooter';
 import Filters from './Filters';
 import Track from './Track';
 import Input from "./Input";
