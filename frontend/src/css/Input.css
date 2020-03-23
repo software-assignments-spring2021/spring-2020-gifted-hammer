@@ -7,19 +7,18 @@ label {
     font-size: 40px;
     line-height: 50px;
     font-weight: 600;
-
 }
-::placeholder{
+
+::placeholder {
     color: rgb(196, 190, 233);
-    font-family: Barlow,sans-serif;
+    font-family: Barlow, sans-serif;
     font-weight: bold;
     font-size: 16pt;
 }
 
-
-input{
+input {
     color: #b4adf0;
-    font-family: Barlow,sans-serif;
+    font-family: Barlow, sans-serif;
     font-size: 18px;
     background: rgba(0, 0, 0, 0);
     border-style: none;
@@ -29,8 +28,11 @@ input{
     border-width: 1px;
 }
 
-.input{
+.input {
     display: flex;
     flex-direction: row;
 }
 
+.fileChooser::-webkit-file-upload-button {
+    visibility: hidden;
+}
