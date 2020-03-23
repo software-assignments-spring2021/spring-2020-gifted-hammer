@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import Discover from './js/Discover.jsx'
 import Analytics from './js/Analytics.jsx'
@@ -13,8 +13,6 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const [pageTitle, setPageTitle] = useState('DISCOVER');
-
   return (
     <Router>
       <Redirect from="/" to="/discover" />

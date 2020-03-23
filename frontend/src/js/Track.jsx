@@ -1,5 +1,4 @@
 import React from 'react';
-import album from '../assets/album_cover.png'
 import '../css/Track.css'
 
 function Track(props) {
