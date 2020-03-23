@@ -4,45 +4,79 @@ import Filters from './Filters'
 import Track from './Track'
 import App from '../App';
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, PieChart, Pie, Tooltip,
 } from 'recharts';
 
 let Analytics = (props) => {
     return (
         <div className="analytics">
-            <div className='section overview'>
-                <div className="overviewOne">
-                    <Metric value="10,123" descriptor="minutes of music"></Metric>
+            <div className='section'>
+                <SectionHeading name="This month you listened to..."></SectionHeading>
+                <div className='overview'>
+                    <div className="overviewOne">
+                        <BigMetric value="10,123" descriptor="Minutes of music"></BigMetric>
+                    </div>
+                    <div className="overviewTwo">
+                        <Metric value="17" descriptor="Albums"></Metric>
+                        <Metric value="200" descriptor="Artists"></Metric>
+                        <Metric value="400" descriptor="Songs"></Metric>
+                    </div>
                 </div>
-                <div className="overviewTwo">
-                    <Metric value="17" descriptor="Albums"></Metric>
-                    <Metric value="200" descriptor="Artists"></Metric>
-                    <Metric value="400" descriptor="Songs"></Metric>
+            </div>
+            <div className='section'>
+                <SectionHeading name="Favorite generes"></SectionHeading>
+                <div className='genres'>
+                    <Genere name="Rock"></Genere>
+                    <Genere name="Pop"></Genere>
+                    <Genere name="Metal"></Genere>
                 </div>
             </div>
-            <div className='section genres'>
-                <Genere name="rock"></Genere>
-                <Genere name="pop"></Genere>
-                <Genere name="metal"></Genere>
-            </div>
-            <div className='section topSong'>
-                <div className="topSongOne">
-                    <Metric value="Thriller" descriptor="Michael Jackson"></Metric>
-                    <p>You listened 500 times!</p>
+            <div className='section'>
+                <SectionHeading name='Top song'></SectionHeading>
+                <div className='topSong'>
+                    <div className="topSongOne">
+                        <Metric value="Thriller" descriptor="Michael Jackson"></Metric>
+                        <p>You listened 500 times!</p>
+                    </div>
+                    <div className="topImg"></div>
                 </div>
-                <div className="topImg"></div>
             </div>
-            <div className='section mood'>
-                <MoodChart></MoodChart>
+            <div className='section'>
+                <SectionHeading name='Average track mood'></SectionHeading>
+                <div className='moodChart'>
+                    <MoodChart></MoodChart>
+                </div>
             </div>
+            <div className='section'>
+                <SectionHeading name='Your genere breakdown'></SectionHeading>
+                <div className='sectionBody genereChart'>
+                    <GenereChart></GenereChart>
+                </div>
+            </div>
+        </div>
+    )
+}
+let SectionHeading = (props) => {
+    return (
+        <div>
+            <h2 className="sectionTitle">{props.name}</h2>
         </div>
     )
 }
 let Metric = (props) => {
     return (
-        <div className="metric">
+        <div className="bigMetric">
             <h3>{props.value}</h3>
             <h4>{props.descriptor}</h4>
+        </div>
+    )
+}
+
+let BigMetric = (props) => {
+    return (
+        <div className="bigMetric">
+            <h2>{props.value}</h2>
+            <h3>{props.descriptor}</h3>
         </div>
     )
 }
@@ -95,4 +129,19 @@ let MoodChart = (props) => {
         </LineChart>
     )
 }
+let GenereChart = (props) => {
+    const data01 = [{ name: 'Group A', value: 2400 }, { name: 'Group B', value: 4567 },
+    { name: 'Group C', value: 1398 }, { name: 'Group D', value: 9800 },
+    { name: 'Group E', value: 3908 }, { name: 'Group F', value: 4800 }];
+
+
+    return (
+        <PieChart width={400} height={400}>
+            <Pie dataKey="value" isAnimationActive={false} data={data01} cx={200} cy={200} outerRadius={80} fill="#8884d8" label="name" />
+            <Tooltip />
+        </PieChart>
+    )
+
+}
+
 export default Analytics
