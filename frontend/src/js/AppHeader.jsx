@@ -12,7 +12,7 @@ function AppHeader(props) {
                     <p> SoundHub</p>
                 </div>
                 <div className="buttonContainer">
-                    <a class= "spotify_container" href="https://www.spotify.com/us/">
+                    <a className="spotify_container" href="https://www.spotify.com/us/">
                         <img alt="Spotify_logo" src = {spotify}></img>
                         <span className="spotifyButton">Connect to Spotify</span>
                     </a>

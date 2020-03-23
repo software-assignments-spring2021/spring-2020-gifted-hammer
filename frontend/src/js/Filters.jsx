@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../css/Filters.css'
 import filterButton from '../assets/filters.svg'
-import { Slider, Handles, Tracks } from 'react-compound-slider'
 
 const filterNames = ['popularity', 'tempo', 'energy', 'danceable', 'vocals', 'mood'];
 function Filters(props) {
@@ -26,7 +25,8 @@ function Filters(props) {
             <div className={visible ? 'filterSliders visible' : 'filterSliders'}>
                 {
                     filterNames.map((filter, index) => (
-                        <div className="filterSliderPair">
+                        <div className="filterSliderPair"  key={filter}>
+                           
                             <p>{filter}</p>
                             <input className="filterSlider"
                                 id={filter}

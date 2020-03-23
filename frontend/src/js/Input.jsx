@@ -6,7 +6,7 @@ const Input = props => {
   //console.log(props.value);
   return (
     <div className="form-group">
-      <label for={props.title} className="form-label">
+      <label className="form-label">
         {props.title}
       </label>
       <div className='input'>
@@ -16,7 +16,6 @@ const Input = props => {
           value={props.value}
           onChange={props.handleChange}
           placeholder={props.placeholder}
-          {...props}
         />
       </div>
     </div>

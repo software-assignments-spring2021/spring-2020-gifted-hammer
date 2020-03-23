@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
-import Discover from './js/Discover'
-import Analytics from './js/Analytics'
-import AppHeader from './js/AppHeader'
-import AppFooter from './js/AppFooter'
+import Discover from './js/Discover.jsx'
+import Analytics from './js/Analytics.jsx'
+import AppHeader from './js/AppHeader.jsx'
+import AppFooter from './js/AppFooter.jsx'
 
 import {
   BrowserRouter as Router,
