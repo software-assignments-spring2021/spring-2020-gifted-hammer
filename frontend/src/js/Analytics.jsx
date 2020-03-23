@@ -1,16 +1,31 @@
 import React from 'react';
 import '../css/Analytics.css'
 import {
-    LineChart, Line, XAxis, YAxis, Tooltip, Legend,
+    LineChart, Line, XAxis, YAxis, Tooltip, Legend, PieChart, Pie
 } from 'recharts';
+import { useState, useEffect } from 'react';
 let Analytics = (props) => {
+
+    const [data, setData] = useState({})
+    const [hasError, setErrors] = useState(false);
+    async function fetchData() {
+        const res = await fetch("https://my.api.mockaroo.com/analytics.json?key=e5acc930");
+        res
+            .json()
+            .then(res => setData(res))
+            .catch(err => setErrors(err));
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
     return (
         <div className="analytics">
             <div className='section'>
                 <SectionHeading name="This month you listened to..."></SectionHeading>
                 <div className='overview'>
                     <div className="overviewOne">
-                        <BigMetric value="10,123" descriptor="Minutes of music"></BigMetric>
+                        <BigMetric value='1005' descriptor="Minutes of music"></BigMetric>
                     </div>
                     <div className="overviewTwo">
                         <Metric value="17" descriptor="Albums"></Metric>
@@ -87,25 +102,25 @@ let Genere = (props) => {
 let MoodChart = (props) => {
     const data = [
         {
-            name: 'Jan', uv: 4000, moodScore: 2400, amt: 2400,
+            name: 'Jan', avgMoodScore: 25,
         },
         {
-            name: 'Feb', uv: 3000, moodScore: 1398, amt: 2210,
+            name: 'Feb', avgMoodScore: 91,
         },
         {
-            name: 'March', uv: 2000, moodScore: 9800, amt: 2290,
+            name: 'Mar', avgMoodScore: 70,
         },
         {
-            name: 'April', uv: 2780, moodScore: 3908, amt: 2000,
+            name: 'Apr', avgMoodScore: 27,
         },
         {
-            name: 'May', uv: 1890, moodScore: 4800, amt: 2181,
+            name: 'May', avgMoodScore: 33,
         },
         {
-            name: 'June', uv: 2390, moodScore: 3800, amt: 2500,
+            name: 'Jun', avgMoodScore: 65,
         },
         {
-            name: 'July', uv: 3490, moodScore: 4300, amt: 2100,
+            name: 'Jul', avgMoodScore: 70,
         },
     ];
     return (
@@ -114,26 +129,29 @@ let MoodChart = (props) => {
             height={200}
             data={data}
             margin={{
-                top: 20, right: 30, left: 20, bottom: 5,
+                top: 20, right: 30, left: 0, bottom: 5,
             }}
         >
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="moodScore" stroke="#8884d8" activeDot={{ r: 8 }} />
+            <Line type="monotone" dataKey="avgMoodScore" stroke="#8884d8" activeDot={{ r: 8 }} />
         </LineChart>
     )
 }
 let GenereChart = (props) => {
-    const data01 = [{ name: 'Group A', value: 2400 }, { name: 'Group B', value: 4567 },
-    { name: 'Group C', value: 1398 }, { name: 'Group D', value: 9800 },
-    { name: 'Group E', value: 3908 }, { name: 'Group F', value: 4800 }];
+    const data01 = [
+        { name: 'Rock', value: 25 }, { name: 'Metal', value: 30 },
+        { name: 'Pop', value: 35 }, { name: 'Lo-Fi', value: 10 }
+    ];
 
 
     return (
-        <PieChart width={400} height={400}>
-            <Pie dataKey="value" isAnimationActive={false} data={data01} cx={200} cy={200} outerRadius={80} fill="#8884d8" label="name" />
+        <PieChart width={800} height={400}
+            margin={{
+                top: 0, right: 40, left: 20, bottom: 0,
+            }}>
+            <Pie dataKey='value' data={data01} cx={400} cy={200} innerRadius={40} outerRadius={80} fill="#8884d8" />
             <Tooltip />
         </PieChart>
     )
