@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../css/Analytics.css'
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, PieChart, Pie, Tooltip,
+    LineChart, Line, XAxis, YAxis, Tooltip, Legend,
 } from 'recharts';
-
 let Analytics = (props) => {
     return (
         <div className="analytics">

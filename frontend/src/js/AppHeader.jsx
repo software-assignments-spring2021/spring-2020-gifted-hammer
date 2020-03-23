@@ -8,7 +8,7 @@ function AppHeader(props) {
         <>
             <div className="AppHeader">
                 <div className='logoContainer'>
-                    <img className="logo" src={logo}></img>
+                    <img className="logo" src={logo} alt="logo"></img>
                     <p> Spotilytics</p>
                 </div>
                 <div className="buttonContainer">

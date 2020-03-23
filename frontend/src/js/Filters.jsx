@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../css/Filters.css'
 import filterButton from '../assets/filters.svg'
 
@@ -25,7 +25,7 @@ function Filters(props) {
             <div className={visible ? 'filterSliders visible' : 'filterSliders'}>
                 {
                     filterNames.map((filter, index) => (
-                        <div className="filterSliderPair"  key={filter}>
+                        <div className="filterSliderPair" key={filter}>
                            
                             <p>{filter}</p>
                             <input className="filterSlider"
@@ -46,8 +46,10 @@ function Filters(props) {
 
     return (
         <div className={visible ? 'Filters visible' : 'Filters'}>
-            <img className='filterButton' src={filterButton} onClick={e => setVisible(!visible)} />
+            <img className='filterButton' src={filterButton} onClick={e => setVisible(!visible)} alt='filter-sliders'/>
             {createSliders()}
+            select photo for mood detection<input className='fileChooser' type="file" accept="image/*" capture="camera"></input>
+
         </div>
     )
 }
