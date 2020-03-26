@@ -1,7 +1,9 @@
 import React from 'react';
 import './App.css';
-import Discover from './js/Discover'
-import Analytics from './js/Analytics'
+import Discover from './js/Discover.jsx'
+import Analytics from './js/Analytics.jsx'
+import AppHeader from './js/AppHeader.jsx'
+import AppFooter from './js/AppFooter.jsx'
 
 import {
   BrowserRouter as Router,
@@ -14,17 +16,18 @@ function App() {
   return (
     <Router>
       <Redirect from="/" to="/discover" />
-
       <div className="App">
         <Switch>
           <Route path="/discover">
+            <AppHeader key='header' pageTitle='DISCOVER' />
             <Discover />
           </Route>
           <Route path="/analytics">
+            <AppHeader key='header' pageTitle='ANALYTICS' />
             <Analytics />
           </Route>
         </Switch>
-
+        <AppFooter />
       </div>
 
     </Router>

@@ -5,6 +5,8 @@
     width: 100%;
     height: 100%;
     /* background: #123163; */
+    font-family: 'Baloo Chettan 2', cursive;
+
     /* color: white; */
 }
 
@@ -19,7 +21,6 @@
 
 
 .searchForm{
-
     padding: 0;
     width: 85%;
     height: 5vh;
@@ -42,3 +43,6 @@
     margin: 0;
 }
 
+.tracks:last-child{
+    margin-bottom: 15vh;
+}

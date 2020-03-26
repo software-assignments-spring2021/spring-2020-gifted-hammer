@@ -1,0 +1,92 @@
+.analytics{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 150%;
+    margin-top: 50px;
+}
+.section{
+    border: solid;
+    margin-bottom: 50px;
+    background: linear-gradient(43deg, rgba(194, 199, 255, 1) 10%, rgba(255, 131, 131, 1) 100%);
+    border-radius: 5px;
+    border-color: rgb(87, 100, 238);
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    
+}
+.sectionTitle{
+    margin:0px;
+    margin-top: 5px;
+    margin-left: 5px;
+    
+}
+.overview{
+    display: flex;
+    flex-direction: column;
+}
+.metric,.bigMetric{
+    margin-right: 25px;
+    margin-left: 25px;
+    text-align: center;
+    color: rgb(114, 123, 228);
+}
+
+.overviewcOne{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40pt;
+}
+.overviewTwo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.genres{
+    color: rgb(114, 123, 228);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+}
+.genere{
+    text-align: center;  
+    margin-right: 13px;
+    margin-left: 13px;
+    margin-bottom: 25px;
+}
+.genereImg{
+    height: 100px;
+    width: 100px;
+    border: solid rgb(46, 59, 201);
+}
+.topSong{
+    display: flex;
+    color: rgb(139, 148, 250);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.topSongOne{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-right: 10px;
+}
+.topImg{
+    border:solid rgb(78, 91, 233);
+    height: 130px;
+    width: 130px;
+}
+.moodChart, .genereChart{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

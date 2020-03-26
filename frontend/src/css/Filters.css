@@ -1,0 +1,87 @@
+.Filters{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 85%;
+    margin: auto;
+    padding: 10px;
+    margin-top: 10vh;
+    border-radius: 5px;
+}
+
+.Filters.visible{
+    border: solid white 1px;
+}
+
+.filterSliders{
+    width: 85vw;
+    height: 0px;
+    visibility: hidden;
+    transition: height 0.1s linear;
+
+}
+
+.filterSliders.visible{
+    visibility: visible;
+    width: 85vw;
+    height: 50vh;
+    transition: height 0.2s linear;
+
+}
+
+
+.filterSliderPair{
+    height: 0;
+    display: flex;
+    flex-direction: column;
+    height: 8vh;
+    margin: 0;
+    width: 100%;
+}
+
+.filterSliderPair > p{
+    margin: 0;
+}
+
+.filterSlider{
+    margin-top: 3vh;
+    width: 100%;
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 1px;
+    background: white; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+  
+}
+
+.filterSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%; 
+    background:white;
+    cursor: pointer;
+    border: none;
+
+  }
+  
+  .filterSlider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    border: none;
+  }
+
+  .filterButton{
+    margin-left: 0px;
+    display: block;
+    max-width: 7vh;
+    max-height: 50%;
+}
