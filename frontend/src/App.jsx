@@ -18,11 +18,17 @@ function App() {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
+
+    fetch('/token')
+    .then(response => response.json())
+    .then(data => setToken(data.token));
+  }, []);   
+
+  useEffect(() => {
     let _token = hash.access_token;
     if (_token) {
       setToken(_token);
-      console.log(token);
-          
+      console.log(token);  
     }      
   }, [token]);   
   

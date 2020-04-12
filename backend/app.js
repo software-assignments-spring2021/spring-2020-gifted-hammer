@@ -1,10 +1,9 @@
 // import and instantiate express
 const express = require("express"); // CommonJS import style!
 const app = express(); // instantiate an Express object
-// we will put some server logic here later...
-// export the express app we created to make it available to other modules
 const http = require('http')
 const https = require('https');
+const querystring = require('querystring');
 
 const bodyParser = require("body-parser");
 const recEndPoint = 'https://api.spotify.com/v1/recommendations?';
@@ -12,13 +11,11 @@ const searchEndPoint = 'https://api.spotify.com/v1/search?'
 
 app.use(bodyParser.json()); // decode JSON-formatted incoming POST data
 
-app.get("/", (req, res) => {
-    res.send("Hello!");
-});
-
-app.post("/test", (req, res) => {
-    console.log(req.body);
-    res.send({ test: 'ok' });
+app.get('/token', async (req, res) => {
+    console.log('receieved');
+    const token = await getBasicToken();
+    
+    res.send({token: token});
 });
 
 app.post("/search", async (req, res) => {
@@ -30,6 +27,44 @@ app.post("/search", async (req, res) => {
     console.log(recs);
     res.send(recs);
 })
+
+const getBasicToken = () => {
+    return new Promise(resolve => {
+        var postData = querystring.stringify({
+            'grant_type': 'client_credentials'
+        });
+    
+        let buf = new Buffer(new Buffer('3a0ca7b16e144325b0d16335076aae72:f7fd31efae414382bf0e053678a16a31'));
+        let base64 = buf.toString('base64');
+        var options = {
+            method: 'POST',
+            headers: {
+                'Authorization':'Basic ' + base64,
+                'Content-Type': 'application/x-www-form-urlencoded',
+    
+            }
+        };
+    
+        var tokenReq = https.request('https://accounts.spotify.com/api/token', options, (res) => {
+            console.log('statusCode:', res.statusCode);
+            console.log('headers:', res.headers);
+    
+            res.on('data', (d) => {
+                process.stdout.write(d);
+                const parsedData = JSON.parse(d);
+                resolve(parsedData.access_token);
+            });
+        });
+    
+        tokenReq.on('error', (e) => {
+            console.error(e);
+        });
+    
+        tokenReq.write(postData);
+        tokenReq.end();
+    
+    })
+}
 
 const getArtistId = (token, name) => {
     return new Promise(resolve => {
@@ -43,7 +78,7 @@ const getArtistId = (token, name) => {
                 try {
                     const parsedData = JSON.parse(rawData);
                     console.log(parsedData);
-                    
+
                     const id = parsedData.artists.items[0].id;
                     resolve(id);
 
@@ -60,17 +95,17 @@ const getArtistId = (token, name) => {
 }
 
 const getRecs = (token, artistId, params) => {
-    
+
     return new Promise(resolve => {
 
         const seedArtists = 'seed_artists=' + artistId;
-        const filters = 
-        '&min_popularity=' + params.popularity * 100 + 
-        '&min_tempo=' + params.tempo * 200 + 
-        '&min_energy=' + params.energy + 
-        '&min_danceability=' + params.danceability +
-        '&min_vocals=' + params.vocals +
-        '&min_liveness=' + params.mood;
+        const filters =
+            '&min_popularity=' + params.popularity * 100 +
+            '&min_tempo=' + params.tempo * 200 +
+            '&min_energy=' + params.energy +
+            '&min_danceability=' + params.danceability +
+            '&min_vocals=' + params.vocals +
+            '&min_liveness=' + params.mood;
         const request = recEndPoint + seedArtists;
         // console.log(request);
 
