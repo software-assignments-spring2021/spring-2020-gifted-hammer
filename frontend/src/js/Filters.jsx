@@ -13,11 +13,34 @@ function Filters(props) {
         mood: .5
     })
 
+    const [faceImage, setFaceImage] = useState(null);
+
     const [visible, setVisible] = useState(false);
 
+    const handleSubmit = e => {
+        const formData = new FormData()
+        formData.append('face', faceImage)
+      
+        e.preventDefault();
+        const requestOptions = {
+            method: 'POST',
+            body: formData
+        }
+        fetch('/face', requestOptions)
+        .then(response => response.json())
+        .then(data => console.log(data));
+    
+
+    }
     let handleChange = e => {
         e.persist();
         setSliderValues({ ...sliderValues, [e.target.id]: parseFloat(e.target.value) })
+    }
+
+    const handleImageUpload = e => {
+        console.log(e.target.files);
+        setFaceImage(e.target.files[0]);
+
     }
 
     let createSliders = () => {
@@ -51,7 +74,11 @@ function Filters(props) {
         <div className={visible ? 'Filters visible' : 'Filters'}>
             <img className='filterButton' src={filterButton} onClick={e => setVisible(!visible)} alt='filter-sliders'/>
             {createSliders()}
-            select photo for mood detection<input className='fileChooser' type="file" accept="image/*" capture="camera"></input>
+            <form onSubmit={handleSubmit}>
+                select photo for mood detection<input onChange={handleImageUpload} name='face' className='fileChooser' type="file" capture="camera"></input>
+                <input type='submit' value='Upload' ></input>
+            </form>
+
 
         </div>
     )
