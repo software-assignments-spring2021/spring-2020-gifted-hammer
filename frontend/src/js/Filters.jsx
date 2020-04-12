@@ -5,12 +5,12 @@ import filterButton from '../assets/filters.svg'
 const filterNames = ['popularity', 'tempo', 'energy', 'danceable', 'vocals', 'mood'];
 function Filters(props) {
     const [sliderValues, setSliderValues] = useState({
-        popularity: 50,
-        tempo: 50,
-        energy: 50,
-        danceable: 50,
-        vocals: 50,
-        mood: 50
+        popularity: .5,
+        tempo: .5,
+        energy: .5,
+        danceable: .5,
+        vocals: .5,
+        mood: .5
     })
 
     const [visible, setVisible] = useState(false);
@@ -34,7 +34,10 @@ function Filters(props) {
                                 onMouseUp={props.sliderValueChanged}
                                 onTouchEnd={props.sliderValueChanged}
                                 value={sliderValues[index]}
-                                type="range" min="1" max="100">
+                                type="range" min="0" max="1"
+                                step=".01"
+                                >
+                                
                             </input>
 
                         </div>

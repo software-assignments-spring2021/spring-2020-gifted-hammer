@@ -3,16 +3,30 @@ import '../css/Discover.css';
 import Filters from './Filters';
 import Track from './Track';
 import Input from "./Input";
-let http = require('http');
-
-const numTracks = 20;
+// const filterNames = ['popularity', 'tempo', 'energy', 'danceable', 'vocals', 'mood'];
 
 function Discover(props) {
     const [userSearched, setUserSearched] = useState(false);
     const [textValue, setTextValue] = useState('Search Artist or Track');
     const [tracks, setTracks] = useState([]);
     const [selectedTrack, setSelectedTrack] = useState(-1);
-    const [parameterValues, setParameterValues] = useState({});
+    const [audioPlayer] = useState(new Audio());
+
+    const [parameterValues, setParameterValues] = useState({
+        popularity: 0,
+        tempo: 0,
+        energy: 0,
+        danceable: 0,
+        vocals: 0,
+        mood: 0
+    });
+
+    const millisToMinutesAndSeconds = millis => {
+        var minutes = Math.floor(millis / 60000);
+        var seconds = ((millis % 60000) / 1000).toFixed(0);
+        return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+    }
+      
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -20,28 +34,43 @@ function Discover(props) {
         getTracks();
     }
 
-    const getTracks = () => {        
-        http.get('https://my.api.mockaroo.com/spotify.json?key=997893d0', res => {
-            res.setEncoding('utf8');
-            let rawData = '';
-            res.on('data', (chunk) => { rawData += chunk; });
-            res.on('end', () => {
-                try {
-                    const parsedData = JSON.parse(rawData);
-                    processData(parsedData);
-                } catch (e) {
-                    console.error(e.message);
-                }
-            });
-        })
+    const getTracks = () => {    
+        const token = props.token;        
+        let data = {
+            token: token,
+            artist: textValue,
+            filters: parameterValues
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+
+        fetch('/search', requestOptions)
+        .then(response => response.json())
+        .then(data => processData(data));
     }
 
     const processData = data => {
+        console.log(data);
+        
         let newTracks = []
         for (let i = 0; i < data.length; i++) {
-            newTracks.push(data[i]);
+            let newTrack = {};
+            newTrack.artist = data[i].artists[0].name;
+            newTrack.name = data[i].name;
+            newTrack.duration = millisToMinutesAndSeconds(data[i].duration_ms);
+            newTrack.art = data[i].album.images[0].url;
+            newTrack.audio = data[i].preview_url;
+
+            newTracks.push(newTrack);
+
         }
-        setTracks(newTracks);        
+        console.log(newTracks);
+        setTracks(newTracks);  
+
     }
 
     const handleChange = e => {
@@ -49,10 +78,24 @@ function Discover(props) {
     }
 
     const handleTrackClick = trackNum => {
-        if (trackNum == selectedTrack)
+        if (trackNum === selectedTrack)
+        {
+            audioPlayer.pause();
             setSelectedTrack(-1);
+        }   
         else
+        {
+            const newSource = tracks[trackNum].audio;
+            if (newSource === null)
+                audioPlayer.pause();
+            else
+            {
+                audioPlayer.src = newSource
+                audioPlayer.play()
+            }
+              
             setSelectedTrack(trackNum);
+        }
     }
 
     const sliderValueChanged = e =>{
@@ -64,7 +107,16 @@ function Discover(props) {
         return (<div className='tracks'>
             {
                 tracks.map((track, index) => (
-                    <Track key={index} index={index} selected={(index == selectedTrack) ? true : false} handleTrackClick={handleTrackClick} artist={track.artist} title={track.title} length={track.length} art={track.art} />
+                    <Track 
+                    key={index} 
+                    index={index} 
+                    selected={(index === selectedTrack) ? true : false} 
+                    handleTrackClick={handleTrackClick} 
+                    artist={track.artist} 
+                    name={track.name} 
+                    duration={track.duration} 
+                    art={track.art} 
+                    audio={track.audio}/>
                 ))
             }
         </div>);
