@@ -22,9 +22,7 @@ var upload = multer({ storage: storage });
 app.use(bodyParser.json()); // decode JSON-formatted incoming POST data
 
 app.get('/token', async (req, res) => {
-    console.log('receieved');
     const token = await getBasicToken();
-
     res.send({ token: token });
 });
 
@@ -96,8 +94,6 @@ const getArtistId = (token, name) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData);
-
                     const id = parsedData.artists.items[0].id;
                     resolve(id);
 
@@ -124,7 +120,7 @@ const getRecs = (token, artistId, params) => {
             '&min_energy=' + params.energy +
             '&min_danceability=' + params.danceability +
             '&min_vocals=' + params.vocals +
-            '&min_liveness=' + params.mood;
+            '&min_valence=' + params.mood;
         const request = recEndPoint + seedArtists;
         // console.log(request);
 
@@ -155,7 +151,7 @@ const processFace = (path) => {
 
         process.stdout.on('data', function (data) {
             console.log(data.toString());
-            resolve({ emotion: data.toString() });
+            resolve({ emotion: data.toString().trim() });
 
         })
     })

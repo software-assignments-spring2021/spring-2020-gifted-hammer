@@ -22,7 +22,6 @@ function Track(props) {
                     </div>
                 </div>
             </div>
-            {/* <hr /> */}
         </>)
 }
 
