@@ -10,6 +10,7 @@ const recEndPoint = 'https://api.spotify.com/v1/recommendations?';
 const searchEndPoint = 'https://api.spotify.com/v1/search?'
 const monthlyEndPointArtist = 'https://api.spotify.com/v1/me/top/artists?'
 const monthlyEndPointTrack = 'https://api.spotify.com/v1/me/top/tracks?'
+const trackMood = 'https://api.spotify.com/v1/audio-features/'
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -43,7 +44,7 @@ app.post("/search", async (req, res) => {
 
 // monthly statistics - artist
 app.post('/monthlyArtist', async(req,res) =>{
-    const userToken = req.body.tioken;
+    const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "3";
     const monthlyArtist = await getMonthlyArtist(userToken, timeRange, limit);
@@ -51,16 +52,29 @@ app.post('/monthlyArtist', async(req,res) =>{
 })
 // monthly statistics - track
 app.post('/monthlyTrack', async(req,res) =>{
-    const userToken = req.body.tioken;
-    const monthlyArtist = await getMonthlyArtist(userToken, timeRange, limit);
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "3";
+    const monthlyTrack = await getMonthlyTrack(userToken, timeRange, limit);
     res.send(monthlyTrack);
+})
+// monthly statistics - average mood
+app.post('/averageMood', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "50";
+    const allMonthlyTracks = await getMonthlyTrack(userToken, timeRange, limit);
+    const trackIDs = allMonthlyTracks.map(data => data.id);
+    //console.log(trackIDs);
+    const trackMoods = await Promise.all(trackIDs.map(async (data) => await getTrackMood(data, userToken)));
+    res.send(trackMoods);
 })
 
 // Facial Recognition
 
 app.post('/face', upload.single('face'), async (req, res) => {
     try {
-        console.log('recieved face image')
+        console.log('received face image')
         const emotion = await processFace(req.file.path);
         console.log('emotion: ', emotion);
 
@@ -69,8 +83,6 @@ app.post('/face', upload.single('face'), async (req, res) => {
         res.send(400);
     }
 });
-
-
 
 // get token
 
@@ -183,7 +195,7 @@ const getRecs = (token, artistId, params) => {
 const getMonthlyArtist = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
         let search = monthlyEndPointArtist + 'time_range=' + timeRange + '&limit=' + limit
-        https.get(request,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -201,10 +213,10 @@ const getMonthlyArtist = (userToken, timeRange, limit) => {
     })
 }
 
-const getMonthlyTrack = (userToken) => {
+const getMonthlyTrack = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
         let search = monthlyEndPointTrack + 'time_range=' + timeRange + '&limit=' + limit
-        https.get(request,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -212,6 +224,28 @@ const getMonthlyTrack = (userToken) => {
                 try {
                     const parsedData = JSON.parse(rawData);
                     resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+const getTrackMood = (trackID, userToken) => {
+    return new Promise(resolve => {
+        let search = trackMood + trackID
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    //console.log(parsedData);
+                    resolve(parsedData.valence);
                 } catch (e) {
                     console.error(e.message);
                 }
