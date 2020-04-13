@@ -36,7 +36,7 @@ app.get('/api/getTracks/:uri', async (req, res) => {
 
 app.get('/api/getNearbyInfo/:location', async (req, res) => {
     let location = req.params.location
-    let token = 'BQBzRDjxnTJWRgAq5wC_Dt9WMfSq0Yan5ECS-YnNZEiVrlPipiQQeowKeAz6wr8ob42AY_dmFvm_NQehFec'
+    let token = 'BQDfmkyLY8JVPrIX32gYGbn6dAY9hORMH_duBgOsrNXckrtjEedMqrN9xGv30eGqBcGXSkTFI1xnRt14NK0'
     try {
         let locationResp = await spotify.getLocationID(location)
         let artistsResp = await spotify.getNearbyArtists(locationResp, token)
