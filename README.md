@@ -21,3 +21,14 @@ https://invis.io/M6W6PEZ7D93
 
 ## Contributing
 If you would like to contribute to this project please see our [contributing rules](./CONTRIBUTING.md)
+
+## Running the Project:
+1. Starting Backend
+- `cd` into 'backend' directory
+- Run `node server.js`
+
+2. Starting Frontend
+- `cd` into 'frontend' directory
+- Run `npm start`
+- Navigate to 'localhost:3000' in your browser
+
