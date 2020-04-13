@@ -24,19 +24,19 @@ If you would like to contribute to this project please see our [contributing rul
 
 ## Running the Project:
 1. Starting Backend
-- `cd` into 'backend' directory
-- Run `$ npm install` to get all necessary modules
-- MacOS/Linux:
-    - Run `$ pip3 install -r requirements.txt` to get python modules necessary for face analyzation 
-- Windows:
-    - Run `$ python -m pip install -U pip setuptools`
+    - `cd` into 'backend' directory
+    - Run `$ npm install` to get all necessary modules
+    - MacOS/Linux:
+        - Run `$ pip3 install -r requirements.txt` to get python modules necessary for face analyzation 
+    - Windows:
+        - Run `$ python -m pip install -U pip setuptools`
+        - Run `$ pip3 install -r requirements.txt` to get python modules necessary for face analyzation 
 
-
-- Run `node server.js`
+    - Run `$ node server.js`
 
 2. Starting Frontend
-- `cd` into 'frontend' directory
-- Run `$ npm install` to get all necessary modules
-- Run `$ npm start`
-- Navigate to 'localhost:3000' in your browser
+    - `cd` into 'frontend' directory
+    - Run `$ npm install` to get all necessary modules
+    - Run `$ npm start`
+    - Navigate to 'localhost:3000' in your browser
 
