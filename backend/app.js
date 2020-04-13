@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const recEndPoint = 'https://api.spotify.com/v1/recommendations?';
 const searchEndPoint = 'https://api.spotify.com/v1/search?'
 const monthlyEndPointArtist = 'https://api.spotify.com/v1/me/top/artists?'
+const monthlyEndPointTrack = 'https://api.spotify.com/v1/me/top/tracks?'
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -39,7 +40,7 @@ app.post('/face', upload.single('face'), async (req, res) => {
         console.log('recieved face image')
         const emotion = await processFace(req.file.path);
         console.log('emotion: ', emotion);
-        
+
         res.send(emotion);
     } catch (err) {
         res.send(400);
@@ -148,7 +149,7 @@ const getRecs = (token, artistId, params) => {
 const getMonthlyArtist = (userToken) => {
     return new Promise(resolve => {
         let search = monthlyEndPointArtist + 'time_range=short_term&limit=3'
-        https.get(request,{ headers: {Autheorization: 'Bearer ' + userToken}}, res => {
+        https.get(request,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -164,8 +165,28 @@ const getMonthlyArtist = (userToken) => {
             console.error(`Got error: ${e.message}`);
         });
     })
-}   
+}
 
+const getMonthlyTrack = (userToken) => {
+    return new Promise(resolve => {
+        let search = monthlyEndPointTrack + 'time_range=short_term&limit=3'
+        https.get(request,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
 
 const processFace = (path) => {
     return new Promise(resolve => {
