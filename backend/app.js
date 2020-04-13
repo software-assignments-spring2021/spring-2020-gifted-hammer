@@ -8,6 +8,7 @@ var multer = require('multer');
 const bodyParser = require("body-parser");
 const recEndPoint = 'https://api.spotify.com/v1/recommendations?';
 const searchEndPoint = 'https://api.spotify.com/v1/search?'
+const monthlyEndPointArtist = 'https://api.spotify.com/v1/me/top/artists?'
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -142,6 +143,29 @@ const getRecs = (token, artistId, params) => {
         });
     })
 }
+
+
+const getMonthlyArtist = (userToken) => {
+    return new Promise(resolve => {
+        let search = monthlyEndPointArtist + 'time_range=short_term&limit=3'
+        https.get(request,{ headers: {Autheorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}   
+
 
 const processFace = (path) => {
     return new Promise(resolve => {
