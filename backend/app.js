@@ -28,12 +28,33 @@ app.get('/token', async (req, res) => {
     res.send({ token: token });
 });
 
+
+// Discovery 
+
 app.post("/search", async (req, res) => {
     const token = req.body.token;
     const id = await getArtistId(token, req.body.artist);
     const recs = await getRecs(token, id, {});
     res.send(recs);
 })
+
+
+// Analytics 
+
+// monthly statistics - artist
+app.post('/monthlyArtist', async(req,res) =>{
+    const userToken = req.body.tioken;
+    const monthlyArtist = await getMonthlyArtist(userToken);
+    res.send(monthlyArtist);
+})
+// monthly statistics - track
+app.post('/monthlyTrack', async(req,res) =>{
+    const userToken = req.body.tioken;
+    const monthlyTrack = await getMonthlyTrack(userToken);
+    res.send(monthlyTrack);
+})
+
+// Facial Recognition
 
 app.post('/face', upload.single('face'), async (req, res) => {
     try {
@@ -46,6 +67,10 @@ app.post('/face', upload.single('face'), async (req, res) => {
         res.send(400);
     }
 });
+
+
+
+// get token
 
 const getBasicToken = () => {
     return new Promise(resolve => {
@@ -84,6 +109,10 @@ const getBasicToken = () => {
 
     })
 }
+
+
+// Discovery
+
 
 const getArtistId = (token, name) => {
     return new Promise(resolve => {
@@ -146,6 +175,9 @@ const getRecs = (token, artistId, params) => {
 }
 
 
+// Analytics 
+
+
 const getMonthlyArtist = (userToken) => {
     return new Promise(resolve => {
         let search = monthlyEndPointArtist + 'time_range=short_term&limit=3'
@@ -187,6 +219,8 @@ const getMonthlyTrack = (userToken) => {
         });
     })
 }
+
+// Facial Recongition (Discovery)
 
 const processFace = (path) => {
     return new Promise(resolve => {
