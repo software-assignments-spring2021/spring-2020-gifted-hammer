@@ -5,8 +5,8 @@
     "spotify": {
         "clientID": "",
         "clientSecret": "",
-        "recEndPoint": "https: //api.spotify.com/v1/recommendations?",
-        "searchEndPoint": "https: //api.spotify.com/v1/search?",
+        "recEndPoint": "https://api.spotify.com/v1/recommendations?",
+        "searchEndPoint": "https://api.spotify.com/v1/search?",
         "tokenOptions": {
             "headers": {
                 "Authorization": "Basic M2EwY2E3YjE2ZTE0NDMyNWIwZDE2MzM1MDc2YWFlNzI6ZjdmZDMxZWZhZTQxNDM4MmJmMGUwNTM2NzhhMTZhMzE=",

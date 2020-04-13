@@ -15,10 +15,12 @@ app.get('/token', async (req, res) => {
     res.send({ token: token });
 });
 
-app.get("/search/:artist/:token", async (req, res) => {
-    const token = req.params.token;
-    const id = await logic.getArtistId(token, req.params.artist);
-    const recs = await logic.getRecs(token, id, {});
+app.post("/search", async (req, res) => {
+    const token = req.body.token;
+    const artist = req.body.artist
+    const filters = req.body.filters
+    const id = await logic.getArtistId(token, artist);
+    const recs = await logic.getRecs(token, id, filters);
     res.send(recs);
 })
 
