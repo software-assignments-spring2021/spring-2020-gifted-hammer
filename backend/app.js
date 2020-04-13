@@ -44,13 +44,15 @@ app.post("/search", async (req, res) => {
 // monthly statistics - artist
 app.post('/monthlyArtist', async(req,res) =>{
     const userToken = req.body.tioken;
-    const monthlyArtist = await getMonthlyArtist(userToken);
+    const timeRange = "short_term";
+    const limit = "3";
+    const monthlyArtist = await getMonthlyArtist(userToken, timeRange, limit);
     res.send(monthlyArtist);
 })
 // monthly statistics - track
 app.post('/monthlyTrack', async(req,res) =>{
     const userToken = req.body.tioken;
-    const monthlyTrack = await getMonthlyTrack(userToken);
+    const monthlyArtist = await getMonthlyArtist(userToken, timeRange, limit);
     res.send(monthlyTrack);
 })
 
@@ -178,9 +180,9 @@ const getRecs = (token, artistId, params) => {
 // Analytics 
 
 
-const getMonthlyArtist = (userToken) => {
+const getMonthlyArtist = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
-        let search = monthlyEndPointArtist + 'time_range=short_term&limit=3'
+        let search = monthlyEndPointArtist + 'time_range=' + timeRange + '&limit=' + limit
         https.get(request,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
             res.setEncoding('utf8');
             let rawData = '';
@@ -201,7 +203,7 @@ const getMonthlyArtist = (userToken) => {
 
 const getMonthlyTrack = (userToken) => {
     return new Promise(resolve => {
-        let search = monthlyEndPointTrack + 'time_range=short_term&limit=3'
+        let search = monthlyEndPointTrack + 'time_range=' + timeRange + '&limit=' + limit
         https.get(request,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
             res.setEncoding('utf8');
             let rawData = '';
