@@ -51,18 +51,30 @@ exports.getLocationID = async (locationString) => {
     }
     catch (error) { console.log(error) }
 }
-exports.getArtistURI = async (artist, token) => {
+exports.getArtistInfo = async (artist, token) => {
     let artist_string = replaceAll(artist, ' ', '%20')
     let artistQuery = `https://api.spotify.com/v1/search?q=${artist_string}&type=artist`
+    let artistObj = {}
     let headers = {
         "content-type": "application/json", "Accept": "application/json", "Authorization": "Bearer " + token
     }
     try {
         let resp = await got(artistQuery, { headers: headers });
         result = JSON.parse(resp.body)
-        console.log(result)
+        if (result.artists.items[0]) {
+            artistObj = {
+                name: result.artists.items[0].name,
+                id: result.artists.items[0].id,
+                genres: result.artists.items[0].genres,
+                popularity: result.artists.items[0].popularity
+            }
+            return artistObj
+        }
     }
-    catch (error) { console.log(error) }
+    catch (error) {
+        console.log(error)
+        return artistObj
+    }
 }
 
 function replaceAll(str, find, replace) {
@@ -78,6 +90,7 @@ exports.getNearbyArtists = async (locationObj, token) => {
         let rawEvents = result.resultsPage.results.event
         let events = []
         for (let event of rawEvents) {
+            artistObj = await this.getArtistInfo(event.performance[0].artist.displayName, token)
             eventObj = {
                 event: {
                     link: event.uri,
@@ -85,7 +98,8 @@ exports.getNearbyArtists = async (locationObj, token) => {
                     status: event.status,
                     date: event.start.date,
                     artist: event.performance[0].artist.displayName
-                }
+                },
+                artist: artistObj
             }
             events.push(eventObj)
         }
@@ -93,6 +107,32 @@ exports.getNearbyArtists = async (locationObj, token) => {
         return eventsObj
     }
     catch (error) { console.log(error) }
+}
+
+exports.getTracks = async (artistObj, token) => {
+    let headers = {
+        "content-type": "application/json", "Accept": "application/json", "Authorization": "Bearer " + token
+    }
+    let completeObject = artistObj
+    for (let obj of artistObj.events) {
+        //DONT HAVE UNDEFINED ARTISTS!!
+        if (obj.artist) {
+            let trackQuery = `https://api.spotify.com/v1/artists/${obj.artist.id}/top-tracks?country=US`
+            try {
+                let resp = await got(trackQuery, { headers: headers })
+                let result = JSON.parse(resp.body)
+                let tracks = []
+                for (let track of result.tracks) {
+                    let trackObj = { Name: track['name'], Artist: track['album']['artists'][0]['name'], Album: track['album']['name'], Images: track['album']['images'], Duration_ms: track['duration_ms'], popularity: track['popularity'] }
+                    tracks.push(trackObj)
+                }
+                obj['tracks'] = tracks
+            }
+            catch (error) { console.log(error) }
+        }
+    }
+    return artistObj
+
 }
 
 

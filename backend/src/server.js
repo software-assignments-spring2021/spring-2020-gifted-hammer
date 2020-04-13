@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors())
 app.use(cookieParser());
 //check if user has an anon token already, if not generate and give them one!
-app.use(middleware.cookieWare)
+//app.use(middleware.cookieWare)
 
 //this exists to add the speical USER token to the users cookies
 app.get('/setUserToken:token', async (req, res) => {
@@ -21,7 +21,7 @@ app.get('/setUserToken:token', async (req, res) => {
     res.send(res.cookie);
 });
 
-//get reccomendations based off any URI
+//get reccomendations based off any URIs (can be a comma seperated string too!)
 app.get('/api/getTracks/:uri', async (req, res) => {
     let seed = req.params.uri
     try {
@@ -34,12 +34,15 @@ app.get('/api/getTracks/:uri', async (req, res) => {
     }
 });
 
-app.get('/api/test/:location', async (req, res) => {
+app.get('/api/getNearbyInfo/:location', async (req, res) => {
     let location = req.params.location
+    let token = 'BQBzRDjxnTJWRgAq5wC_Dt9WMfSq0Yan5ECS-YnNZEiVrlPipiQQeowKeAz6wr8ob42AY_dmFvm_NQehFec'
     try {
         let locationResp = await spotify.getLocationID(location)
-        let artistsResp = await spotify.getNearbyArtists(locationResp)
-        res.send(artistsResp)
+        let artistsResp = await spotify.getNearbyArtists(locationResp, token)
+        let tracksResp = await spotify.getTracks(artistsResp, token)
+        console.log(tracksResp.events.length)
+        res.send(tracksResp)
     }
     catch (error) { console.log(error) }
 })
