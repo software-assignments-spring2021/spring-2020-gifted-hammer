@@ -1,5 +1,4 @@
 const https = require('https');
-const querystring = require('querystring');
 const config = require('./config.json')
 const got = require('got')
 
@@ -11,7 +10,7 @@ exports.getToken = async () => {
         let resp = await got.post(tokenUrl, options)
         result = JSON.parse(resp.body)
         let token = result['access_token']
-        return token
+        return { token: token }
     }
     catch (error) { console.log(error) }
 }
@@ -188,4 +187,46 @@ exports.getTracks = async (artistObj, token) => {
     }
     return artistObj
 
+}
+
+exports.getMonthlyArtist = (userToken, timeRange, limit) => {
+    return new Promise(resolve => {
+        let search = monthlyEndPointArtist + 'time_range=' + timeRange + '&limit=' + limit
+        https.get(request, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+exports.getMonthlyTrack = (userToken) => {
+    return new Promise(resolve => {
+        let search = monthlyEndPointTrack + 'time_range=' + timeRange + '&limit=' + limit
+        https.get(request, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
 }
