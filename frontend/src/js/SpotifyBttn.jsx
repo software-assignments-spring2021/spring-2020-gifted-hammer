@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 let SpotifyBttn = (props) => {
     const [artists, setArtists] = useState('')
     useEffect(() => {
@@ -15,6 +14,8 @@ let SpotifyBttn = (props) => {
         let redirect_uri = 'http%3A%2F%2Flocalhost%3A3000'
         let scopes = 'user-top-read'
         let popup = window.open(`https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=token&redirect_uri=${redirect_uri}&scope=${scopes}&show_dialog=true`, 'Login with Spotify', 'width=800,height=600')
+        let browser = "https://accounts.spotify.com/authorize?client_id=2a1e4b30a72b41feb5c432aed9877ccb&response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A3000&scope=user-top-read&show_dialog=true"
+
         window.spotifyCallback = (payload) => {
             //alert(payload)
             popup.close()
