@@ -1,4 +1,4 @@
-.Filters{
+.Filters {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -9,28 +9,25 @@
     border-radius: 5px;
 }
 
-.Filters.visible{
+.Filters.visible {
     border: solid white 1px;
 }
 
-.filterSliders{
+.filterSliders {
     width: 85vw;
     height: 0px;
     visibility: hidden;
     transition: height 0.1s linear;
-
 }
 
-.filterSliders.visible{
+.filterSliders.visible {
     visibility: visible;
     width: 85vw;
     height: 50vh;
     transition: height 0.2s linear;
-
 }
 
-
-.filterSliderPair{
+.filterSliderPair {
     height: 0;
     display: flex;
     flex-direction: column;
@@ -39,23 +36,28 @@
     width: 100%;
 }
 
-.filterSliderPair > p{
+.filterSliderPair>p {
     margin: 0;
 }
 
-.filterSlider{
+.filterSlider {
     margin-top: 3vh;
     width: 100%;
-    -webkit-appearance: none;  /* Override default CSS styles */
+    -webkit-appearance: none;
+    /* Override default CSS styles */
     appearance: none;
-    width: 100%; /* Full-width */
+    width: 100%;
+    /* Full-width */
     height: 1px;
-    background: white; /* Grey background */
-    outline: none; /* Remove outline */
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    background: white;
+    /* Grey background */
+    outline: none;
+    /* Remove outline */
+    opacity: 0.7;
+    /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s;
+    /* 0.2 seconds transition on hover */
     transition: opacity .2s;
-  
 }
 
 .filterSlider::-webkit-slider-thumb {
@@ -63,25 +65,52 @@
     appearance: none;
     width: 25px;
     height: 25px;
-    border-radius: 50%; 
-    background:white;
+    border-radius: 50%;
+    background: white;
     cursor: pointer;
     border: none;
+}
 
-  }
-  
-  .filterSlider::-moz-range-thumb {
+.filterSlider::-moz-range-thumb {
     width: 25px;
     height: 25px;
     border-radius: 50%;
     background: white;
     cursor: pointer;
     border: none;
-  }
+}
 
-  .filterButton{
+.filterButton {
     margin-left: 0px;
     display: block;
     max-width: 7vh;
     max-height: 50%;
 }
+
+.imageForm{
+    display: flex;
+}
+
+.loadingContainer{
+    width: 2vh;
+    height: 2vh;
+}
+
+.loadingImage {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    animation: loading-image-spin infinite 1s linear;
+}
+
+@keyframes loading-image-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+

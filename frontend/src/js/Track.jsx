@@ -14,15 +14,14 @@ function Track(props) {
                 </div>
                 <div className="trackTextInfo">
                     <div className="artistSong">
-                        <p className = "title">{props.title}</p>
+                        <p className = "title">{props.name}</p>
                         <p className = "artist">{props.artist}</p>
                     </div>
                     <div className ="lengthContainer">
-                        <p className="length">{props.length}</p>
+                        <p className="length">{props.duration}</p>
                     </div>
                 </div>
             </div>
-            {/* <hr /> */}
         </>)
 }
 

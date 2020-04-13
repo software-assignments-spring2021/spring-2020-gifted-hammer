@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import Discover from './js/Discover.jsx'
 import Analytics from './js/Analytics.jsx'
 import AppHeader from './js/AppHeader.jsx'
 import AppFooter from './js/AppFooter.jsx'
+import hash from './hash'
 
 import {
   BrowserRouter as Router,
@@ -12,7 +13,26 @@ import {
   Route,
 } from "react-router-dom";
 
+
 function App() {
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+
+    fetch('/token')
+    .then(response => response.json())
+    .then(data => setToken(data.token));
+  }, []);   
+
+  useEffect(() => {
+    let _token = hash.access_token;
+    if (_token) {
+      setToken(_token);
+      console.log(token);  
+    }      
+  }, [token]);   
+  
+
   return (
     <Router>
       <Redirect from="/" to="/discover" />
@@ -20,7 +40,7 @@ function App() {
         <Switch>
           <Route path="/discover">
             <AppHeader key='header' pageTitle='DISCOVER' />
-            <Discover />
+            <Discover token={token}/>
           </Route>
           <Route path="/analytics">
             <AppHeader key='header' pageTitle='ANALYTICS' />
@@ -29,7 +49,6 @@ function App() {
         </Switch>
         <AppFooter />
       </div>
-
     </Router>
 
   );
