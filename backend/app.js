@@ -10,7 +10,8 @@ const recEndPoint = 'https://api.spotify.com/v1/recommendations?';
 const searchEndPoint = 'https://api.spotify.com/v1/search?'
 const monthlyEndPointArtist = 'https://api.spotify.com/v1/me/top/artists?'
 const monthlyEndPointTrack = 'https://api.spotify.com/v1/me/top/tracks?'
-const trackMood = 'https://api.spotify.com/v1/audio-features/'
+const trackMoodEndPoint = 'https://api.spotify.com/v1/audio-features/'
+const trackFeaturesEndPoint = 'https://api.spotify.com/v1/audio-features?'
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -47,7 +48,7 @@ app.post('/monthlyArtist', async(req,res) =>{
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "3";
-    const monthlyArtist = await getMonthlyArtist(userToken, timeRange, limit);
+    const monthlyArtist = await getArtist(userToken, timeRange, limit);
     res.send(monthlyArtist);
 })
 // monthly statistics - track
@@ -55,7 +56,7 @@ app.post('/monthlyTrack', async(req,res) =>{
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "3";
-    const monthlyTrack = await getMonthlyTrack(userToken, timeRange, limit);
+    const monthlyTrack = await getTrack(userToken, timeRange, limit);
     res.send(monthlyTrack);
 })
 // monthly statistics - average mood
@@ -63,11 +64,23 @@ app.post('/averageMood', async(req,res) =>{
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "50";
-    const allMonthlyTracks = await getMonthlyTrack(userToken, timeRange, limit);
+    const allMonthlyTracks = await getTrack(userToken, timeRange, limit);
     const trackIDs = allMonthlyTracks.map(data => data.id);
-    //console.log(trackIDs);
+    // console.log(trackIDs);
     const trackMoods = await Promise.all(trackIDs.map(async (data) => await getTrackMood(data, userToken)));
     res.send(trackMoods);
+})
+
+// user statistics - song features
+app.post('/songFeatures', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "long_term";
+    const limit = "50";
+    const topTracks = await getTrack(userToken, timeRange, limit);
+    const trackIDs = topTracks.map(data => data.id);
+    const trackString = trackIDs.toString();
+    const trackFeatures = await getTrackFeatures(trackString, userToken);
+    res.send(trackFeatures);
 })
 
 // Facial Recognition
@@ -192,7 +205,7 @@ const getRecs = (token, artistId, params) => {
 // Analytics 
 
 
-const getMonthlyArtist = (userToken, timeRange, limit) => {
+const getArtist = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
         let search = monthlyEndPointArtist + 'time_range=' + timeRange + '&limit=' + limit
         https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
@@ -213,7 +226,7 @@ const getMonthlyArtist = (userToken, timeRange, limit) => {
     })
 }
 
-const getMonthlyTrack = (userToken, timeRange, limit) => {
+const getTrack = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
         let search = monthlyEndPointTrack + 'time_range=' + timeRange + '&limit=' + limit
         https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
@@ -236,7 +249,7 @@ const getMonthlyTrack = (userToken, timeRange, limit) => {
 
 const getTrackMood = (trackID, userToken) => {
     return new Promise(resolve => {
-        let search = trackMood + trackID
+        let search = trackMoodEndPoint + trackID
         https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
             res.setEncoding('utf8');
             let rawData = '';
@@ -244,8 +257,32 @@ const getTrackMood = (trackID, userToken) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    //console.log(parsedData);
+                    console.log(parsedData);
                     resolve(parsedData.valence);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+const getTrackFeatures = (trackID, userToken) => {
+    return new Promise(resolve => {
+        trackID = trackID.replace(/,/g, '%2C');
+        let search = trackFeaturesEndPoint + 'ids=' + trackID;
+        console.log(search);
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    console.log(parsedData);
+                    resolve(parsedData);
                 } catch (e) {
                     console.error(e.message);
                 }
