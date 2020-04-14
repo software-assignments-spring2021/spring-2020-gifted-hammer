@@ -43,7 +43,7 @@ app.post("/search", async (req, res) => {
 
 // Analytics 
 
-// monthly statistics - artist
+// monthly statistics - top 3 artists
 app.post('/monthlyArtist', async(req,res) =>{
     const userToken = req.body.token;
     const timeRange = "short_term";
@@ -52,30 +52,63 @@ app.post('/monthlyArtist', async(req,res) =>{
     res.send(monthlyArtist);
 })
 
-// monthly statistics - artist
+// monthly statistics - top 3 genres
 app.post('/topGenres', async(req,res) =>{
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "50";
     const allMonthlyArtists = await getArtist(userToken, timeRange, limit);
-    const moods = [];
+    const genres = [];
     for(let i = 0; i < allMonthlyArtists.length; i++) {
         let artistGenres = allMonthlyArtists[i].genres;
         for(let j = 0; j < artistGenres.length; j++) {
             let currGenre = artistGenres[j];
-            let index = moods.findIndex(k => k.genre === currGenre);
+            let index = genres.findIndex(k => k.genre === currGenre);
             if(index === -1) {
-                moods.push({genre: currGenre, count: 1});
+                genres.push({genre: currGenre, count: 1});
             } else {
-                moods[index].count++;
+                genres[index].count++;
             }
         }
     }
-    moods.sort(function(a, b) {return b.count-a.count});
-    res.send(moods.slice(0,3));
+    genres.sort(function(a, b) {return b.count-a.count});
+    //console.log(genres);
+    res.send(genres.slice(0,3));
 })
 
-// monthly statistics - track
+// monthly statistics - count breakdown of all genres
+app.post('/genreBreakdown', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "50";
+    const allMonthlyArtists = await getArtist(userToken, timeRange, limit);
+    const genres = [];
+    for(let i = 0; i < allMonthlyArtists.length; i++) {
+        let artistGenres = allMonthlyArtists[i].genres;
+        for(let j = 0; j < artistGenres.length; j++) {
+            let currGenre = artistGenres[j];
+            let index = genres.findIndex(k => k.genre === currGenre);
+            if(index === -1) {
+                genres.push({genre: currGenre, count: 1});
+            } else {
+                genres[index].count++;
+            }
+        }
+    }
+    genres.sort(function(a, b) {return b.count-a.count});
+    res.send(genres);
+})
+
+// monthly statistics - top song
+app.post('/topSong', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "1";
+    const topTrack = await getTrack(userToken, timeRange, limit);
+    res.send(topTrack);
+})
+
+// monthly statistics - top 3 tracks
 app.post('/monthlyTrack', async(req,res) =>{
     const userToken = req.body.token;
     const timeRange = "short_term";
@@ -83,16 +116,17 @@ app.post('/monthlyTrack', async(req,res) =>{
     const monthlyTrack = await getTrack(userToken, timeRange, limit);
     res.send(monthlyTrack);
 })
-// monthly statistics - average mood
-app.post('/averageMood', async(req,res) =>{
+
+// monthly statistics - mood of all songs
+app.post('/trackMoods', async(req,res) =>{
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "50";
     const allMonthlyTracks = await getTrack(userToken, timeRange, limit);
     const trackIDs = allMonthlyTracks.map(data => data.id);
-    // console.log(trackIDs);
-    const trackMoods = await Promise.all(trackIDs.map(async (data) => await getTrackMood(data, userToken)));
-    res.send(trackMoods);
+    //console.log(trackIDs);
+    const allTrackMoods = await Promise.all(trackIDs.map(async (data) => await getTrackMood(data, userToken)));
+    res.send(allTrackMoods);
 })
 
 // user statistics - song features
