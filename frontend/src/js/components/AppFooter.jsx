@@ -1,11 +1,11 @@
 import React from 'react';
-import '../css/AppFooter.css'
+import '../../css/AppFooter.css'
 import {
     Link
 } from "react-router-dom";
 
-import discoverImage from '../assets/discover.svg'
-import analyticsImage from '../assets/analytics.svg'
+import discoverImage from '../../assets/discover.svg'
+import analyticsImage from '../../assets/analytics.svg'
 const AppFooter = (props) => {
     return (
         <div className="AppFooter">

@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import './App.css';
-import Discover from './js/Discover.jsx'
-import Analytics from './js/Analytics.jsx'
-import AppHeader from './js/AppHeader.jsx'
-import AppFooter from './js/AppFooter.jsx'
-import hash from './hash'
+import '../../css/App.css';
+import Discover from './Discover.jsx'
+import Analytics from './Analytics.jsx'
+import AppHeader from './AppHeader.jsx'
+import AppFooter from './AppFooter.jsx'
+import hash from '../util/hash'
 
 import {
   BrowserRouter as Router,

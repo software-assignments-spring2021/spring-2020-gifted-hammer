@@ -1,8 +1,8 @@
 import React from 'react';
-import '../css/AppHeader.css';
-import spotify from '../spotify_logo.png';
-import logo from '../assets/logo.svg';
-import * as config from './config'
+import '../../css/AppHeader.css';
+import spotify from '../../spotify_logo.png';
+import logo from '../../assets/logo.svg';
+import * as config from '../util/config'
 let http = require('http');
 
 function AppHeader(props) {

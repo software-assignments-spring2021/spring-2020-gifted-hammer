@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/Track.css'
+import '../../css/Track.css'
 
 function Track(props) {
     const handleTrackClick = e =>{
