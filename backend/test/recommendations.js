@@ -3,6 +3,7 @@ var chai = require('chai'), chaiHttp = require('chai-http');
 var expect = chai.expect;
 const app = require("../src/routes.js");
 
+
 chai.use(chaiHttp);
 
 let userToken = '';
@@ -24,19 +25,20 @@ describe('Discovery', function () {
             '_method': 'post',
             token: userToken,
             artist: 'tool',
-            tempo: .5,
-            popularity: .5,
-            energy: .5,
-            mood: .5,
-            vocals: .5,
-            danceability: .5
+            filters: {
+                tempo: .5,
+                popularity: .5,
+                energy: .5,
+                mood: .5,
+                vocals: .5,
+                danceability: .5
+            }
         }
 
         chai.request(app)
             .post('/search')
             .send(data)
             .end(function (err, res) {
-                console.log(res.body[0]);
                 expect(res.body[0]).to.have.all.keys(
                     "album",
                     "artists",
