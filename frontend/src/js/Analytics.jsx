@@ -85,7 +85,7 @@ let Analytics = (props) => {
                 </div>
             </div> */}
             <div className='section'>
-                <SectionHeading name="This Month's Favorite Genres"></SectionHeading>
+                <SectionHeading name="This Month's Top 3 Genres"></SectionHeading>
                 <div className='genres'>
                     <Genere name={topGenres.firstName} image ={topGenres.firstImage}></Genere>
                     <Genere name={topGenres.secondName} image ={topGenres.secondImage}></Genere>
@@ -93,7 +93,7 @@ let Analytics = (props) => {
                 </div>
             </div>
             <div className='section'>
-                <SectionHeading name='Top song'></SectionHeading>
+                <SectionHeading name='Top Song'></SectionHeading>
                 <div className='topSong'>
                     <div className="topSongOne">
                         <Metric value={topSongData.name} descriptor={topSongData.artist}></Metric>
@@ -103,13 +103,13 @@ let Analytics = (props) => {
                 </div>
             </div>
             <div className='section'>
-                <SectionHeading name='Mood of Your Songs'></SectionHeading>
+                <SectionHeading name='Moods of Your Top Songs'></SectionHeading>
                 <div className='moodChart'>
                     <MoodChart data={trackMoods}></MoodChart>
                 </div>
             </div>
             <div className='section'>
-                <SectionHeading name='Your genere breakdown'></SectionHeading>
+                <SectionHeading name='Your Genre Breakdown'></SectionHeading>
                 <div className='sectionBody genereChart'>
                     <GenereChart data={genreBreakdown}></GenereChart>
                 </div>

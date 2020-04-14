@@ -129,7 +129,7 @@ function Discover(props) {
                 <form className="searchForm" onSubmit={handleSubmit}>
                     <Input
                         inputType={"text"}
-                        title={"Find new Music:"}
+                        title={"Find New Music:"}
                         placeholder={"Enter Song Name or Track Name"}
                         handleChange={handleChange}
                     />
