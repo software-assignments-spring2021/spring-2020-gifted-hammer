@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import '../css/Filters.css'
-import filterButton from '../assets/filters.svg'
-import loadingImage from '../assets/loading.svg'
-import EmotionFilters from './Emotions'
+import '../../css/Filters.css'
+import filterButton from '../../assets/filters.svg'
+import loadingImage from '../../assets/loading.svg'
+import EmotionFilters from '../util/Emotions'
 
 const filterNames = ['popularity', 'tempo', 'energy', 'danceable', 'vocals', 'mood'];
 

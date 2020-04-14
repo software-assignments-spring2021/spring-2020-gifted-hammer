@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/Analytics.css'
+import '../../css/Analytics.css'
 import {
     LineChart, Line, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, BarChart, Bar, Cell, CartesianGrid
 } from 'recharts';
