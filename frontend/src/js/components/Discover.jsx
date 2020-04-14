@@ -3,6 +3,7 @@ import '../../css/Discover.css';
 import Filters from './Filters';
 import Track from './Track';
 import Input from "./Input";
+import SearchType from "./SearchType";
 // const filterNames = ['popularity', 'tempo', 'energy', 'danceable', 'vocals', 'mood'];
 
 function Discover(props) {
@@ -11,7 +12,8 @@ function Discover(props) {
     const [tracks, setTracks] = useState([]);
     const [selectedTrack, setSelectedTrack] = useState(-1);
     const [audioPlayer] = useState(new Audio());
-    const [type, setType] = useState('location')
+    const [type, setType] = useState('recommend')
+    const [title, setTitle] = useState('Enter Song Name or Track Name')
 
     const [parameterValues, setParameterValues] = useState({
         popularity: 0,
@@ -128,6 +130,11 @@ function Discover(props) {
         getRecTracks();
     }
 
+    const setText = () => {
+
+    }
+
+
     const createTracks = () => {
 
         return (<div className='tracks'>
@@ -148,14 +155,24 @@ function Discover(props) {
         </div>);
     }
 
+    const searchSwitch = () => {
+        let curState = type
+        if (curState == 'location') { setType('recommend') }
+        else { setType('location') }
+        console.log(type)
+    }
+
     return (
         <div className='Discover'>
             <div className="discoverBody">
                 <form className="searchForm" onSubmit={handleSubmit}>
+                    <SearchType
+                        handleChange={searchSwitch}
+                    />
                     <Input
                         inputType={"text"}
                         title={"Find new Music:"}
-                        placeholder={"Enter Song Name or Track Name"}
+                        placeholder={type == 'location' ? 'Enter City Name' : 'Enter Song Name or Track Name'}
                         handleChange={handleChange}
                     />
                 </form>
