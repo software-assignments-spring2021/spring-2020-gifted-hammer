@@ -66,24 +66,13 @@ app.post('/topGenres', async(req,res) =>{
             let currGenre = artistGenres[j];
             let index = genres.findIndex(k => k.genre === currGenre);
             if(index === -1) {
-                genres.push({genre: currGenre, count: 1, image: currArtist.images[0].url});
+                genres.push({genre: currGenre, count: 1, image: [currArtist.images[0].url]});
             } else {
                 genres[index].count++;
+                genres[index].image.push(currArtist.images[0].url);
             }
         }
     }
-    /*for(let i = 0; i < allMonthlyArtists.length; i++) {
-        let artistGenres = allMonthlyArtists[i].genres;
-        for(let j = 0; j < artistGenres.length; j++) {
-            let currGenre = artistGenres[j];
-            let index = genres.findIndex(k => k.genre === currGenre);
-            if(index === -1) {
-                genres.push({genre: currGenre, count: 1});
-            } else {
-                genres[index].count++;
-            }
-        }
-    }*/
     genres.sort(function(a, b) {return b.count-a.count});
     console.log(genres);
     res.send(genres.slice(0,3));
