@@ -7,14 +7,17 @@ import { useState, useEffect } from 'react';
 let Analytics = (props) => {
 
     const [topSongData, setTopSongData] = useState({})
+    const [topGenres, setTopGenres] = useState({})
+
     const [hasError, setErrors] = useState(false);
     async function fetchData() {
+        console.log(props.token);
 
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "token": "BQCNYqv_O0w8OdyjycMy3_LDHhX4DMN_8z1oxeDUAjpnn3kTBwIduaWkQnFBItFVKCqAjrEZlmegVM0TBmz_W08WDWHKasheq2_C2DM7P9uoY4Agyu1vsrqWhjkt_Y3rqSch1gIJEoOuMOm_dQ9kC5FxkwbMOaoD3FcGNdrHpCcDbvAPtWAdU7YFiqRvxbYq046x7zwjsuKqBIOjUhVabal5p4SyrWBd92043qsf6LVWLWpEU5cieFzTE0IMlCmU8mJWq2wCoVI"
+                "token": "BQCD-biLKXEOxjeRr5suOq1Sz-54wloFrfxu4H3VZseB4OEbdmP1oQoe4lNKZsQtQQUQ4IBjHDNAgH3IZbzxmKwplUL3bEPx06x6tr_BGYmB7H3fLl2LUCvnD86P2o_ssqitDFr-6mqwfD2sXxr2zKYrnwiupKLUtTX_vgHIQuZdbzTz_E906Hwn4E5pls2NNqs-VzpxX7C5m1s3hVFdrQ0MmZtAJkC-Stvf65DUTGZS8M-8IqioggZnJVXAgh9y7aUnTzMHFvk"
             })
         };
 
@@ -22,6 +25,10 @@ let Analytics = (props) => {
         fetch('/topSong', requestOptions)
         .then(response => response.json())
         .then(data => formatTopSong(data));
+
+        fetch('/topGenres', requestOptions)
+        .then(response => response.json())
+        .then(data => formatMonthlyGenre(data));
         }
 
         const formatTopSong = data => {
@@ -30,9 +37,25 @@ let Analytics = (props) => {
             topSong.name = data[0].name;
             topSong.artist = data[0].artists[0].name;
             topSong.image = data[0].album.images[0].url;
-            // topSong.
             setTopSongData(topSong);
         }
+
+        
+        const formatMonthlyGenre = data => {
+            console.log(data);
+            let topGenre = {};
+            topGenre.firstName = data[0].genre;
+            topGenre.firstCount = data[0].count;
+            topGenre.secondName = data[1].genre;
+            topGenre.secondCount = data[1].count;
+            topGenre.thirdName = data[2].genre;
+            topGenre.thirdCount = data[2].count;
+            setTopGenres(topGenre);
+        }
+
+
+
+        
 
     useEffect(() => {
         fetchData();
@@ -55,9 +78,9 @@ let Analytics = (props) => {
             <div className='section'>
                 <SectionHeading name="This Month's Favorites"></SectionHeading>
                 <div className='genres'>
-                    <Genere name="Rock"></Genere>
-                    <Genere name="Pop"></Genere>
-                    <Genere name="Metal"></Genere>
+                    <Genere name={topGenres.firstName}></Genere>
+                    <Genere name={topGenres.secondName}></Genere>
+                    <Genere name={topGenres.thirdName}></Genere>
                 </div>
             </div>
             <div className='section'>

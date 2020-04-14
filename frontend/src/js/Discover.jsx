@@ -35,7 +35,8 @@ function Discover(props) {
     }
 
     const getTracks = () => {    
-        const token = props.token;        
+        const token = props.token;
+        console.log(token);    
         let data = {
             token: token,
             artist: textValue,
