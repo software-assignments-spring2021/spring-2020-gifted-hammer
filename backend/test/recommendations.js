@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var chai = require('chai'), chaiHttp = require('chai-http');
 var expect = chai.expect;
-const app = require("../app"); 
+const app = require("../src/routes"); 
 
 chai.use(chaiHttp);
 
@@ -24,12 +24,14 @@ describe('Discovery', function () {
             '_method': 'post',
             token: userToken,
             artist: 'tool',
-            tempo: .5,
-            popularity: .5,
-            energy: .5,
-            mood: .5,
-            vocals: .5,
-            danceability: .5
+            filters: {
+                tempo: .5,
+                popularity: .5,
+                energy: .5,
+                mood: .5,
+                vocals: .5,
+                danceability: .5    
+            }
         }
 
         chai.request(app)
