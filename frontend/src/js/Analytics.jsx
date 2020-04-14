@@ -30,7 +30,6 @@ let Analytics = (props) => {
             topSong.name = data[0].name;
             topSong.artist = data[0].artists[0].name;
             topSong.image = data[0].album.images[0].url;
-            // topSong.
             setTopSongData(topSong);
         }
 
