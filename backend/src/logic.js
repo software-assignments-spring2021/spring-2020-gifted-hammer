@@ -89,6 +89,7 @@ exports.processFace = (path) => {
     })
 }
 exports.getLocationID = async (locationString) => {
+    locationString = replaceAll(locationString, " ", "_")
     locationIDQuery = `https://api.songkick.com/api/3.0/search/locations.json?query=${locationString}&apikey=${config.songKick.apiKey}`
     let locationObj = {}
     try {
@@ -177,7 +178,7 @@ exports.getTracks = async (artistObj, token) => {
                 let result = JSON.parse(resp.body)
                 let tracks = []
                 for (let track of result.tracks) {
-                    let trackObj = { Name: track['name'], Artist: track['album']['artists'][0]['name'], Album: track['album']['name'], Images: track['album']['images'], Duration_ms: track['duration_ms'], popularity: track['popularity'] }
+                    let trackObj = { name: track['name'], artist: track['album']['artists'][0]['name'], album: track['album']['name'], art: track['album']['images'][0]['url'], duration: track['duration_ms'], popularity: track['popularity'], audio: ['preview_url'] }
                     tracks.push(trackObj)
                 }
                 obj['tracks'] = tracks

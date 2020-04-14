@@ -11,6 +11,7 @@ function Discover(props) {
     const [tracks, setTracks] = useState([]);
     const [selectedTrack, setSelectedTrack] = useState(-1);
     const [audioPlayer] = useState(new Audio());
+    const [type, setType] = useState('location')
 
     const [parameterValues, setParameterValues] = useState({
         popularity: 0,
@@ -26,16 +27,35 @@ function Discover(props) {
         var seconds = ((millis % 60000) / 1000).toFixed(0);
         return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
     }
-      
+
 
     const handleSubmit = e => {
         e.preventDefault();
         setUserSearched(true);
-        getTracks();
+        if (type !== 'location') { getRecTracks() }
+        else (getLocTracks())
     }
 
-    const getTracks = () => {    
-        const token = props.token;        
+    const getLocTracks = () => {
+        const token = props.token;
+        let data = {
+            token: token,
+            location: textValue,
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+
+        fetch('/nearby', requestOptions)
+            .then(response => response.json())
+            .then(data => processData(data));
+    }
+
+    const getRecTracks = () => {
+        const token = props.token;
         let data = {
             token: token,
             artist: textValue,
@@ -49,74 +69,80 @@ function Discover(props) {
         };
 
         fetch('/search', requestOptions)
-        .then(response => response.json())
-        .then(data => processData(data));
+            .then(response => response.json())
+            .then(data => processData(data));
     }
 
     const processData = data => {
         console.log(data);
-        
+
         let newTracks = []
-        for (let i = 0; i < data.length; i++) {
-            let newTrack = {};
-            newTrack.artist = data[i].artists[0].name;
-            newTrack.name = data[i].name;
-            newTrack.duration = millisToMinutesAndSeconds(data[i].duration_ms);
-            newTrack.art = data[i].album.images[0].url;
-            newTrack.audio = data[i].preview_url;
+        if (type !== 'location') {
+            for (let i = 0; i < data.length; i++) {
+                let newTrack = {};
+                newTrack.artist = data[i].artists[0].name;
+                newTrack.name = data[i].name;
+                newTrack.duration = millisToMinutesAndSeconds(data[i].duration_ms);
+                newTrack.art = data[i].album.images[0].url;
+                newTrack.audio = data[i].preview_url;
 
-            newTracks.push(newTrack);
-
+                newTracks.push(newTrack);
+            }
+            console.log(newTracks);
+            setTracks(newTracks);
         }
-        console.log(newTracks);
-        setTracks(newTracks);  
+        else {
+            for (let obj of data.events) {
+                if (obj.tracks) {
+                    obj.tracks[0].duration = millisToMinutesAndSeconds(obj.tracks[0].duration)
+                    newTracks.push(obj.tracks[0])
+                }
+            }
+            setTracks(newTracks)
+        }
 
     }
-
     const handleChange = e => {
         setTextValue(e.target.value)
     }
-
     const handleTrackClick = trackNum => {
-        if (trackNum === selectedTrack)
-        {
+        if (trackNum === selectedTrack) {
             audioPlayer.pause();
             setSelectedTrack(-1);
-        }   
-        else
-        {
+        }
+        else {
             const newSource = tracks[trackNum].audio;
             if (newSource === null)
                 audioPlayer.pause();
-            else
-            {
+            else {
                 audioPlayer.src = newSource
                 audioPlayer.play()
             }
-              
+
             setSelectedTrack(trackNum);
         }
     }
 
-    const sliderValueChanged = e =>{
-        setParameterValues({...parameterValues, [e.target.id]: e.target.value});
-        getTracks();
+    const sliderValueChanged = e => {
+        setParameterValues({ ...parameterValues, [e.target.id]: e.target.value });
+        getRecTracks();
     }
 
     const createTracks = () => {
+
         return (<div className='tracks'>
             {
                 tracks.map((track, index) => (
-                    <Track 
-                    key={index} 
-                    index={index} 
-                    selected={(index === selectedTrack) ? true : false} 
-                    handleTrackClick={handleTrackClick} 
-                    artist={track.artist} 
-                    name={track.name} 
-                    duration={track.duration} 
-                    art={track.art} 
-                    audio={track.audio}/>
+                    <Track
+                        key={index}
+                        index={index}
+                        selected={(index === selectedTrack) ? true : false}
+                        handleTrackClick={handleTrackClick}
+                        artist={track.artist}
+                        name={track.name}
+                        duration={track.duration}
+                        art={track.art}
+                        audio={track.audio} />
                 ))
             }
         </div>);
@@ -134,7 +160,7 @@ function Discover(props) {
                     />
                 </form>
 
-                <Filters sliderValueChanged={sliderValueChanged}/>
+                <Filters sliderValueChanged={sliderValueChanged} />
                 {userSearched ? createTracks() : null}
 
             </div>

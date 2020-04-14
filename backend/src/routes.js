@@ -25,6 +25,7 @@ app.post("/search", async (req, res) => {
 //LOCATION BASED TRACKS
 app.post('/nearby', async (req, res) => {
     try {
+        console.log(req.body.location)
         let locationResp = await logic.getLocationID(req.body.location)
         let artistsResp = await logic.getNearbyArtists(locationResp, req.body.token)
         let tracksResp = await logic.getTracks(artistsResp, req.body.token)
