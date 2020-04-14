@@ -89,15 +89,15 @@ app.post('/genreBreakdown', async(req,res) =>{
         let artistGenres = allMonthlyArtists[i].genres;
         for(let j = 0; j < artistGenres.length; j++) {
             let currGenre = artistGenres[j];
-            let index = genres.findIndex(k => k.genre === currGenre);
+            let index = genres.findIndex(k => k.name === currGenre);
             if(index === -1) {
-                genres.push({genre: currGenre, count: 1});
+                genres.push({name: currGenre, value: 1});
             } else {
-                genres[index].count++;
+                genres[index].value++;
             }
         }
     }
-    genres.sort(function(a, b) {return b.count-a.count});
+    genres.sort(function(a, b) {return b.value-a.value});
     res.send(genres);
 })
 
@@ -319,7 +319,7 @@ const getTrackMood = (trackID, userToken) => {
                 try {
                     const parsedData = JSON.parse(rawData);
                     console.log(parsedData);
-                    resolve(parsedData.valence);
+                    resolve(parsedData);
                 } catch (e) {
                     console.error(e.message);
                 }
