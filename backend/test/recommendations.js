@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var chai = require('chai'), chaiHttp = require('chai-http');
 var expect = chai.expect;
-const app = require("../app"); 
+const app = require("../src/routes.js");
 
 chai.use(chaiHttp);
 
@@ -57,5 +57,25 @@ describe('Discovery', function () {
                     "uri")
                 done();
             });
-    });
+    }).timeout(5000);
+
+    it('gets nearby artists', function (done) { // <= Pass in done callback
+        const data = {
+            '_method': 'post',
+            token: userToken,
+            location: 'new york',
+        }
+
+        chai.request(app)
+            .post('/nearby')
+            .send(data)
+            .end(function (err, res) {
+                expect(res.body.events[0]).to.have.all.keys(
+                    "artist",
+                    "event",
+                    "tracks",
+                )
+                done();
+            });
+    }).timeout(5000000);
 })
