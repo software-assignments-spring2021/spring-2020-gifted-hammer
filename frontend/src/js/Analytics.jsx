@@ -46,15 +46,15 @@ let Analytics = (props) => {
             let topGenre = {};
             topGenre.firstName = data[0].genre;
             topGenre.firstCount = data[0].count;
+            topGenre.firstImage = data[0].image[0];
             topGenre.secondName = data[1].genre;
             topGenre.secondCount = data[1].count;
+            topGenre.secondImage = data[1].image[1];
             topGenre.thirdName = data[2].genre;
             topGenre.thirdCount = data[2].count;
+            topGenre.thirdImage = data[2].image[2];
             setTopGenres(topGenre);
         }
-
-
-
         
 
     useEffect(() => {
@@ -76,11 +76,11 @@ let Analytics = (props) => {
                 </div>
             </div> */}
             <div className='section'>
-                <SectionHeading name="This Month's Favorites"></SectionHeading>
+                <SectionHeading name="This Month's Favorite Genres"></SectionHeading>
                 <div className='genres'>
-                    <Genere name={topGenres.firstName}></Genere>
-                    <Genere name={topGenres.secondName}></Genere>
-                    <Genere name={topGenres.thirdName}></Genere>
+                    <Genere name={topGenres.firstName} image ={topGenres.firstImage}></Genere>
+                    <Genere name={topGenres.secondName} image ={topGenres.secondImage}></Genere>
+                    <Genere name={topGenres.thirdName} image ={topGenres.thirdImage}></Genere>
                 </div>
             </div>
             <div className='section'>
@@ -136,7 +136,7 @@ let Genere = (props) => {
     return (
         <div className="genere">
             <h4>{props.name}</h4>
-            <div className="genereImg"></div>
+            <img className="genereImg" src={props.image}></img>
         </div>
     )
 }
