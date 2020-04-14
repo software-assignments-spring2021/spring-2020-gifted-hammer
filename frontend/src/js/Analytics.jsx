@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/Analytics.css'
 import {
-    LineChart, Line, XAxis, YAxis, Tooltip, Legend, PieChart, Pie
+    LineChart, Line, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, BarChart, Bar, Cell, CartesianGrid
 } from 'recharts';
 import { useState, useEffect } from 'react';
 let Analytics = (props) => {
@@ -21,7 +21,7 @@ let Analytics = (props) => {
     }, []);
     return (
         <div className="analytics">
-            <div className='section'>
+            {/* <div className='section'>
                 <SectionHeading name="This month you listened to..."></SectionHeading>
                 <div className='overview'>
                     <div className="overviewOne">
@@ -33,9 +33,9 @@ let Analytics = (props) => {
                         <Metric value="400" descriptor="Songs"></Metric>
                     </div>
                 </div>
-            </div>
+            </div> */}
             <div className='section'>
-                <SectionHeading name="Favorite generes"></SectionHeading>
+                <SectionHeading name="This Month's Favorites"></SectionHeading>
                 <div className='genres'>
                     <Genere name="Rock"></Genere>
                     <Genere name="Pop"></Genere>
@@ -47,7 +47,7 @@ let Analytics = (props) => {
                 <div className='topSong'>
                     <div className="topSongOne">
                         <Metric value="Thriller" descriptor="Michael Jackson"></Metric>
-                        <p>You listened 500 times!</p>
+                        {/* <p>You listened 500 times!</p> */}
                     </div>
                     <div className="topImg"></div>
                 </div>
@@ -102,41 +102,96 @@ let Genere = (props) => {
 let MoodChart = (props) => {
     const data = [
         {
-            name: 'Jan', avgMoodScore: 25,
+            name: 'song1', avgMoodScore: 25,
         },
         {
-            name: 'Feb', avgMoodScore: 91,
+            name: 'song2', avgMoodScore: 91,
         },
         {
-            name: 'Mar', avgMoodScore: 70,
+            name: 'song', avgMoodScore: 70,
         },
         {
-            name: 'Apr', avgMoodScore: 27,
+            name: 'song4', avgMoodScore: 27,
         },
         {
-            name: 'May', avgMoodScore: 33,
+            name: 'song5', avgMoodScore: 33,
         },
         {
-            name: 'Jun', avgMoodScore: 65,
+            name: 'song6', avgMoodScore: 65,
         },
         {
-            name: 'Jul', avgMoodScore: 70,
+            name: 'song7', avgMoodScore: 91,
         },
+        {
+            name: 'song8', avgMoodScore: 92,
+        },
+        {
+            name: 'song9', avgMoodScore: 73,
+        },
+        {
+            name: 'song10', avgMoodScore: 24,
+        },
+        {
+            name: 'song11', avgMoodScore: 31,
+        },
+        {
+            name: 'song12', avgMoodScore: 25,
+        },
+        {
+            name: 'song13', avgMoodScore: 30,
+        },
+        {
+            name: 'song14', avgMoodScore: 41,
+        },
+        {
+            name: 'song15', avgMoodScore: 21,
+        },
+        {
+            name: 'song16', avgMoodScore: 47,
+        },
+        {
+            name: 'song17', avgMoodScore: 12,
+        },
+        {
+            name: 'song18', avgMoodScore: 15,
+        },
+        {
+            name: 'song18', avgMoodScore: 90,
+        },
+        {
+            name: 'song20', avgMoodScore: 81,
+        },
+        {
+            name: 'song21', avgMoodScore: 77,
+        },
+        {
+            name: 'song22', avgMoodScore: 27,
+        },
+        {
+            name: 'song23', avgMoodScore: 37,
+        },
+        {
+            name: 'song24', avgMoodScore: 35,
+        },
+        {
+            name: 'song25', avgMoodScore: 60,
+        }
     ];
+
     return (
-        <LineChart
-            width={400}
+        <BarChart
+            width={700}
             height={200}
             data={data}
             margin={{
-                top: 20, right: 30, left: 0, bottom: 5,
+                top: 10, right: 10, left: 0, bottom: 5,
             }}
         >
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Legend />
-            <Line type="monotone" dataKey="avgMoodScore" stroke="#8884d8" activeDot={{ r: 8 }} />
-        </LineChart>
+        <XAxis dataKey="name" tick={false}/>
+        <YAxis />
+        <Tooltip/>
+        <Bar dataKey="avgMoodScore" fill="#8884d8" />
+        </BarChart>
     )
 }
 let GenereChart = (props) => {
