@@ -55,13 +55,13 @@ let Analytics = (props) => {
         const formatMonthlyGenre = data => {
             let topGenre = {};
             topGenre.firstName = data[0].genre;
-            const random1 = Math.floor((Math.random() * data[0].image.length) + 1);
+            const random1 = Math.floor((Math.random() * data[0].image.length-1) + 1);
             topGenre.firstImage = data[0].image[random1];
             topGenre.secondName = data[1].genre;
-            const random2 = Math.floor((Math.random() * data[1].image.length) + 1);
+            const random2 = Math.floor((Math.random() * data[1].image.length-1) + 1);
             topGenre.secondImage = data[1].image[random2];
             topGenre.thirdName = data[2].genre;
-            const random3 = Math.floor((Math.random() * data[2].image.length) + 1);
+            const random3 = Math.floor((Math.random() * data[2].image.length-1) + 1);
             topGenre.thirdImage = data[2].image[random3];
             setTopGenres(topGenre);
         }
