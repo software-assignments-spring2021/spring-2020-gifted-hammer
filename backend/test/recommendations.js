@@ -1,5 +1,4 @@
 var expect = require('chai').expect;
-const axios = require('axios').default;
 var chai = require('chai'), chaiHttp = require('chai-http');
 var expect = chai.expect;
 const app = require("../app"); 
@@ -33,7 +32,7 @@ describe('Discovery', function () {
             danceability: .5
         }
 
-        chai.request('http://localhost:3001')
+        chai.request(app)
             .post('/search')
             .send(data)
             .end(function (err, res) {
