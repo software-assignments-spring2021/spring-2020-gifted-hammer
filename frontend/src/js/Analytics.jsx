@@ -162,7 +162,7 @@ let MoodChart = (props) => {
 
     return (
         <BarChart
-            width={1200}
+            width={800}
             height={200}
             data={data}
             margin={{
