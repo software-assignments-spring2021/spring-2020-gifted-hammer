@@ -80,12 +80,17 @@ exports.processFace = (path) => {
         var spawn = require("child_process").spawn;
         var process = spawn('python', ["./python/face-analysis.py",
             path]);
-
         process.stdout.on('data', function (data) {
             console.log(data.toString());
             resolve({ emotion: data.toString().trim() });
 
         })
+
+        process.stderr.on('data', (data) => {
+            // As said before, convert the Uint8Array to a readable string.
+            console.log(new TextDecoder("utf-8").decode(data));
+        });
+        
     })
 }
 exports.getLocationID = async (locationString) => {

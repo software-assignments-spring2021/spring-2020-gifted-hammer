@@ -14,8 +14,7 @@ import sys
 
 # In[8]:
 
-
-model = load_model("./model_v6_23.hdf5")
+model = load_model("./python/model_v6_23.hdf5")
 # print('model loaded')
 
 # In[11]:
