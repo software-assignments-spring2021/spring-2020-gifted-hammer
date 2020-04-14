@@ -105,6 +105,7 @@ app.post('/topSong', async(req,res) =>{
     const timeRange = "short_term";
     const limit = "1";
     const topTrack = await getTrack(userToken, timeRange, limit);
+    console.log(JSON.stringify(topTrack));
     res.send(topTrack);
 })
 

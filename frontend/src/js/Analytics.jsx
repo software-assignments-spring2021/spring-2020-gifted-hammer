@@ -1,20 +1,38 @@
 import React from 'react';
 import '../css/Analytics.css'
 import {
-    LineChart, Line, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, BarChart, Bar, Cell, CartesianGrid
+   XAxis, YAxis, Tooltip, Legend, PieChart, Pie, BarChart, Bar, Cell, CartesianGrid
 } from 'recharts';
 import { useState, useEffect } from 'react';
 let Analytics = (props) => {
 
-    const [data, setData] = useState({})
+    const [topSongData, setTopSongData] = useState({})
     const [hasError, setErrors] = useState(false);
     async function fetchData() {
-        const res = await fetch("https://my.api.mockaroo.com/analytics.json?key=e5acc930");
-        res
-            .json()
-            .then(res => setData(res))
-            .catch(err => setErrors(err));
-    }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "token": "BQCNYqv_O0w8OdyjycMy3_LDHhX4DMN_8z1oxeDUAjpnn3kTBwIduaWkQnFBItFVKCqAjrEZlmegVM0TBmz_W08WDWHKasheq2_C2DM7P9uoY4Agyu1vsrqWhjkt_Y3rqSch1gIJEoOuMOm_dQ9kC5FxkwbMOaoD3FcGNdrHpCcDbvAPtWAdU7YFiqRvxbYq046x7zwjsuKqBIOjUhVabal5p4SyrWBd92043qsf6LVWLWpEU5cieFzTE0IMlCmU8mJWq2wCoVI"
+            })
+        };
+
+        // console.log((await fetch('/topSong', requestOptions)).json());
+        fetch('/topSong', requestOptions)
+        .then(response => response.json())
+        .then(data => formatTopSong(data));
+        }
+
+        const formatTopSong = data => {
+            console.log(data);
+            let topSong = {};
+            topSong.name = data[0].name;
+            topSong.artist = data[0].artists[0].name;
+            topSong.image = data[0].album.images[0].url;
+            // topSong.
+            setTopSongData(topSong);
+        }
 
     useEffect(() => {
         fetchData();
@@ -46,10 +64,10 @@ let Analytics = (props) => {
                 <SectionHeading name='Top song'></SectionHeading>
                 <div className='topSong'>
                     <div className="topSongOne">
-                        <Metric value="Thriller" descriptor="Michael Jackson"></Metric>
+                        <Metric value={topSongData.name} descriptor={topSongData.artist}></Metric>
                         {/* <p>You listened 500 times!</p> */}
                     </div>
-                    <div className="topImg"></div>
+                    <img className="topImg" src={topSongData.image} alt="album art"></img>
                 </div>
             </div>
             <div className='section'>
