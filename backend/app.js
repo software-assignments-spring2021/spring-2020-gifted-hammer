@@ -51,6 +51,30 @@ app.post('/monthlyArtist', async(req,res) =>{
     const monthlyArtist = await getArtist(userToken, timeRange, limit);
     res.send(monthlyArtist);
 })
+
+// monthly statistics - artist
+app.post('/topGenres', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "50";
+    const allMonthlyArtists = await getArtist(userToken, timeRange, limit);
+    const moods = [];
+    for(let i = 0; i < allMonthlyArtists.length; i++) {
+        let artistGenres = allMonthlyArtists[i].genres;
+        for(let j = 0; j < artistGenres.length; j++) {
+            let currGenre = artistGenres[j];
+            let index = moods.findIndex(k => k.genre === currGenre);
+            if(index === -1) {
+                moods.push({genre: currGenre, count: 1});
+            } else {
+                moods[index].count++;
+            }
+        }
+    }
+    moods.sort(function(a, b) {return b.count-a.count});
+    res.send(moods.slice(0,3));
+})
+
 // monthly statistics - track
 app.post('/monthlyTrack', async(req,res) =>{
     const userToken = req.body.token;
