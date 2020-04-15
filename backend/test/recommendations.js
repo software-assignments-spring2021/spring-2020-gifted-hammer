@@ -81,3 +81,14 @@ describe('Discovery', function () {
             });
     }).timeout(5000000);
 })
+
+describe('Analytics', function () {
+    it('top song', function (done) {
+        chai.request(app)
+            .post('/topSong')
+            .end(function (err, res) {
+                expect(res.body).to.be.a('object');
+                done();
+            });
+    }).timeout(5000);
+})
