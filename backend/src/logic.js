@@ -90,7 +90,7 @@ exports.processFace = (path) => {
             // As said before, convert the Uint8Array to a readable string.
             console.log(new TextDecoder("utf-8").decode(data));
         });
-        
+
     })
 }
 exports.getLocationID = async (locationString) => {
@@ -121,14 +121,17 @@ exports.getArtistInfo = async (artist, token) => {
     try {
         let resp = await got(artistQuery, { headers: headers });
         result = JSON.parse(resp.body)
-        if (result.artists.items[0]) {
-            artistObj = {
-                name: result.artists.items[0].name,
-                id: result.artists.items[0].id,
-                genres: result.artists.items[0].genres,
-                popularity: result.artists.items[0].popularity
+        if (result.artists.items) {
+
+            if (result.artists.items[0]) {
+                artistObj = {
+                    name: result.artists.items[0].name,
+                    id: result.artists.items[0].id,
+                    genres: result.artists.items[0].genres,
+                    popularity: result.artists.items[0].popularity
+                }
+                return artistObj
             }
-            return artistObj
         }
     }
     catch (error) {
