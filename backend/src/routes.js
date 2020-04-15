@@ -15,7 +15,7 @@ app.get('/token', async (req, res) => {
     res.send(token);
 });
 
-//RECCOMENDATIONS
+//RECOMMENDATIONS
 app.post("/search", async (req, res) => {
     const id = await logic.getArtistId(req.body.token, req.body.artist);
     const recomendations = await logic.getRecs(req.body.token, id, req.body.filters);
@@ -48,7 +48,102 @@ app.post('/face', upload.single('face'), async (req, res) => {
 });
 
 //ANALYTICS
-app.post('/monthlyArtist', async (req, res) => {
+
+app.post('/monthlyArtist', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "3";
+    const monthlyArtist = await logic.getArtist(userToken, timeRange, limit);
+    res.send(monthlyArtist);
+})
+
+app.post('/topGenres', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "50";
+    const allMonthlyArtists = await logic.getArtist(userToken, timeRange, limit);
+    const genres = [];
+    for(let i = 0; i < allMonthlyArtists.length; i++) {
+        let currArtist = allMonthlyArtists[i];
+        let artistGenres = currArtist.genres;
+        for(let j = 0; j < artistGenres.length; j++) {
+            let currGenre = artistGenres[j];
+            let index = genres.findIndex(k => k.genre === currGenre);
+            if(index === -1) {
+                genres.push({genre: currGenre, count: 1, image: [currArtist.images[0].url]});
+            } else {
+                genres[index].count++;
+                genres[index].image.push(currArtist.images[0].url);
+            }
+        }
+    }
+    genres.sort(function(a, b) {return b.count-a.count});
+    console.log(genres);
+    res.send(genres.slice(0,3));
+})
+
+app.post('/genreBreakdown', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "50";
+    const allMonthlyArtists = await logic.getArtist(userToken, timeRange, limit);
+    const genres = [];
+    for(let i = 0; i < allMonthlyArtists.length; i++) {
+        let artistGenres = allMonthlyArtists[i].genres;
+        for(let j = 0; j < artistGenres.length; j++) {
+            let currGenre = artistGenres[j];
+            let index = genres.findIndex(k => k.name === currGenre);
+            if(index === -1) {
+                genres.push({name: currGenre, value: 1});
+            } else {
+                genres[index].value++;
+            }
+        }
+    }
+    genres.sort(function(a, b) {return b.value-a.value});
+    res.send(genres);
+})
+
+app.post('/topSong', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "1";
+    const topTrack = await logic.getTrack(userToken, timeRange, limit);
+    console.log(JSON.stringify(topTrack));
+    res.send(topTrack);
+})
+
+app.post('/monthlyTrack', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "3";
+    const monthlyTrack = await logic.getTrack(userToken, timeRange, limit);
+    res.send(monthlyTrack);
+})
+
+app.post('/trackMoods', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "short_term";
+    const limit = "50";
+    const allMonthlyTracks = await logic.getTrack(userToken, timeRange, limit);
+    const trackIDs = allMonthlyTracks.map(data => data.id);
+    //console.log(trackIDs);
+    const allTrackMoods = await Promise.all(trackIDs.map(async (data) => await logic.getTrackMood(data, userToken)));
+    res.send(allTrackMoods);
+})
+
+app.post('/songFeatures', async(req,res) =>{
+    const userToken = req.body.token;
+    const timeRange = "long_term";
+    const limit = "50";
+    const topTracks = await logic.getTrack(userToken, timeRange, limit);
+    const trackIDs = topTracks.map(data => data.id);
+    const trackString = trackIDs.toString();
+    const trackFeatures = await logic.getTrackFeatures(trackString, userToken);
+    res.send(trackFeatures);
+})
+
+/*app.post('/monthlyArtist', async (req, res) => {
     //TIME-RAGE/LIMIT SHOULD BE SENT IN REQ?
     const timeRange = "short_term";
     const limit = "3";
@@ -59,7 +154,7 @@ app.post('/monthlyArtist', async (req, res) => {
 app.post('/monthlyTrack', async (req, res) => {
     const monthlyArtist = await getMonthlyArtist(req.body.token, timeRange, limit);
     res.send(monthlyTrack);
-})
+})*/
 
 
 

@@ -16,6 +16,7 @@ import {
 
 function App() {
   const [token, setToken] = useState(null);
+  const  [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
 
@@ -25,12 +26,12 @@ function App() {
   }, []);   
 
   useEffect(() => {
-    let _token = hash.access_token;
-    if (_token) {
-      setToken(_token);
-      console.log(token);  
+    let accessToken = hash.access_token;
+    if (accessToken) {
+      setAccessToken(accessToken);
+      console.log(accessToken);  
     }      
-  }, [token]);   
+  }, [accessToken]);   
   
 
   return (
@@ -44,7 +45,7 @@ function App() {
           </Route>
           <Route path="/analytics">
             <AppHeader key='header' pageTitle='ANALYTICS' />
-            <Analytics />
+            <Analytics token = {token} accessToken = {accessToken}/>
           </Route>
         </Switch>
         <AppFooter />

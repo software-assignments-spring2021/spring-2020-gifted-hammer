@@ -25,15 +25,16 @@
     width: 85%;
     height: 5vh;
     margin: auto;
-    margin-top: 6%;
+    margin-top: 5%;
     margin-bottom: 10%;
 }
 
 .form-control{
     width: 100%;
-    height: 3vh;
+    height: 4vh;
     margin-top: 3%;
     margin-bottom: 5%;
+    font-size: 19px;
 }
 
 .searchForm > input{

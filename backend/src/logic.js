@@ -236,3 +236,93 @@ exports.getMonthlyTrack = (userToken) => {
         });
     })
 }
+
+//ANALYTICS
+
+exports.getArtist = (userToken, timeRange, limit) => {
+    return new Promise(resolve => {
+        let search = config.spotify.monthlyEndPointArtist + 'time_range=' + timeRange + '&limit=' + limit
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+exports.getTrack = (userToken, timeRange, limit) => {
+    return new Promise(resolve => {
+        let search = config.spotify.monthlyEndPointTrack + 'time_range=' + timeRange + '&limit=' + limit
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+exports.getTrackMood = (trackID, userToken) => {
+    return new Promise(resolve => {
+        let search = config.spotify.trackMoodEndPoint + trackID
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    console.log(parsedData);
+                    resolve(parsedData);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+exports.getTrackFeatures = (trackID, userToken) => {
+    return new Promise(resolve => {
+        trackID = trackID.replace(/,/g, '%2C');
+        let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
+        console.log(search);
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    console.log(parsedData);
+                    resolve(parsedData);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
