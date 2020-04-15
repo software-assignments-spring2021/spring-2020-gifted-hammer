@@ -96,8 +96,10 @@ function Discover(props) {
         else {
             for (let obj of data.events) {
                 if (obj.tracks) {
-                    obj.tracks[0].duration = millisToMinutesAndSeconds(obj.tracks[0].duration)
-                    newTracks.push(obj.tracks[0])
+                    if (obj.tracks[0]) {
+                        obj.tracks[0].duration = millisToMinutesAndSeconds(obj.tracks[0].duration)
+                        newTracks.push(obj.tracks[0])
+                    }
                 }
             }
             setTracks(newTracks)
