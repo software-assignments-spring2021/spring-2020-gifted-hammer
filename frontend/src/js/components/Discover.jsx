@@ -171,7 +171,7 @@ function Discover(props) {
                     />
                     <Input
                         inputType={"text"}
-                        title={"Find new Music:"}
+                        title={"Find New Music:"}
                         placeholder={type == 'location' ? 'Enter City Name' : 'Enter Song Name or Track Name'}
                         handleChange={handleChange}
                     />

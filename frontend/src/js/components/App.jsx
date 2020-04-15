@@ -18,6 +18,7 @@ function App() {
   const [token, setToken] = useState(null);
   const [accessToken, setAccessToken] = useState(null)
 
+
   useEffect(() => {
 
     fetch('/token')
@@ -34,6 +35,7 @@ function App() {
   }, [accessToken]);
 
 
+
   return (
     <Router>
       <Redirect from="/" to="/discover" />
@@ -45,7 +47,7 @@ function App() {
           </Route>
           <Route path="/analytics">
             <AppHeader key='header' pageTitle='ANALYTICS' />
-            <Analytics />
+            <Analytics token={token} accessToken={accessToken} />
           </Route>
         </Switch>
         <AppFooter />

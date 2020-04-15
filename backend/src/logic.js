@@ -90,7 +90,7 @@ exports.processFace = (path) => {
             // As said before, convert the Uint8Array to a readable string.
             console.log(new TextDecoder("utf-8").decode(data));
         });
-        
+
     })
 }
 exports.getLocationID = async (locationString) => {
@@ -121,14 +121,17 @@ exports.getArtistInfo = async (artist, token) => {
     try {
         let resp = await got(artistQuery, { headers: headers });
         result = JSON.parse(resp.body)
-        if (result.artists.items[0]) {
-            artistObj = {
-                name: result.artists.items[0].name,
-                id: result.artists.items[0].id,
-                genres: result.artists.items[0].genres,
-                popularity: result.artists.items[0].popularity
+        if (result.artists.items) {
+
+            if (result.artists.items[0]) {
+                artistObj = {
+                    name: result.artists.items[0].name,
+                    id: result.artists.items[0].id,
+                    genres: result.artists.items[0].genres,
+                    popularity: result.artists.items[0].popularity
+                }
+                return artistObj
             }
-            return artistObj
         }
     }
     catch (error) {
@@ -227,6 +230,96 @@ exports.getMonthlyTrack = (userToken) => {
                 try {
                     const parsedData = JSON.parse(rawData);
                     resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+//ANALYTICS
+
+exports.getArtist = (userToken, timeRange, limit) => {
+    return new Promise(resolve => {
+        let search = config.spotify.monthlyEndPointArtist + 'time_range=' + timeRange + '&limit=' + limit
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+exports.getTrack = (userToken, timeRange, limit) => {
+    return new Promise(resolve => {
+        let search = config.spotify.monthlyEndPointTrack + 'time_range=' + timeRange + '&limit=' + limit
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    resolve(parsedData.items);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+exports.getTrackMood = (trackID, userToken) => {
+    return new Promise(resolve => {
+        let search = config.spotify.trackMoodEndPoint + trackID
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    console.log(parsedData);
+                    resolve(parsedData);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+exports.getTrackFeatures = (trackID, userToken) => {
+    return new Promise(resolve => {
+        trackID = trackID.replace(/,/g, '%2C');
+        let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
+        console.log(search);
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    console.log(parsedData);
+                    resolve(parsedData);
                 } catch (e) {
                     console.error(e.message);
                 }
