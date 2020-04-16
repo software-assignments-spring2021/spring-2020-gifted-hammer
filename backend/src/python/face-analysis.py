@@ -19,7 +19,6 @@ model = load_model("./python/model_v6_23.hdf5")
 
 # In[11]:
 
-
 emotion_dict = {
     "Angry": 0,
     "Sad": 5,

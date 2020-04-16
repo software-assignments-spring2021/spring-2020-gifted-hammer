@@ -79,7 +79,7 @@ exports.processFace = (path) => {
     return new Promise(resolve => {
         var spawn = require("child_process").spawn;
         var process = spawn('python', ["./python/face-analysis.py",
-            path]);
+             path]);
         process.stdout.on('data', function (data) {
             console.log(data.toString());
             resolve({ emotion: data.toString().trim() });
