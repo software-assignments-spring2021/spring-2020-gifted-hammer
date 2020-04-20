@@ -92,3 +92,14 @@ describe('Analytics', function () {
             });
     }).timeout(5000);
 })
+
+describe('Analytics', function () {
+    it('monthly artist', function (done) {
+        chai.request(app)
+            .post('/monthlyArtist')
+            .end(function (err, res) {
+                expect(res.body).to.be.a('object');
+                done();
+            });
+    }).timeout(5000);
+})
