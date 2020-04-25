@@ -4,6 +4,31 @@ const app = express(); // instantiate an Express object
 const bodyParser = require("body-parser");
 const logic = require('./logic.js')
 const multer = require('./python/multer.js')
+let mongoose = require('mongoose');
+
+const server = 'mongodb+srv://giftedHammer:giftedHammer@cluster0-smurl.mongodb.net/spotilytics?retryWrites=true&w=majority'
+const database = 'geoLocations';      // REPLACE WITH YOUR DB NAME
+let UserModel = require('./user')
+
+let msg = new UserModel({
+  name: 'ada.lovelace@gmail.com'
+})
+
+mongoose.connect(server, { useNewUrlParser: true })
+.then(() => {
+  console.log('Database connection successful')
+  msg.save()
+   .then(doc => {
+     console.log(doc)
+   })
+   .catch(err => {
+     console.error(err)
+   })
+
+})
+.catch(err => {
+  console.error('Database connection error')
+})
 
 app.use(bodyParser.json()); // decode JSON-formatted incoming POST data
 

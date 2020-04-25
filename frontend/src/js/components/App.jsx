@@ -5,6 +5,7 @@ import Analytics from './Analytics.jsx'
 import AppHeader from './AppHeader.jsx'
 import AppFooter from './AppFooter.jsx'
 import hash from '../util/hash'
+import { geolocated } from "react-geolocated";
 
 import {
   BrowserRouter as Router,
@@ -12,18 +13,20 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+const reverse = require('reverse-geocode')
 
 
-function App() {
+
+function App(props) {
   const [token, setToken] = useState(null);
   const [accessToken, setAccessToken] = useState(null)
-
 
   useEffect(() => {
 
     fetch('/token')
       .then(response => response.json())
       .then(data => setToken(data.token));
+
   }, []);
 
   useEffect(() => {
@@ -34,7 +37,12 @@ function App() {
     }
   }, [accessToken]);
 
+  useEffect(() => {
+    if (props.coords) {
+      console.log(reverse.lookup(props.coords.latitude, props.coords.longitude, 'us'))
 
+    }
+  })
 
   return (
     <Router>
@@ -57,4 +65,9 @@ function App() {
   );
 }
 
-export default App;
+export default geolocated({
+  positionOptions: {
+      enableHighAccuracy: false,
+  },
+  userDecisionTimeout: 5000,
+})(App);
