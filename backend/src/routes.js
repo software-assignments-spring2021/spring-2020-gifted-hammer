@@ -43,10 +43,12 @@ app.post("/search", async (req, res) => {
         
         let found = false
         for (let i = 0; i < location.genres.length; i++) {
-            if (location.genres[i] === req.body.artist)
-            location.genres[i].count++
-            found = true
-            break;
+            if (location.genres[i].name === req.body.artist) {
+                location.genres[i].count++        
+                console.log(location.genres[i])        
+                found = true
+                break;
+            }
         }
         if (!found) {
             location.genres.push(new Genre({
