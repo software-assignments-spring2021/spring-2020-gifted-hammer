@@ -20,13 +20,13 @@ const reverse = require('reverse-geocode')
 function App(props) {
   const [token, setToken] = useState(null);
   const [accessToken, setAccessToken] = useState(null)
-
+  const [location, setLocation] = useState({city: '', state: 'null'})
+  
   useEffect(() => {
 
     fetch('/token')
       .then(response => response.json())
       .then(data => setToken(data.token));
-
   }, []);
 
   useEffect(() => {
@@ -38,11 +38,12 @@ function App(props) {
   }, [accessToken]);
 
   useEffect(() => {
-    if (props.coords) {
-      console.log(reverse.lookup(props.coords.latitude, props.coords.longitude, 'us'))
-
+    if (props.coords && location.city === '') {
+      const location = reverse.lookup(props.coords.latitude, props.coords.longitude, 'us')
+      console.log(location.city, location.state_abbr)
+      setLocation({city: location.city, state: location.state_abbr})
     }
-  })
+  }, [props.coords, location.city])
 
   return (
     <Router>
@@ -51,11 +52,11 @@ function App(props) {
         <Switch>
           <Route path="/discover">
             <AppHeader key='header' pageTitle='DISCOVER' />
-            <Discover token={token} accessToken={accessToken} />
+            <Discover token={token} accessToken={accessToken} location={location}/>
           </Route>
           <Route path="/analytics">
             <AppHeader key='header' pageTitle='ANALYTICS' />
-            <Analytics token={token} accessToken={accessToken} />
+            <Analytics token={token} accessToken={accessToken} location={location}/>
           </Route>
         </Switch>
         <AppFooter />

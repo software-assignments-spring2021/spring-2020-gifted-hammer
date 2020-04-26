@@ -61,7 +61,8 @@ function Discover(props) {
         let data = {
             token: token,
             artist: textValue,
-            filters: parameterValues
+            filters: parameterValues,
+            location: props.location
         }
 
         const requestOptions = {

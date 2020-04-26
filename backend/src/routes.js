@@ -8,27 +8,16 @@ let mongoose = require('mongoose');
 
 const server = 'mongodb+srv://giftedHammer:giftedHammer@cluster0-smurl.mongodb.net/spotilytics?retryWrites=true&w=majority'
 const database = 'geoLocations';      // REPLACE WITH YOUR DB NAME
-let UserModel = require('./user')
-
-let msg = new UserModel({
-  name: 'ada.lovelace@gmail.com'
-})
-
+let Locations = require('./location')
+let Genre = require('./genre')
+var db
 mongoose.connect(server, { useNewUrlParser: true })
-.then(() => {
-  console.log('Database connection successful')
-  msg.save()
-   .then(doc => {
-     console.log(doc)
-   })
-   .catch(err => {
-     console.error(err)
-   })
-
-})
-.catch(err => {
-  console.error('Database connection error')
-})
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('connected to database');
+  
+});
 
 app.use(bodyParser.json()); // decode JSON-formatted incoming POST data
 
@@ -42,9 +31,52 @@ app.get('/token', async (req, res) => {
 
 //RECOMMENDATIONS
 app.post("/search", async (req, res) => {
+    console.log(req.body)
     const id = await logic.getArtistId(req.body.token, req.body.artist);
     const recomendations = await logic.getRecs(req.body.token, id, req.body.filters);
-    res.send(recomendations);
+    const city = req.body.location.city.toLowerCase()
+    const state = req.body.location.state.toLowerCase()
+    let location = await Locations.findOne({city, state})
+    
+    if (location) {
+        console.log(location);
+        
+        let found = false
+        for (let i = 0; i < location.genres.length; i++) {
+            if (location.genres[i] === req.body.artist)
+            location.genres[i].count++
+            found = true
+            break;
+        }
+        if (!found) {
+            location.genres.push(new Genre({
+                name: req.body.artist,
+                count: 0
+            }))    
+        }
+
+        location.save()        
+        console.log('updated location');
+        
+    }
+    else {
+        console.log('added location');
+        
+        const newLocation = new Location({
+            city,
+            state,
+            genres: []
+        })
+        newLocation.genres.push(new Genre({
+            name: req.body.artist,
+            count: 0
+        }))
+        newLocation.save()
+    }    
+
+        res.send(recomendations);
+        
+    // add location and genre search to database
 })
 
 //LOCATION BASED TRACKS
@@ -74,7 +106,7 @@ app.post('/face', upload.single('face'), async (req, res) => {
 
 //ANALYTICS
 
-app.post('/monthlyArtist', async(req,res) =>{
+app.post('/monthlyArtist', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "3";
@@ -82,54 +114,54 @@ app.post('/monthlyArtist', async(req,res) =>{
     res.send(monthlyArtist);
 })
 
-app.post('/topGenres', async(req,res) =>{
+app.post('/topGenres', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "50";
     const allMonthlyArtists = await logic.getArtist(userToken, timeRange, limit);
     const genres = [];
-    for(let i = 0; i < allMonthlyArtists.length; i++) {
+    for (let i = 0; i < allMonthlyArtists.length; i++) {
         let currArtist = allMonthlyArtists[i];
         let artistGenres = currArtist.genres;
-        for(let j = 0; j < artistGenres.length; j++) {
+        for (let j = 0; j < artistGenres.length; j++) {
             let currGenre = artistGenres[j];
             let index = genres.findIndex(k => k.genre === currGenre);
-            if(index === -1) {
-                genres.push({genre: currGenre, count: 1, image: [currArtist.images[0].url]});
+            if (index === -1) {
+                genres.push({ genre: currGenre, count: 1, image: [currArtist.images[0].url] });
             } else {
                 genres[index].count++;
                 genres[index].image.push(currArtist.images[0].url);
             }
         }
     }
-    genres.sort(function(a, b) {return b.count-a.count});
+    genres.sort(function (a, b) { return b.count - a.count });
     console.log(genres);
-    res.send(genres.slice(0,3));
+    res.send(genres.slice(0, 3));
 })
 
-app.post('/genreBreakdown', async(req,res) =>{
+app.post('/genreBreakdown', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "50";
     const allMonthlyArtists = await logic.getArtist(userToken, timeRange, limit);
     const genres = [];
-    for(let i = 0; i < allMonthlyArtists.length; i++) {
+    for (let i = 0; i < allMonthlyArtists.length; i++) {
         let artistGenres = allMonthlyArtists[i].genres;
-        for(let j = 0; j < artistGenres.length; j++) {
+        for (let j = 0; j < artistGenres.length; j++) {
             let currGenre = artistGenres[j];
             let index = genres.findIndex(k => k.name === currGenre);
-            if(index === -1) {
-                genres.push({name: currGenre, value: 1});
+            if (index === -1) {
+                genres.push({ name: currGenre, value: 1 });
             } else {
                 genres[index].value++;
             }
         }
     }
-    genres.sort(function(a, b) {return b.value-a.value});
+    genres.sort(function (a, b) { return b.value - a.value });
     res.send(genres);
 })
 
-app.post('/topSong', async(req,res) =>{
+app.post('/topSong', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "1";
@@ -138,7 +170,7 @@ app.post('/topSong', async(req,res) =>{
     res.send(topTrack);
 })
 
-app.post('/monthlyTrack', async(req,res) =>{
+app.post('/monthlyTrack', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "3";
@@ -146,7 +178,7 @@ app.post('/monthlyTrack', async(req,res) =>{
     res.send(monthlyTrack);
 })
 
-app.post('/trackMoods', async(req,res) =>{
+app.post('/trackMoods', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "50";
@@ -157,7 +189,7 @@ app.post('/trackMoods', async(req,res) =>{
     res.send(allTrackMoods);
 })
 
-app.post('/songFeatures', async(req,res) =>{
+app.post('/songFeatures', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "long_term";
     const limit = "50";
