@@ -6,13 +6,16 @@ const logic = require('./logic.js')
 const multer = require('./python/multer.js')
 let mongoose = require('mongoose');
 
-const server = 'mongodb+srv://giftedHammer:giftedHammer@cluster0-smurl.mongodb.net/spotilytics?retryWrites=true&w=majority'
-const database = 'geoLocations';      // REPLACE WITH YOUR DB NAME
+require('dotenv').config()
+const server = process.env.DB_HOST
+console.log(server);
+
 let Locations = require('./location')
 let Genre = require('./genre')
-var db
+
+
 mongoose.connect(server, { useNewUrlParser: true })
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('connected to database');
@@ -53,7 +56,7 @@ app.post("/search", async (req, res) => {
         if (!found) {
             location.genres.push(new Genre({
                 name: req.body.artist,
-                count: 0
+                count: 1
             }))    
         }
 
@@ -64,14 +67,14 @@ app.post("/search", async (req, res) => {
     else {
         console.log('added location');
         
-        const newLocation = new Location({
+        const newLocation = new Locations({
             city,
             state,
             genres: []
         })
         newLocation.genres.push(new Genre({
             name: req.body.artist,
-            count: 0
+            count: 1
         }))
         newLocation.save()
     }    
