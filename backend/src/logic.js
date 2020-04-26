@@ -3,7 +3,6 @@ const config = require('./config.json')
 const got = require('got')
 
 exports.getToken = async () => {
-    console.log('getting token....')
     let options = config.spotify.tokenOptions
     let tokenUrl = config.spotify.tokenURL
     try {
@@ -63,7 +62,6 @@ exports.getRecs = (token, artistId, params) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    // console.log(parsedData);
                     resolve(parsedData.tracks)
                 } catch (e) {
                     console.error(e.message);
@@ -81,7 +79,6 @@ exports.processFace = (path) => {
         var process = spawn('python', ["./python/face-analysis.py",
              path]);
         process.stdout.on('data', function (data) {
-            console.log(data.toString());
             resolve({ emotion: data.toString().trim() });
 
         })
@@ -294,7 +291,6 @@ exports.getTrackMood = (trackID, userToken) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData);
                     resolve(parsedData);
                 } catch (e) {
                     console.error(e.message);
@@ -310,7 +306,6 @@ exports.getTrackFeatures = (trackID, userToken) => {
     return new Promise(resolve => {
         trackID = trackID.replace(/,/g, '%2C');
         let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
-        console.log(search);
         https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
             res.setEncoding('utf8');
             let rawData = '';
@@ -318,7 +313,6 @@ exports.getTrackFeatures = (trackID, userToken) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData);
                     resolve(parsedData);
                 } catch (e) {
                     console.error(e.message);

@@ -20,7 +20,6 @@ app.get('/token', async (req, res) => {
 
 //RECOMMENDATIONS
 app.post("/search", async (req, res) => {
-    console.log(req.body)
     const id = await logic.getArtistId(req.body.token, req.body.artist);
     const recomendations = await logic.getRecs(req.body.token, id, req.body.filters);
     
@@ -31,7 +30,6 @@ app.post("/search", async (req, res) => {
 //LOCATION BASED TRACKS
 app.post('/nearby', async (req, res) => {
     try {
-        console.log(req.body.location)
         let locationResp = await logic.getLocationID(req.body.location)
         let artistsResp = await logic.getNearbyArtists(locationResp, req.body.token)
         let tracksResp = await logic.getTracks(artistsResp, req.body.token)
@@ -43,9 +41,7 @@ app.post('/nearby', async (req, res) => {
 //FACIAL RECOGNITION
 app.post('/face', upload.single('face'), async (req, res) => {
     try {
-        console.log('recieved face image')
         const emotion = await logic.processFace(req.file.path);
-        console.log('emotion: ', emotion);
 
         res.send(emotion);
     } catch (err) {
@@ -84,7 +80,6 @@ app.post('/topGenres', async (req, res) => {
         }
     }
     genres.sort(function (a, b) { return b.count - a.count });
-    console.log(genres);
     res.send(genres.slice(0, 3));
 })
 
@@ -115,7 +110,6 @@ app.post('/topSong', async (req, res) => {
     const timeRange = "short_term";
     const limit = "1";
     const topTrack = await logic.getTrack(userToken, timeRange, limit);
-    console.log(JSON.stringify(topTrack));
     res.send(topTrack);
 })
 
@@ -152,7 +146,6 @@ app.post('/songFeatures', async (req, res) => {
 app.post('/areaSearch', async (req, res) => {
     const userToken = req.body.token;
     const topArtistsInArea = await db.getTopArtistsInArea(req.body.location.city, req.body.location.state)
-    console.log(topArtistsInArea);
     res.send(topArtistsInArea);
 })
 
