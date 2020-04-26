@@ -27,9 +27,26 @@ app.post('/nearby', async (req, res) => {
     try {
         console.log(req.body.location)
         let locationResp = await logic.getLocationID(req.body.location)
-        let artistsResp = await logic.getNearbyArtists(locationResp, req.body.token)
-        let tracksResp = await logic.getTracks(artistsResp, req.body.token)
-        res.send(tracksResp)
+        let locationId = ((JSON.parse(locationResp)).id).toString()
+        let cachedResults = await logic.findTracks(locationId)
+        if (cachedResults) {
+            console.log('cache hit!')
+            res.send(cachedResults)
+        }
+        else {
+            console.log('cache miss')
+            let artistsResp = await logic.getNearbyArtists(locationResp, req.body.token)
+            let tracksResp = await logic.getTracks(artistsResp, req.body.token)
+            try {
+                let upload = await logic.uploadTracks(locationId, tracksResp.events)
+                console.log('upload success')
+                res.send(tracksResp)
+            }
+            catch{
+                console.log('upload failed')
+                res.send(undefined)
+            }
+        }
     }
     catch (error) { console.log(error) }
 })
@@ -49,7 +66,7 @@ app.post('/face', upload.single('face'), async (req, res) => {
 
 //ANALYTICS
 
-app.post('/monthlyArtist', async(req,res) =>{
+app.post('/monthlyArtist', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "3";
@@ -57,54 +74,54 @@ app.post('/monthlyArtist', async(req,res) =>{
     res.send(monthlyArtist);
 })
 
-app.post('/topGenres', async(req,res) =>{
+app.post('/topGenres', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "50";
     const allMonthlyArtists = await logic.getArtist(userToken, timeRange, limit);
     const genres = [];
-    for(let i = 0; i < allMonthlyArtists.length; i++) {
+    for (let i = 0; i < allMonthlyArtists.length; i++) {
         let currArtist = allMonthlyArtists[i];
         let artistGenres = currArtist.genres;
-        for(let j = 0; j < artistGenres.length; j++) {
+        for (let j = 0; j < artistGenres.length; j++) {
             let currGenre = artistGenres[j];
             let index = genres.findIndex(k => k.genre === currGenre);
-            if(index === -1) {
-                genres.push({genre: currGenre, count: 1, image: [currArtist.images[0].url]});
+            if (index === -1) {
+                genres.push({ genre: currGenre, count: 1, image: [currArtist.images[0].url] });
             } else {
                 genres[index].count++;
                 genres[index].image.push(currArtist.images[0].url);
             }
         }
     }
-    genres.sort(function(a, b) {return b.count-a.count});
+    genres.sort(function (a, b) { return b.count - a.count });
     console.log(genres);
-    res.send(genres.slice(0,3));
+    res.send(genres.slice(0, 3));
 })
 
-app.post('/genreBreakdown', async(req,res) =>{
+app.post('/genreBreakdown', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "50";
     const allMonthlyArtists = await logic.getArtist(userToken, timeRange, limit);
     const genres = [];
-    for(let i = 0; i < allMonthlyArtists.length; i++) {
+    for (let i = 0; i < allMonthlyArtists.length; i++) {
         let artistGenres = allMonthlyArtists[i].genres;
-        for(let j = 0; j < artistGenres.length; j++) {
+        for (let j = 0; j < artistGenres.length; j++) {
             let currGenre = artistGenres[j];
             let index = genres.findIndex(k => k.name === currGenre);
-            if(index === -1) {
-                genres.push({name: currGenre, value: 1});
+            if (index === -1) {
+                genres.push({ name: currGenre, value: 1 });
             } else {
                 genres[index].value++;
             }
         }
     }
-    genres.sort(function(a, b) {return b.value-a.value});
+    genres.sort(function (a, b) { return b.value - a.value });
     res.send(genres);
 })
 
-app.post('/topSong', async(req,res) =>{
+app.post('/topSong', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "1";
@@ -113,7 +130,7 @@ app.post('/topSong', async(req,res) =>{
     res.send(topTrack);
 })
 
-app.post('/monthlyTrack', async(req,res) =>{
+app.post('/monthlyTrack', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "3";
@@ -121,7 +138,7 @@ app.post('/monthlyTrack', async(req,res) =>{
     res.send(monthlyTrack);
 })
 
-app.post('/trackMoods', async(req,res) =>{
+app.post('/trackMoods', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "short_term";
     const limit = "50";
@@ -132,7 +149,7 @@ app.post('/trackMoods', async(req,res) =>{
     res.send(allTrackMoods);
 })
 
-app.post('/songFeatures', async(req,res) =>{
+app.post('/songFeatures', async (req, res) => {
     const userToken = req.body.token;
     const timeRange = "long_term";
     const limit = "50";

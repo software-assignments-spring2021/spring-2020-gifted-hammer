@@ -1,6 +1,9 @@
 const https = require('https');
 const config = require('./config.json')
 const got = require('got')
+const db = require('./db');
+const mongoose = require('mongoose');
+const Tracks = mongoose.model('Tracks');
 
 exports.getToken = async () => {
     console.log('getting token....')
@@ -153,18 +156,23 @@ exports.getNearbyArtists = async (locationObj, token) => {
         let rawEvents = result.resultsPage.results.event
         let events = []
         for (let event of rawEvents) {
-            artistObj = await this.getArtistInfo(event.performance[0].artist.displayName, token)
-            eventObj = {
-                event: {
-                    link: event.uri,
-                    popularity: event.popularity,
-                    status: event.status,
-                    date: event.start.date,
-                    artist: event.performance[0].artist.displayName
-                },
-                artist: artistObj
+            if (event.performance[0]) {
+                artistObj = await this.getArtistInfo(event.performance[0].artist.displayName, token)
+                if (artistObj) {
+                    eventObj = {
+                        event: {
+                            link: event.uri,
+                            popularity: event.popularity,
+                            status: event.status,
+                            date: event.start.date,
+                            artist: event.performance[0].artist.displayName
+                        },
+                        artist: artistObj
+                    }
+                    events.push(eventObj)
+                }
             }
-            events.push(eventObj)
+
         }
         let eventsObj = { events: events }
         return eventsObj
@@ -245,7 +253,7 @@ exports.getMonthlyTrack = (userToken) => {
 exports.getArtist = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
         let search = config.spotify.monthlyEndPointArtist + 'time_range=' + timeRange + '&limit=' + limit
-        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -266,7 +274,7 @@ exports.getArtist = (userToken, timeRange, limit) => {
 exports.getTrack = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
         let search = config.spotify.monthlyEndPointTrack + 'time_range=' + timeRange + '&limit=' + limit
-        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -287,7 +295,7 @@ exports.getTrack = (userToken, timeRange, limit) => {
 exports.getTrackMood = (trackID, userToken) => {
     return new Promise(resolve => {
         let search = config.spotify.trackMoodEndPoint + trackID
-        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -311,7 +319,7 @@ exports.getTrackFeatures = (trackID, userToken) => {
         trackID = trackID.replace(/,/g, '%2C');
         let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
         console.log(search);
-        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -328,4 +336,16 @@ exports.getTrackFeatures = (trackID, userToken) => {
             console.error(`Got error: ${e.message}`);
         });
     })
+}
+
+
+//DATABASE 
+exports.uploadTracks = (locationCode, events) => {
+    const tracks = new Tracks({ locationCode: locationCode, events: events })
+    let res = tracks.save()
+    return res
+}
+exports.findTracks = async (locationCode) => {
+    let res = await Tracks.find({ "locationCode": locationCode })
+    return res[0]
 }

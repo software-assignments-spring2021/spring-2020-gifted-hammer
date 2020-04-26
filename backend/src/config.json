@@ -7,10 +7,7 @@
         "clientSecret": "",
         "recEndPoint": "https://api.spotify.com/v1/recommendations?",
         "searchEndPoint": "https://api.spotify.com/v1/search?",
-        "monthlyEndPointArtist": "https://api.spotify.com/v1/me/top/artists?",
-        "monthlyEndPointTrack": "https://api.spotify.com/v1/me/top/tracks?",
-        "trackMoodEndPoint": "https://api.spotify.com/v1/audio-features/",
-        "trackFeaturesEndPoint": "https://api.spotify.com/v1/audio-features?",
+       
         "tokenOptions": {
             "headers": {
                 "Authorization": "Basic M2EwY2E3YjE2ZTE0NDMyNWIwZDE2MzM1MDc2YWFlNzI6ZjdmZDMxZWZhZTQxNDM4MmJmMGUwNTM2NzhhMTZhMzE=",
