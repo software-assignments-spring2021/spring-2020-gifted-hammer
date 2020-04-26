@@ -4,23 +4,9 @@ const app = express(); // instantiate an Express object
 const bodyParser = require("body-parser");
 const logic = require('./logic.js')
 const multer = require('./python/multer.js')
-let mongoose = require('mongoose');
+const db = require('./db')
 
-require('dotenv').config()
-const server = process.env.DB_HOST
-console.log(server);
-
-let Locations = require('./location')
-let Genre = require('./genre')
-
-
-mongoose.connect(server, { useNewUrlParser: true })
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('connected to database');
-  
-});
+db.connect()
 
 app.use(bodyParser.json()); // decode JSON-formatted incoming POST data
 
@@ -37,49 +23,9 @@ app.post("/search", async (req, res) => {
     console.log(req.body)
     const id = await logic.getArtistId(req.body.token, req.body.artist);
     const recomendations = await logic.getRecs(req.body.token, id, req.body.filters);
-    const city = req.body.location.city.toLowerCase()
-    const state = req.body.location.state.toLowerCase()
-    let location = await Locations.findOne({city, state})
     
-    if (location) {
-        console.log(location);
-        
-        let found = false
-        for (let i = 0; i < location.genres.length; i++) {
-            if (location.genres[i].name === req.body.artist) {
-                location.genres[i].count++        
-                console.log(location.genres[i])        
-                found = true
-                break;
-            }
-        }
-        if (!found) {
-            location.genres.push(new Genre({
-                name: req.body.artist,
-                count: 1
-            }))    
-        }
-
-        location.save()        
-        console.log('updated location');
-        
-    }
-    else {
-        console.log('added location');
-        
-        const newLocation = new Locations({
-            city,
-            state,
-            genres: []
-        })
-        newLocation.genres.push(new Genre({
-            name: req.body.artist,
-            count: 1
-        }))
-        newLocation.save()
-    }    
-
-        res.send(recomendations);
+    await db.updateSearch(req.body.location.city, req.body.location.state, req.body.artist)
+    res.send(recomendations);
         
     // add location and genre search to database
 })
@@ -203,6 +149,15 @@ app.post('/songFeatures', async (req, res) => {
     const trackString = trackIDs.toString();
     const trackFeatures = await logic.getTrackFeatures(trackString, userToken);
     res.send(trackFeatures);
+})
+
+app.post('/areaSearch', async (req, res) => {
+    console.log(req.body);
+    
+    const userToken = req.body.token;
+    const topArtistsInArea = await db.getTopArtistsInArea(req.body.location.city, req.body.location.state)
+    console.log(topArtistsInArea);
+    res.send(topArtistsInArea);
 })
 
 /*app.post('/monthlyArtist', async (req, res) => {

@@ -4,9 +4,10 @@
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    height: 150%;
+    /* height: 100%; */
     margin-top: 50px;
 }
+
 .section{
     border: solid;
     margin-bottom: 50px;
@@ -17,6 +18,9 @@
     display: flex;
     flex-direction: column;
     
+}
+.areaArtists {
+    margin-bottom: 20vh;
 }
 .sectionTitle{
     margin:0px;

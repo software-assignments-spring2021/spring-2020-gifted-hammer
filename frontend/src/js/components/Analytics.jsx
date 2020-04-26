@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import '../../css/Analytics.css'
 import {
@@ -10,6 +11,7 @@ let Analytics = (props) => {
     const [topGenres, setTopGenres] = useState({})
     const [genreBreakdown, setGenreBreakdown] = useState([])
     const [trackMoods, setTrackMoods] = useState([])
+    const [topArtistsInArea, setTopArtistsInArea] = useState([])
     const accessToken = props.accessToken
 
     const [hasError, setErrors] = useState(false);
@@ -20,7 +22,8 @@ let Analytics = (props) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "token": accessToken
+                token: accessToken,
+                location: props.location
             })
         };
 
@@ -40,7 +43,15 @@ let Analytics = (props) => {
         fetch('/trackMoods', requestOptions)
         .then(response => response.json())
         .then(data => setTrackMoods(data));
-        }
+
+        fetch('/areaSearch', requestOptions)
+        .then(response => response.json())
+        .then(data => setTopArtistsInArea(data));
+
+    } 
+
+        
+
 
 
         const formatTopSong = data => {
@@ -68,7 +79,7 @@ let Analytics = (props) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
     return (
         <div className="analytics">
             {/* <div className='section'>
@@ -112,6 +123,17 @@ let Analytics = (props) => {
                 <SectionHeading name='Your Genre Breakdown'></SectionHeading>
                 <div className='sectionBody genereChart'>
                     <GenereChart data={genreBreakdown}></GenereChart>
+                </div>
+            </div>
+            <div className='section areaArtists'>
+                <SectionHeading name='People in your area have also searched:'></SectionHeading>
+                <div className='sectionBody'>
+                    <ul>
+                        <li>{topArtistsInArea[0]}</li>
+                        <li>{topArtistsInArea[1]}</li>
+                        <li>{topArtistsInArea[2]}</li>
+
+                    </ul>
                 </div>
             </div>
         </div>
