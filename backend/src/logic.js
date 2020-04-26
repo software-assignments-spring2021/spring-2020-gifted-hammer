@@ -81,14 +81,14 @@ exports.processFace = (path) => {
         var process = spawn('python', ["./python/face-analysis.py",
              path]);
         process.stdout.on('data', function (data) {
-            console.log(data.toString());
+            // console.log(data.toString());
             resolve({ emotion: data.toString().trim() });
 
         })
 
         process.stderr.on('data', (data) => {
             // As said before, convert the Uint8Array to a readable string.
-            console.log(new TextDecoder("utf-8").decode(data));
+            // console.log(new TextDecoder("utf-8").decode(data));
         });
 
     })
@@ -294,7 +294,7 @@ exports.getTrackMood = (trackID, userToken) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData);
+                    // console.log(parsedData);
                     resolve(parsedData);
                 } catch (e) {
                     console.error(e.message);
@@ -310,7 +310,7 @@ exports.getTrackFeatures = (trackID, userToken) => {
     return new Promise(resolve => {
         trackID = trackID.replace(/,/g, '%2C');
         let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
-        console.log(search);
+        // console.log(search);
         https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
             res.setEncoding('utf8');
             let rawData = '';
@@ -318,7 +318,7 @@ exports.getTrackFeatures = (trackID, userToken) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData);
+                    // console.log(parsedData);
                     resolve(parsedData);
                 } catch (e) {
                     console.error(e.message);

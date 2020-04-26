@@ -25,7 +25,7 @@ app.post("/search", async (req, res) => {
 //LOCATION BASED TRACKS
 app.post('/nearby', async (req, res) => {
     try {
-        console.log(req.body.location)
+        // console.log(req.body.location)
         let locationResp = await logic.getLocationID(req.body.location)
         let artistsResp = await logic.getNearbyArtists(locationResp, req.body.token)
         let tracksResp = await logic.getTracks(artistsResp, req.body.token)
@@ -78,7 +78,7 @@ app.post('/topGenres', async(req,res) =>{
         }
     }
     genres.sort(function(a, b) {return b.count-a.count});
-    console.log(genres);
+    // console.log(genres);
     res.send(genres.slice(0,3));
 })
 
@@ -109,7 +109,7 @@ app.post('/topSong', async(req,res) =>{
     const timeRange = "short_term";
     const limit = "1";
     const topTrack = await logic.getTrack(userToken, timeRange, limit);
-    console.log(JSON.stringify(topTrack));
+    // console.log(JSON.stringify(topTrack));
     res.send(topTrack);
 })
 
