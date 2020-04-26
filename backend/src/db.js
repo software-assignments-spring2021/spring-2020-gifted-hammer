@@ -25,7 +25,7 @@ const updateSearch = async (city, state, artist) => {
         
         let found = false
         for (let i = 0; i < location.genres.length; i++) {
-            if (location.genres[i].name === req.body.artist) {
+            if (location.genres[i].name === artist) {
                 location.genres[i].count++        
                 console.log(location.genres[i])        
                 found = true
@@ -34,7 +34,7 @@ const updateSearch = async (city, state, artist) => {
         }
         if (!found) {
             location.genres.push(new Genre({
-                name: req.body.artist,
+                name: artist,
                 count: 1
             }))    
         }
@@ -52,7 +52,7 @@ const updateSearch = async (city, state, artist) => {
             genres: []
         })
         newLocation.genres.push(new Genre({
-            name: req.body.artist,
+            name: artist,
             count: 1
         }))
         newLocation.save()

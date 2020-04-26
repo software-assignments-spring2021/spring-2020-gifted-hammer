@@ -26,8 +26,6 @@ app.post("/search", async (req, res) => {
     
     await db.updateSearch(req.body.location.city, req.body.location.state, req.body.artist)
     res.send(recomendations);
-        
-    // add location and genre search to database
 })
 
 //LOCATION BASED TRACKS
@@ -152,8 +150,6 @@ app.post('/songFeatures', async (req, res) => {
 })
 
 app.post('/areaSearch', async (req, res) => {
-    console.log(req.body);
-    
     const userToken = req.body.token;
     const topArtistsInArea = await db.getTopArtistsInArea(req.body.location.city, req.body.location.state)
     console.log(topArtistsInArea);
