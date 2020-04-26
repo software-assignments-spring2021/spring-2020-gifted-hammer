@@ -23,6 +23,14 @@ mongoose.model("Moods", moodsSchema)
 const Moods = mongoose.model("Moods")
 mongoose.connect('mongodb+srv://giftedHammer:giftedHammer@cluster0-smurl.mongodb.net/spotilytics?retryWrites=true&w=majority', { useNewUrlParser: true });
 
+// mongoose topSongSchema
+const topSongSchema = new mongoose.Schema({
+    userId: { type: String, required: true },
+    song: { type: String, required: true },
+});
+mongoose.model("TopSong", topSongSchema)
+const TopSong = mongoose.model("TopSong")
+mongoose.connect('mongodb+srv://giftedHammer:giftedHammer@cluster0-smurl.mongodb.net/spotilytics?retryWrites=true&w=majority', { useNewUrlParser: true });
 
 //how u create a entry
 /*
