@@ -3,7 +3,7 @@ require('dotenv').config()
 const server = process.env.DB_HOST
 
 let Locations = require('./location')
-let Genre = require('./genre')
+let Artist = require('./artist')
 
 const connect = () => {
     mongoose.connect(server, { useNewUrlParser: true })
@@ -18,28 +18,39 @@ const connect = () => {
 module.exports.connect = connect
 
 const updateSearch = async (city, state, artist) => {
+    city = city.toLowerCase()
+    state = state.toLowerCase()
     let location = await Locations.findOne({city, state})
     
     if (location) {
         console.log(location);
         
         let found = false
-        for (let i = 0; i < location.genres.length; i++) {
-            if (location.genres[i].name === artist) {
-                location.genres[i].count++        
-                console.log(location.genres[i])        
+        for (let i = 0; i < location.artists.length; i++) {
+            if (location.artists[i].name === artist) {
+                console.log('FOUND ARTIST');
+                
+                location.artists[i].count++   
+                console.log(location.artists[i]);   
                 found = true
+                location.markModified('artists');
+
+                location.save()        
                 break;
             }
         }
         if (!found) {
-            location.genres.push(new Genre({
-                name: artist,
+            console.log("No artist founding, adding");
+            
+            location.artists.push(new Artist({
+                name: artist.toLowerCase(),
                 count: 1
             }))    
+            location.save()        
+
         }
 
-        location.save()        
+        
         console.log('updated location');
         
     }
@@ -49,9 +60,9 @@ const updateSearch = async (city, state, artist) => {
         const newLocation = new Locations({
             city,
             state,
-            genres: []
+            artists: []
         })
-        newLocation.genres.push(new Genre({
+        newLocation.artists.push(new Artist({
             name: artist,
             count: 1
         }))
@@ -63,9 +74,10 @@ module.exports.updateSearch = updateSearch
 const getTopArtistsInArea = async (city, state) => {
     city = city.toLowerCase()
     state = state.toLowerCase()
+    console.log(city, state);
     
     const location = await Locations.findOne({city, state})
-    let artists = location.genres;
+    let artists = location.artists;
     artists = artists.sort((a, b) => {
         return a.count > b.count
     })
