@@ -4,6 +4,7 @@ const got = require('got')
 const db = require('./db');
 const mongoose = require('mongoose');
 const Tracks = mongoose.model('Tracks');
+const Moods = mongoose.model('Moods');
 
 exports.getToken = async () => {
     console.log('getting token....')
@@ -340,6 +341,7 @@ exports.getTrackFeatures = (trackID, userToken) => {
 
 
 //DATABASE 
+// Discovery - Location
 exports.uploadTracks = (locationCode, events) => {
     const tracks = new Tracks({ locationCode: locationCode, events: events })
     let res = tracks.save()
@@ -347,5 +349,16 @@ exports.uploadTracks = (locationCode, events) => {
 }
 exports.findTracks = async (locationCode) => {
     let res = await Tracks.find({ "locationCode": locationCode })
+    return res[0]
+}
+
+// Analytics - Mood
+exports.uploadMoods = (userId, moods) => {
+    const moods = new Moods({ userId: userId, moods: moods})
+    let res = moods.save();
+}
+
+exports.findMoods = async (userId) => {
+    let res = await Moods.find({ "userId": userId })
     return res[0]
 }

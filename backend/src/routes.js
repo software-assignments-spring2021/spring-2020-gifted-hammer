@@ -160,6 +160,24 @@ app.post('/songFeatures', async (req, res) => {
     res.send(trackFeatures);
 })
 
+app.post('/yourMood', async(req,res) => {
+    try{
+        console.log(req.body.userId)
+        let cachedResults = await logic.findMoods(req.body.userId)
+        if (cachedResults){
+            console.log('cahce hit!')
+            res.send(cachedResults)
+        }
+        else {
+            console.log('cache miss')
+            res.send(null)
+        }
+    }
+    catch (error) { 
+        console.log(error) 
+    }
+})
+
 /*app.post('/monthlyArtist', async (req, res) => {
     //TIME-RAGE/LIMIT SHOULD BE SENT IN REQ?
     const timeRange = "short_term";
