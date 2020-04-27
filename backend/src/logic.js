@@ -5,6 +5,7 @@ const db = require('./db');
 const mongoose = require('mongoose');
 const Tracks = mongoose.model('Tracks');
 const Moods = mongoose.model('Moods');
+const TopSong = mongoose.model('TopSong');
 
 exports.getToken = async () => {
     console.log('getting token....')
@@ -434,9 +435,16 @@ exports.findMoods = async (userId) => {
 }
 
 // Analytics - Top Song
-exports.uploadTopSong = (userId, topSongInput) => {
-    const topSong = new TopSong({ userId: userId, topSong: topSongInput})
-    let res = topSong.save();
+exports.uploadTopSong = async (userId, topSongInput) => {
+    let res = await this.findTopSong(userId)
+    if(!res) {
+        const topSong = new TopSong({userId: userId, songs: topSongInput})
+        let res2 = await topSong.save();
+        console.log("top song saved " + res2)
+        return res2
+    } else {
+        return res;
+    }
 }
 
 exports.findTopSong = async (userId) => {
