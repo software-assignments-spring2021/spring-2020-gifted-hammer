@@ -353,8 +353,8 @@ exports.findTracks = async (locationCode) => {
 }
 
 // Analytics - Mood
-exports.uploadMoods = (userId, moods) => {
-    const moods = new Moods({ userId: userId, moods: moods})
+exports.uploadMoods = (userId, moodInput) => {
+    const moods = new Moods({ userId: userId, moods: moodInput})
     let res = moods.save();
 }
 

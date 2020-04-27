@@ -10,6 +10,7 @@ let Analytics = (props) => {
     const [topGenres, setTopGenres] = useState({})
     const [genreBreakdown, setGenreBreakdown] = useState([])
     const [trackMoods, setTrackMoods] = useState([])
+    const [yourMoods, setYourMoods] = useState([])
     const accessToken = props.accessToken
 
     const [hasError, setErrors] = useState(false);
@@ -40,6 +41,10 @@ let Analytics = (props) => {
         fetch('/trackMoods', requestOptions)
         .then(response => response.json())
         .then(data => setTrackMoods(data));
+
+        fetch('/yourMood', requestOptions)
+        .then(response => response.json())
+        .then(data => setYourMoods(data));
         }
 
 
@@ -109,9 +114,19 @@ let Analytics = (props) => {
                 </div>
             </div>
             <div className='section'>
-                <SectionHeading name='Your Genre Breakdown'></SectionHeading>
+                <SectionHeading name='Your Monthly Genre Breakdown'></SectionHeading>
                 <div className='sectionBody genereChart'>
                     <GenereChart data={genreBreakdown}></GenereChart>
+                </div>
+            </div>
+            <div>
+                <p> Your Stored Record With Spotiliytics </p>
+                <br></br>
+            </div>
+            <div className='section'>
+                <SectionHeading name='Average Mood of Songs'></SectionHeading>
+                <div className='moodChart'>
+                    <MoodChart data={yourMoods}></MoodChart>
                 </div>
             </div>
         </div>
