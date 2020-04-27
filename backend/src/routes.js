@@ -149,29 +149,30 @@ app.post('/trackMoods', async (req, res) => {
     res.send(allTrackMoods);
 })
 
-app.post('/songFeatures', async (req, res) => {
-    const userToken = req.body.token;
-    const timeRange = "long_term";
-    const limit = "50";
-    const topTracks = await logic.getTrack(userToken, timeRange, limit);
-    const trackIDs = topTracks.map(data => data.id);
-    const trackString = trackIDs.toString();
-    const trackFeatures = await logic.getTrackAverageMood(trackString, userToken);
-    res.send(trackFeatures);
-})
+// app.post('/songFeatures', async (req, res) => {
+//     const userToken = req.body.token;
+//     const timeRange = "long_term";
+//     const limit = "50";
+//     const topTracks = await logic.getTrack(userToken, timeRange, limit);
+//     const trackIDs = topTracks.map(data => data.id);
+//     const trackString = trackIDs.toString();
+//     const trackFeatures = await logic.getTrackAverageMood(trackString, userToken);
+//     res.send(trackFeatures);
+// })
 
 app.post('/yourMood', async(req,res) => {
     try{
         const userToken = req.body.token;
-        const timeRange = "short_term";
-        const limit = "20";
-        const userId = logic.getUserId(userToken).toString();
-        console.log("userId" + userId)
-        const topTracks = await logic.getTrack(userToken, timeRange, limit);
-        const trackString = (topTracks.map(data => data.id)).toString()
+        const limit = "15";
+        const userId = await logic.getUserId(userToken);
+
+        const recentlyPlayedTracks = await logic.getRecentlyPlayed(userToken, limit);
+        const trackString = (recentlyPlayedTracks.map(items => items.track.id)).toString();
         const averageMood = await logic.getTrackAverageMood(trackString, userToken);
-        let upload = await logic.uploadMoods(userId, averageMood)
+
+        let upload = await logic.updateMoods(userId, averageMood)
         let cachedResults = await logic.findMoods(userId)
+        
         if (cachedResults){
             console.log('cache hit!')
             console.log(cachedResults)

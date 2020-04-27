@@ -231,6 +231,7 @@ exports.getTracks = async (artistObj, token) => {
 
 }
 
+
 exports.getMonthlyArtist = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
         let search = monthlyEndPointArtist + 'time_range=' + timeRange + '&limit=' + limit
@@ -327,8 +328,31 @@ exports.getTrackMood = (trackID, userToken) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData);
+                    // console.log(parsedData);
                     resolve(parsedData);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+
+exports.getRecentlyPlayed = async (userToken, limit) => {
+    return new Promise(resolve => {
+        let search = config.spotify.recentlyPlayedEndPoint + '&limit=' + limit
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(rawData);
+                    console.log(parsedData)
+                    resolve(parsedData.items);
                 } catch (e) {
                     console.error(e.message);
                 }
@@ -343,7 +367,7 @@ exports.getTrackAverageMood = (trackID, userToken) => {
     return new Promise(resolve => {
         trackID = trackID.replace(/,/g, '%2C');
         let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
-        console.log(search);
+        // console.log(search);
         https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
@@ -371,6 +395,8 @@ exports.getTrackAverageMood = (trackID, userToken) => {
 }
 
 
+
+
 //DATABASE 
 // Discovery - Location
 exports.uploadTracks = (locationCode, events) => {
@@ -384,10 +410,22 @@ exports.findTracks = async (locationCode) => {
 }
 
 // Analytics - Mood
-exports.uploadMoods = (userId, moodInput) => {
-    const moods = new Moods({ userId: userId, moods: moodInput})
-    let res = moods.save();
-    return res
+exports.updateMoods = async (userId, moodInput) => {
+    let res = await this.findMoods(userId)
+    console.log(res)
+    if (!res[0]){
+        const moods = new Moods({ userId: userId, moods: moodInput})
+        let res2 = await moods.save()
+        console.log("new mood was saved " + res2)
+        return res2
+    }else{
+        let pastMoods = res[0]["moods"]
+        pastMoods.push(moodInput)
+        console.log(pastMoods)
+        let update = await Moods.findOneAndUpdate( { userId: userId } , {moods: pastMoods}, {new: true})
+        return update
+    }
+
 }
 
 exports.findMoods = async (userId) => {

@@ -42,9 +42,9 @@ let Analytics = (props) => {
         .then(response => response.json())
         .then(data => setTrackMoods(data));
 
-        // fetch('/yourMood', requestOptions)
-        // .then(response => response.json())
-        // .then(data => setYourMoods(data));
+        fetch('/yourMood', requestOptions)
+        .then(response => response.json())
+        .then(data => setYourMoods(data));
         }
 
 
