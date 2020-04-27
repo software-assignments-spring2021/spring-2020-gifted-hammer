@@ -161,7 +161,7 @@ app.post('/songFeatures', async (req, res) => {
 })
 
 app.post('/yourMood', async(req,res) => {
-    try{
+    try {
         console.log(req.body.userId)
         let cachedResults = await logic.findMoods(req.body.userId)
         if (cachedResults){

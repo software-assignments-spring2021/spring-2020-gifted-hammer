@@ -362,3 +362,14 @@ exports.findMoods = async (userId) => {
     let res = await Moods.find({ "userId": userId })
     return res[0]
 }
+
+// Analytics - Top Song
+exports.uploadTopSong = (userId, topSongInput) => {
+    const topSong = new TopSong({ userId: userId, topSong: topSongInput})
+    let res = topSong.save();
+}
+
+exports.findTopSong = async (userId) => {
+    let res = await TopSong.find({ "userId": userId })
+    return res[0]
+}
