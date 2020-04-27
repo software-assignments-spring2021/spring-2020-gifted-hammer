@@ -45,6 +45,30 @@ exports.getArtistId = (token, name) => {
 
 }
 
+exports.getUserId = (token) => {
+    return new Promise(resolve => {
+        let search = config.spotify.userIdEnpoint
+        https.get(search, {headers : { Authorization: 'Bearer ' + token } }, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try{
+                    const parsedData = JSON.parse(rawData);
+                    const id = parsedData.id;
+                    resolve(id);
+                    return id;
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+
+}
+
 exports.getRecs = (token, artistId, params) => {
 
     return new Promise(resolve => {
@@ -315,7 +339,7 @@ exports.getTrackMood = (trackID, userToken) => {
     })
 }
 
-exports.getTrackFeatures = (trackID, userToken) => {
+exports.getTrackAverageMood = (trackID, userToken) => {
     return new Promise(resolve => {
         trackID = trackID.replace(/,/g, '%2C');
         let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
@@ -326,9 +350,16 @@ exports.getTrackFeatures = (trackID, userToken) => {
             res.on('data', (chunk) => { rawData += chunk; });
             res.on('end', () => {
                 try {
+                    let moodSum = 0;
+                    let count = 0;
                     const parsedData = JSON.parse(rawData);
                     console.log(parsedData);
-                    resolve(parsedData);
+                    for(let i =0; i<parsedData.audio_features.length; i++){
+                        moodSum += parsedData.audio_features[i].valence;
+                        count++;
+                    }
+                    let averageMood = moodSum/count;
+                    resolve(averageMood);
                 } catch (e) {
                     console.error(e.message);
                 }
@@ -356,9 +387,10 @@ exports.findTracks = async (locationCode) => {
 exports.uploadMoods = (userId, moodInput) => {
     const moods = new Moods({ userId: userId, moods: moodInput})
     let res = moods.save();
+    return res
 }
 
 exports.findMoods = async (userId) => {
     let res = await Moods.find({ "userId": userId })
-    return res[0]
+    return res
 }

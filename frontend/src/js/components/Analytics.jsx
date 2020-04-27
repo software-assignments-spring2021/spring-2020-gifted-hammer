@@ -166,14 +166,12 @@ let Genere = (props) => {
 }
 let MoodChart = (props) => {
     const data= [];
-    console.log(props);
     for (let i = 0; i< props["data"].length; i++){
         const dataval = {};
         dataval.moodScore = props["data"][i]["valence"];
         dataval.name = props["data"][i]["id"];
         data.push(dataval);
     }
-    console.log(data);
 
     return (
         <BarChart

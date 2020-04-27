@@ -156,21 +156,30 @@ app.post('/songFeatures', async (req, res) => {
     const topTracks = await logic.getTrack(userToken, timeRange, limit);
     const trackIDs = topTracks.map(data => data.id);
     const trackString = trackIDs.toString();
-    const trackFeatures = await logic.getTrackFeatures(trackString, userToken);
+    const trackFeatures = await logic.getTrackAverageMood(trackString, userToken);
     res.send(trackFeatures);
 })
 
 app.post('/yourMood', async(req,res) => {
     try{
-        console.log(req.body.userId)
-        let cachedResults = await logic.findMoods(req.body.userId)
+        const userToken = req.body.token;
+        const timeRange = "short_term";
+        const limit = "20";
+        const userId = logic.getUserId(userToken).toString();
+        console.log("userId" + userId)
+        const topTracks = await logic.getTrack(userToken, timeRange, limit);
+        const trackString = (topTracks.map(data => data.id)).toString()
+        const averageMood = await logic.getTrackAverageMood(trackString, userToken);
+        let upload = await logic.uploadMoods(userId, averageMood)
+        let cachedResults = await logic.findMoods(userId)
         if (cachedResults){
-            console.log('cahce hit!')
+            console.log('cache hit!')
+            console.log(cachedResults)
             res.send(cachedResults)
         }
         else {
             console.log('cache miss')
-            res.send(null)
+            res.send("oh")
         }
     }
     catch (error) { 
