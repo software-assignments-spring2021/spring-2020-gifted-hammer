@@ -50,8 +50,6 @@ let Analytics = (props) => {
         .then(response => response.json())
         .then(data => setTopArtistsInArea(data));
 
-     
-
         fetch('/yourMood', requestOptions)
         .then(response => response.json())
         .then(data => setYourMoods(data));
@@ -238,11 +236,11 @@ let MoodChart = (props) => {
 }
 
 let MoodChart2 = (props) => {
+    console.log(props)
     const data= [];
     if(props.data.length === 0){
         return null
     }
-    console.log(props)
     for (let i = 0; i< props.data[0].moods.length; i++){
         const dataval = {};
         dataval.moodScore = props.data[0].moods[i];

@@ -348,7 +348,6 @@ exports.getRecentlyPlayed = async (userToken, limit) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData)
                     resolve(parsedData.items);
                 } catch (e) {
                     console.error(e.message);
@@ -373,7 +372,6 @@ exports.getTrackAverageMood = (trackID, userToken) => {
                     let moodSum = 0;
                     let count = 0;
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData);
                     for(let i =0; i<parsedData.audio_features.length; i++){
                         moodSum += parsedData.audio_features[i].valence;
                         count++;
@@ -402,6 +400,7 @@ exports.uploadTracks = (locationCode, events) => {
 }
 exports.findTracks = async (locationCode) => {
     let res = await Tracks.find({ "locationCode": locationCode })
+    
     return res[0]
 }
 
@@ -414,7 +413,7 @@ exports.updateMoods = async (userId, moodInput) => {
         let res2 = await moods.save()
         console.log("new mood was saved " + res2)
         return res2
-    }else{
+    } else{
         let pastMoods = res[0]["moods"]
         pastMoods.push(moodInput)
         console.log(pastMoods)
@@ -425,6 +424,7 @@ exports.updateMoods = async (userId, moodInput) => {
 }
 
 exports.findMoods = async (userId) => {
+
     let res = await Moods.find({ "userId": userId })
     return res
 }
