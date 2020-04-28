@@ -47,7 +47,7 @@
     align-items: center;
     justify-content: center;
 }
-.genres{
+.genres, .songs{
     color: rgb(114, 123, 228);
     display: flex;
     flex-direction: row;
@@ -55,13 +55,13 @@
     justify-content: center;
 
 }
-.genere{
+.genere, .song{
     text-align: center;  
     margin-right: 13px;
     margin-left: 13px;
     margin-bottom: 25px;
 }
-.genereImg{
+.genereImg, .songImg{
     height: 100px;
     width: 100px;
     border: solid rgb(46, 59, 201);

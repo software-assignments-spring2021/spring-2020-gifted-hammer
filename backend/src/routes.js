@@ -196,8 +196,9 @@ app.post('/yourTopSongs', async(req,res) => {
         const song1 = await logic.getTrack(userToken, "short_term", 1);
         const song2 = await logic.getTrack(userToken, "medium_term", 1);
         const song3 = await logic.getTrack(userToken, "long_term", 1);
-        const songs = [[song1.name, song1.album.images[0].url], [song2.name, song2.album.images[0].url], [song3.name, song3.album.images[0].url]];
-
+        const songs = [[song1[0].name, song1[0].album.images[0].url], [song2[0].name, song2[0].album.images[0].url], [song3[0].name, song3[0].album.images[0].url]];
+        //console.log("songs");
+        //console.log(songs);
         let upload = await logic.uploadTopSong(userId, songs)
         let cachedResults = await logic.findTopSong(userId)
         
