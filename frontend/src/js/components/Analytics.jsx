@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import '../../css/Analytics.css'
 import {
@@ -10,6 +11,9 @@ let Analytics = (props) => {
     const [topGenres, setTopGenres] = useState({})
     const [genreBreakdown, setGenreBreakdown] = useState([])
     const [trackMoods, setTrackMoods] = useState([])
+    const [topArtistsInArea, setTopArtistsInArea] = useState([])
+    const [yourMoods, setYourMoods] = useState([])
+    const [yourTopSongs, setYourTopSongs] = useState([])
     const accessToken = props.accessToken
 
     const [hasError, setErrors] = useState(false);
@@ -20,7 +24,8 @@ let Analytics = (props) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "token": accessToken
+                token: accessToken,
+                location: props.location
             })
         };
 
@@ -40,8 +45,20 @@ let Analytics = (props) => {
         fetch('/trackMoods', requestOptions)
         .then(response => response.json())
         .then(data => setTrackMoods(data));
-        }
 
+        fetch('/areaSearch', requestOptions)
+        .then(response => response.json())
+        .then(data => setTopArtistsInArea(data));
+
+        fetch('/yourMood', requestOptions)
+        .then(response => response.json())
+        .then(data => setYourMoods(data));
+
+        fetch('/yourTopSongs', requestOptions)
+        .then(response => response.json())
+        .then(data => setYourTopSongs(data));
+    }
+        
 
         const formatTopSong = data => {
             let topSong = {};
@@ -51,7 +68,6 @@ let Analytics = (props) => {
             setTopSongData(topSong);
         }
 
-        
         const formatMonthlyGenre = data => {
             let topGenre = {};
             topGenre.firstName = data[0].genre;
@@ -68,7 +84,7 @@ let Analytics = (props) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
     return (
         <div className="analytics">
             {/* <div className='section'>
@@ -109,11 +125,49 @@ let Analytics = (props) => {
                 </div>
             </div>
             <div className='section'>
-                <SectionHeading name='Your Genre Breakdown'></SectionHeading>
+                <SectionHeading name='Your Monthly Genre Breakdown'></SectionHeading>
                 <div className='sectionBody genereChart'>
                     <GenereChart data={genreBreakdown}></GenereChart>
                 </div>
             </div>
+
+            <div>
+                <p> Your Stored Record With Spotilytics </p>
+                <br></br>
+            </div>
+
+            <div className='section'>
+                <SectionHeading name='Average Mood of Songs'></SectionHeading>
+                <div className='moodChart'>
+                    <MoodChart2 data={yourMoods}></MoodChart2>
+                </div>
+            </div>
+
+            <div className='section'>
+                <SectionHeading name="Past Top Songs"></SectionHeading>
+                <div className='songs'>
+                    {!yourTopSongs.songs ? null :
+                    <>
+                        <Song name={yourTopSongs.songs[0][0]} image = {yourTopSongs.songs[0][1]} time="Past 1 Month"></Song>
+                        <Song name={yourTopSongs.songs[1][0]} image = {yourTopSongs.songs[1][1]} time="Past 6 Months"></Song>
+                        <Song name={yourTopSongs.songs[2][0]} image = {yourTopSongs.songs[2][1]} time="Past 2 Years"></Song>
+                    </>
+                    }
+                </div>
+            </div>
+
+            <div className='section areaArtists'>
+                <SectionHeading name='People in your area have also searched:'></SectionHeading>
+                <div className='sectionBody'>
+                    <ul>
+                        <li>{topArtistsInArea[0]}</li>
+                        <li>{topArtistsInArea[1]}</li>
+                        <li>{topArtistsInArea[2]}</li>
+
+                    </ul>
+                </div>
+            </div>
+
         </div>
     )
 }
@@ -133,14 +187,6 @@ let Metric = (props) => {
     )
 }
 
-let BigMetric = (props) => {
-    return (
-        <div className="bigMetric">
-            <h2>{props.value}</h2>
-            <h3>{props.descriptor}</h3>
-        </div>
-    )
-}
 let Genere = (props) => {
     return (
         <div className="genere">
@@ -149,16 +195,28 @@ let Genere = (props) => {
         </div>
     )
 }
-let MoodChart = (props) => {
-    const data= [];
+let Song = (props) => {
     console.log(props);
+    // if(props.data.length === 0){
+    //     return null
+    // }
+    return (
+        <div className="song">
+            <h4>{props.name}</h4>
+            <img className="songImg" src={props.image}></img>
+            <h5>{props.time}</h5>
+        </div>
+    )
+}
+let MoodChart = (props) => {
+    // console.log(props)
+    const data= [];
     for (let i = 0; i< props["data"].length; i++){
         const dataval = {};
         dataval.moodScore = props["data"][i]["valence"];
         dataval.name = props["data"][i]["id"];
         data.push(dataval);
     }
-    console.log(data);
 
     return (
         <BarChart
@@ -176,13 +234,36 @@ let MoodChart = (props) => {
         </BarChart>
     )
 }
+
+let MoodChart2 = (props) => {
+    console.log(props)
+    const data= [];
+    if(props.data.length === 0){
+        return null
+    }
+    for (let i = 0; i< props.data[0].moods.length; i++){
+        const dataval = {};
+        dataval.moodScore = props.data[0].moods[i];
+        dataval.name = i;
+        data.push(dataval);
+    }
+    return (
+        <BarChart
+            width={800}
+            height={200}
+            data={data}
+            margin={{
+                top: 10, right: 10, left: 0, bottom: 5,
+            }}
+        >
+        <XAxis dataKey="name" tick={false}/>
+        <YAxis />
+        <Tooltip/>
+        <Bar dataKey="moodScore" fill="#8884d8" />
+        </BarChart>
+    )
+}
 let GenereChart = (props) => {
-    // const data01 = [
-    //     { name: 'Rock', value: 25 }, 
-    //     { name: 'Metal', value: 30 },
-    //     { name: 'Pop', value: 35 }, 
-    //     { name: 'Lo-Fi', value: 10 }
-    // ];
     const data01 = [];
     for (let i = 0; i< props["data"].length; i++){
         const dataval = {};
