@@ -108,13 +108,14 @@ exports.processFace = (path) => {
         var process = spawn('python', ["./python/face-analysis.py",
              path]);
         process.stdout.on('data', function (data) {
+
             resolve({ emotion: data.toString().trim() });
 
         })
 
         process.stderr.on('data', (data) => {
             // As said before, convert the Uint8Array to a readable string.
-            console.log(new TextDecoder("utf-8").decode(data));
+            // console.log(new TextDecoder("utf-8").decode(data));
         });
 
     })
