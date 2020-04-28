@@ -3,6 +3,11 @@ require('dotenv').config()
 const server = process.env.DB_HOST
 const { check, validationResult } = require('express-validator');
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true)
+
 let Locations = require('./location')
 let Artist = require('./artist')
 
