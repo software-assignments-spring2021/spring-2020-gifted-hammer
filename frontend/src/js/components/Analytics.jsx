@@ -176,7 +176,7 @@ let Song = (props) => {
     )
 }
 let MoodChart = (props) => {
-    console.log(props)
+    // console.log(props)
     const data= [];
     for (let i = 0; i< props["data"].length; i++){
         const dataval = {};
@@ -204,10 +204,13 @@ let MoodChart = (props) => {
 
 let MoodChart2 = (props) => {
     const data= [];
+    if(props.data.length === 0){
+        return null
+    }
     console.log(props)
-    for (let i = 0; i< props[0]["moods"].length; i++){
+    for (let i = 0; i< props.data[0].moods.length; i++){
         const dataval = {};
-        dataval.moodScore = props[0]["moods"][i];
+        dataval.moodScore = props.data[0].moods[i];
         dataval.name = i;
         data.push(dataval);
     }
