@@ -84,7 +84,7 @@ let Analytics = (props) => {
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, []);
     return (
         <div className="analytics">
             {/* <div className='section'>
