@@ -31,9 +31,26 @@ app.post("/search", async (req, res) => {
 app.post('/nearby', async (req, res) => {
     try {
         let locationResp = await logic.getLocationID(req.body.location)
-        let artistsResp = await logic.getNearbyArtists(locationResp, req.body.token)
-        let tracksResp = await logic.getTracks(artistsResp, req.body.token)
-        res.send(tracksResp)
+        let locationId = ((JSON.parse(locationResp)).id).toString()
+        let cachedResults = await logic.findTracks(locationId)
+        if (cachedResults) {
+            console.log('cache hit!')
+            res.send(cachedResults)
+        }
+        else {
+            console.log('cache miss')
+            let artistsResp = await logic.getNearbyArtists(locationResp, req.body.token)
+            let tracksResp = await logic.getTracks(artistsResp, req.body.token)
+            try {
+                let upload = await logic.uploadTracks(locationId, tracksResp.events)
+                console.log('upload success')
+                res.send(tracksResp)
+            }
+            catch{
+                console.log('upload failed')
+                res.send(undefined)
+            }
+        }
     }
     catch (error) { console.log(error) }
 })
@@ -132,15 +149,72 @@ app.post('/trackMoods', async (req, res) => {
     res.send(allTrackMoods);
 })
 
-app.post('/songFeatures', async (req, res) => {
-    const userToken = req.body.token;
-    const timeRange = "long_term";
-    const limit = "50";
-    const topTracks = await logic.getTrack(userToken, timeRange, limit);
-    const trackIDs = topTracks.map(data => data.id);
-    const trackString = trackIDs.toString();
-    const trackFeatures = await logic.getTrackFeatures(trackString, userToken);
-    res.send(trackFeatures);
+// app.post('/songFeatures', async (req, res) => {
+//     const userToken = req.body.token;
+//     const timeRange = "long_term";
+//     const limit = "50";
+//     const topTracks = await logic.getTrack(userToken, timeRange, limit);
+//     const trackIDs = topTracks.map(data => data.id);
+//     const trackString = trackIDs.toString();
+//     const trackFeatures = await logic.getTrackAverageMood(trackString, userToken);
+//     res.send(trackFeatures);
+// })
+
+app.post('/yourMood', async(req,res) => {
+    try{
+        const userToken = req.body.token;
+        const limit = "15";
+        const userId = await logic.getUserId(userToken);
+
+        const recentlyPlayedTracks = await logic.getRecentlyPlayed(userToken, limit);
+        const trackString = (recentlyPlayedTracks.map(items => items.track.id)).toString();
+        const averageMood = await logic.getTrackAverageMood(trackString, userToken);
+
+        let upload = await logic.updateMoods(userId, averageMood)
+        let cachedResults = await logic.findMoods(userId)
+        
+        if (cachedResults){
+            console.log('cache hit!')
+            console.log(cachedResults)
+            res.send(cachedResults)
+        }
+        else {
+            console.log('cache miss')
+            res.send("oh")
+        }
+    }
+    catch (error) { 
+        console.log(error) 
+    }
+})
+
+app.post('/yourTopSongs', async(req,res) => {
+    try{
+        const userToken = req.body.token;
+        const userId = await logic.getUserId(userToken);
+
+        const song1 = await logic.getTrack(userToken, "short_term", 1);
+        const song2 = await logic.getTrack(userToken, "medium_term", 1);
+        const song3 = await logic.getTrack(userToken, "long_term", 1);
+        const songs = [[song1[0].name, song1[0].album.images[0].url], [song2[0].name, song2[0].album.images[0].url], [song3[0].name, song3[0].album.images[0].url]];
+        //console.log("songs");
+        //console.log(songs);
+        let upload = await logic.uploadTopSong(userId, songs)
+        let cachedResults = await logic.findTopSong(userId)
+        
+        if (cachedResults){
+            console.log('cache hit!')
+            console.log(cachedResults)
+            res.send(cachedResults)
+        }
+        else {
+            console.log('cache miss')
+            res.send("oh")
+        }
+    }
+    catch (error) { 
+        console.log(error) 
+    }
 })
 
 app.post('/areaSearch', async (req, res) => {
