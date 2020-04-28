@@ -11,6 +11,7 @@ let Analytics = (props) => {
     const [genreBreakdown, setGenreBreakdown] = useState([])
     const [trackMoods, setTrackMoods] = useState([])
     const [yourMoods, setYourMoods] = useState([])
+    const [yourTopSongs, setYourTopSongs] = useState([])
     const accessToken = props.accessToken
 
     const [hasError, setErrors] = useState(false);
@@ -46,9 +47,9 @@ let Analytics = (props) => {
         .then(response => response.json())
         .then(data => setYourMoods(data));
 
-        // fetch('/yourTopSongs', requestOptions)
-        // .then(response => response.json())
-        // .then(data => setYourTopSongs(data));
+        fetch('/yourTopSongs', requestOptions)
+        .then(response => response.json())
+        .then(data => setYourTopSongs(data));
         }
 
         const formatTopSong = data => {
@@ -122,7 +123,7 @@ let Analytics = (props) => {
                 </div>
             </div>
             <div>
-                <p> Your Stored Record With Spotiliytics </p>
+                <p> Your Stored Record With Spotilytics </p>
                 <br></br>
             </div>
             <div className='section'>
@@ -134,9 +135,9 @@ let Analytics = (props) => {
             <div className='section'>
                 <SectionHeading name="Past Top Songs"></SectionHeading>
                 <div className='songs'>
-                    <Song name={topGenres.firstName} image ={topGenres.firstImage} time="Past 1 Month"></Song>
-                    <Song name={topGenres.firstName} image ={topGenres.firstImage} time="Past 6 Months"></Song>
-                    <Song name={topGenres.firstName} image ={topGenres.firstImage} time="Past 2 Years"></Song>
+                    <Song name={yourTopSongs[0][0]} image ={yourTopSongs[0][1]} time="Past 1 Month"></Song>
+                    <Song name={yourTopSongs[1][0]} image ={yourTopSongs[1][1]} time="Past 6 Months"></Song>
+                    <Song name={yourTopSongs[2][0]} image ={yourTopSongs[2][1]} time="Past 2 Years"></Song>
                 </div>
             </div>
         </div>
@@ -167,6 +168,10 @@ let Genere = (props) => {
     )
 }
 let Song = (props) => {
+    console.log(props);
+    if(props.data.length === 0){
+        return null
+    }
     return (
         <div className="song">
             <h4>{props.name}</h4>
