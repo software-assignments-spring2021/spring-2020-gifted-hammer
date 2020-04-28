@@ -49,7 +49,11 @@ let Analytics = (props) => {
 
         fetch('/yourTopSongs', requestOptions)
         .then(response => response.json())
-        .then(data => setYourTopSongs(data));
+        .then(data => {
+            setYourTopSongs(data)
+            console.log("\n\n\n\n\n\n\n\n\n\n");
+            
+        });
         }
 
         const formatTopSong = data => {
@@ -76,7 +80,7 @@ let Analytics = (props) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
     return (
         <div className="analytics">
             {/* <div className='section'>
@@ -135,9 +139,13 @@ let Analytics = (props) => {
             <div className='section'>
                 <SectionHeading name="Past Top Songs"></SectionHeading>
                 <div className='songs'>
-                    <Song name={yourTopSongs[0][0]} image ={yourTopSongs[0][1]} time="Past 1 Month"></Song>
-                    <Song name={yourTopSongs[1][0]} image ={yourTopSongs[1][1]} time="Past 6 Months"></Song>
-                    <Song name={yourTopSongs[2][0]} image ={yourTopSongs[2][1]} time="Past 2 Years"></Song>
+                    {!yourTopSongs.songs ? null :
+                    <>
+                        <Song name={yourTopSongs.songs[0][0]} image = {yourTopSongs.songs[0][1]} time="Past 1 Month"></Song>
+                        <Song name={yourTopSongs.songs[1][0]} image = {yourTopSongs.songs[1][1]} time="Past 6 Months"></Song>
+                        <Song name={yourTopSongs.songs[2][0]} image = {yourTopSongs.songs[2][1]} time="Past 2 Years"></Song>
+                    </>
+                    }
                 </div>
             </div>
         </div>
@@ -169,9 +177,9 @@ let Genere = (props) => {
 }
 let Song = (props) => {
     console.log(props);
-    if(props.data.length === 0){
-        return null
-    }
+    // if(props.data.length === 0){
+    //     return null
+    // }
     return (
         <div className="song">
             <h4>{props.name}</h4>
