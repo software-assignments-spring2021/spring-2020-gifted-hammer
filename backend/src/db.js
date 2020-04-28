@@ -26,7 +26,7 @@ mongoose.connect('mongodb+srv://giftedHammer:giftedHammer@cluster0-smurl.mongodb
 // mongoose topSongSchema
 const topSongSchema = new mongoose.Schema({
     userId: { type: String, required: true },
-    song: { type: String, required: true },
+    songs: { type: Array, required: true },
 });
 mongoose.model("TopSong", topSongSchema)
 const TopSong = mongoose.model("TopSong")

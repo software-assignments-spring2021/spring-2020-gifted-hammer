@@ -45,8 +45,11 @@ let Analytics = (props) => {
         fetch('/yourMood', requestOptions)
         .then(response => response.json())
         .then(data => setYourMoods(data));
-        }
 
+        // fetch('/yourTopSongs', requestOptions)
+        // .then(response => response.json())
+        // .then(data => setYourTopSongs(data));
+        }
 
         const formatTopSong = data => {
             let topSong = {};
@@ -56,7 +59,6 @@ let Analytics = (props) => {
             setTopSongData(topSong);
         }
 
-        
         const formatMonthlyGenre = data => {
             let topGenre = {};
             topGenre.firstName = data[0].genre;
@@ -129,6 +131,14 @@ let Analytics = (props) => {
                     <MoodChart2 data={yourMoods}></MoodChart2>
                 </div>
             </div>
+            <div className='section'>
+                <SectionHeading name="Past Top Songs"></SectionHeading>
+                <div className='songs'>
+                    <Song name={topGenres.firstName} image ={topGenres.firstImage} time="Past 1 Month"></Song>
+                    <Song name={topGenres.firstName} image ={topGenres.firstImage} time="Past 6 Months"></Song>
+                    <Song name={topGenres.firstName} image ={topGenres.firstImage} time="Past 2 Years"></Song>
+                </div>
+            </div>
         </div>
     )
 }
@@ -153,6 +163,15 @@ let Genere = (props) => {
         <div className="genere">
             <h4>{props.name}</h4>
             <img className="genereImg" src={props.image}></img>
+        </div>
+    )
+}
+let Song = (props) => {
+    return (
+        <div className="song">
+            <h4>{props.name}</h4>
+            <img className="songImg" src={props.image}></img>
+            <h5>{props.time}</h5>
         </div>
     )
 }

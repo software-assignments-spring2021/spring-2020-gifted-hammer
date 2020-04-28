@@ -126,7 +126,7 @@ app.post('/topSong', async (req, res) => {
     const timeRange = "short_term";
     const limit = "1";
     const topTrack = await logic.getTrack(userToken, timeRange, limit);
-    console.log(JSON.stringify(topTrack));
+    //console.log(JSON.stringify(topTrack));
     res.send(topTrack);
 })
 
@@ -172,6 +172,35 @@ app.post('/yourMood', async(req,res) => {
 
         let upload = await logic.updateMoods(userId, averageMood)
         let cachedResults = await logic.findMoods(userId)
+        
+        if (cachedResults){
+            console.log('cache hit!')
+            console.log(cachedResults)
+            res.send(cachedResults)
+        }
+        else {
+            console.log('cache miss')
+            res.send("oh")
+        }
+    }
+    catch (error) { 
+        console.log(error) 
+    }
+})
+
+app.post('/yourTopSongs', async(req,res) => {
+    try{
+        const userToken = req.body.token;
+        const userId = await logic.getUserId(userToken);
+
+        const song1 = await logic.getTrack(userToken, "short_term", 1);
+        const song2 = await logic.getTrack(userToken, "medium_term", 1);
+        const song3 = await logic.getTrack(userToken, "long_term", 1);
+        const songs = [[song1[0].name, song1[0].album.images[0].url], [song2[0].name, song2[0].album.images[0].url], [song3[0].name, song3[0].album.images[0].url]];
+        //console.log("songs");
+        //console.log(songs);
+        let upload = await logic.uploadTopSong(userId, songs)
+        let cachedResults = await logic.findTopSong(userId)
         
         if (cachedResults){
             console.log('cache hit!')
