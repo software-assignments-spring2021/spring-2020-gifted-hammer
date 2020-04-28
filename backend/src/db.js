@@ -5,6 +5,30 @@ const server = process.env.DB_HOST
 let Locations = require('./location')
 let Artist = require('./artist')
 
+// mongoose moodSchema
+const moodsSchema = new mongoose.Schema({
+    userId: { type: String, required: true },
+    moods: { type: Array, required: true },
+});
+mongoose.model("Moods", moodsSchema)
+const Moods = mongoose.model("Moods")
+
+// mongoose topSongSchema
+const topSongSchema = new mongoose.Schema({
+    userId: { type: String, required: true },
+    songs: { type: Array, required: true },
+});
+
+mongoose.model("TopSong", topSongSchema)
+const TopSong = mongoose.model("TopSong")
+
+const TracksSchema = new mongoose.Schema({
+    locationCode: { type: String, required: true },
+    events: { type: Array, required: true },
+});
+
+mongoose.model("Tracks", TracksSchema)
+const Tracks = mongoose.model("Tracks")
 const connect = () => {
     mongoose.connect(server, { useNewUrlParser: true })
     const db = mongoose.connection;

@@ -132,27 +132,19 @@ let Analytics = (props) => {
                     <GenereChart data={genreBreakdown}></GenereChart>
                 </div>
             </div>
-            <div className='section areaArtists'>
-                <SectionHeading name='People in your area have also searched:'></SectionHeading>
-                <div className='sectionBody'>
-                    <ul>
-                        <li>{topArtistsInArea[0]}</li>
-                        <li>{topArtistsInArea[1]}</li>
-                        <li>{topArtistsInArea[2]}</li>
 
-                    </ul>
-                </div>
-            </div>
             <div>
                 <p> Your Stored Record With Spotilytics </p>
                 <br></br>
             </div>
+
             <div className='section'>
                 <SectionHeading name='Average Mood of Songs'></SectionHeading>
                 <div className='moodChart'>
                     <MoodChart2 data={yourMoods}></MoodChart2>
                 </div>
             </div>
+
             <div className='section'>
                 <SectionHeading name="Past Top Songs"></SectionHeading>
                 <div className='songs'>
@@ -165,6 +157,19 @@ let Analytics = (props) => {
                     }
                 </div>
             </div>
+
+            <div className='section areaArtists'>
+                <SectionHeading name='People in your area have also searched:'></SectionHeading>
+                <div className='sectionBody'>
+                    <ul>
+                        <li>{topArtistsInArea[0]}</li>
+                        <li>{topArtistsInArea[1]}</li>
+                        <li>{topArtistsInArea[2]}</li>
+
+                    </ul>
+                </div>
+            </div>
+
         </div>
     )
 }
