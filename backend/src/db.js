@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config()
 const server = process.env.DB_HOST
+const { check, validationResult } = require('express-validator');
 
 let Locations = require('./location')
 let Artist = require('./artist')
@@ -42,8 +43,10 @@ const connect = () => {
 module.exports.connect = connect
 
 const updateSearch = async (city, state, artist) => {
+
     city = city.toLowerCase()
     state = state.toLowerCase()
+  
     let location = await Locations.findOne({city, state})
     
     if (location) {

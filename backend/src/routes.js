@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const logic = require('./logic.js')
 const multer = require('./python/multer.js')
 const db = require('./db')
+const { check, validationResult } = require('express-validator');
 
 db.connect()
 
@@ -19,7 +20,12 @@ app.get('/token', async (req, res) => {
 });
 
 //RECOMMENDATIONS
-app.post("/search", async (req, res) => {
+app.post("/search", [check('location.state').isLength({min: 2})], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    
     const id = await logic.getArtistId(req.body.token, req.body.artist);
     const recomendations = await logic.getRecs(req.body.token, id, req.body.filters);
 
