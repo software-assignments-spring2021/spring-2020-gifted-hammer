@@ -18,7 +18,7 @@ let Analytics = (props) => {
 
     const [hasError, setErrors] = useState(false);
     async function fetchData() {
-        console.log(accessToken);
+        // console.log(accessToken);
 
         const requestOptions = {
             method: 'POST',
@@ -196,7 +196,7 @@ let Genere = (props) => {
     )
 }
 let Song = (props) => {
-    console.log(props);
+    // console.log(props);
     // if(props.data.length === 0){
     //     return null
     // }
@@ -236,7 +236,7 @@ let MoodChart = (props) => {
 }
 
 let MoodChart2 = (props) => {
-    console.log(props)
+    // console.log(props)
     const data= [];
     if(props.data.length === 0){
         return null
