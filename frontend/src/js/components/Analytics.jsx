@@ -126,7 +126,7 @@ let Analytics = (props) => {
             <div className='section'>
                 <SectionHeading name='Average Mood of Songs'></SectionHeading>
                 <div className='moodChart'>
-                    <MoodChart data={yourMoods}></MoodChart>
+                    <MoodChart2 data={yourMoods}></MoodChart2>
                 </div>
             </div>
         </div>
@@ -148,14 +148,6 @@ let Metric = (props) => {
     )
 }
 
-let BigMetric = (props) => {
-    return (
-        <div className="bigMetric">
-            <h2>{props.value}</h2>
-            <h3>{props.descriptor}</h3>
-        </div>
-    )
-}
 let Genere = (props) => {
     return (
         <div className="genere">
@@ -165,6 +157,7 @@ let Genere = (props) => {
     )
 }
 let MoodChart = (props) => {
+    console.log(props)
     const data= [];
     for (let i = 0; i< props["data"].length; i++){
         const dataval = {};
@@ -189,13 +182,33 @@ let MoodChart = (props) => {
         </BarChart>
     )
 }
+
+let MoodChart2 = (props) => {
+    const data= [];
+    console.log(props)
+    for (let i = 0; i< props[0]["moods"].length; i++){
+        const dataval = {};
+        dataval.moodScore = props[0]["moods"][i];
+        dataval.name = i;
+        data.push(dataval);
+    }
+    return (
+        <BarChart
+            width={800}
+            height={200}
+            data={data}
+            margin={{
+                top: 10, right: 10, left: 0, bottom: 5,
+            }}
+        >
+        <XAxis dataKey="name" tick={false}/>
+        <YAxis />
+        <Tooltip/>
+        <Bar dataKey="moodScore" fill="#8884d8" />
+        </BarChart>
+    )
+}
 let GenereChart = (props) => {
-    // const data01 = [
-    //     { name: 'Rock', value: 25 }, 
-    //     { name: 'Metal', value: 30 },
-    //     { name: 'Pop', value: 35 }, 
-    //     { name: 'Lo-Fi', value: 10 }
-    // ];
     const data01 = [];
     for (let i = 0; i< props["data"].length; i++){
         const dataval = {};
