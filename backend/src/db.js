@@ -14,7 +14,7 @@ mongoose.model("Tracks", TracksSchema)
 const Tracks = mongoose.model("Tracks")
 
 
-mongoose.connect('mongodb+srv://giftedHammer:giftedHammer@cluster0-smurl.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://giftedHammer:giftedHammer@cluster0-smurl.mongodb.net/spotilytics?retryWrites=true&w=majority', { useNewUrlParser: true });
 //how u create a entry
 /*
 const tracks = new Tracks({locationCode:"0000",data:{test:"blah!",testo:["spoo","bah"]})
