@@ -4,8 +4,9 @@
   "description": "",
   "main": "../server.js",
   "scripts": {
-    "start": "node ./src/server.js",
-    "test": "nyc mocha"
+    "test": "mocha",
+    "test-with-coverage": "nyc mocha"
+
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "nodemon": "^2.0.3"
   },
   "devDependencies": {
+    "mocha": "^7.1.2",
     "nyc": "^15.0.1"
   }
 }

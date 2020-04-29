@@ -1,5 +1,5 @@
 # Spotilytics
-[![Build Status](https://travis-ci.com/qscacheri/software-dev.svg?branch=master)](https://travis-ci.com/qscacheri/software-dev)
+[![Build Status](https://travis-ci.com/nyu-software-engineering/spring-2020-gifted-hammer.svg?branch=master)](https://travis-ci.com/nyu-software-engineering/spring-2020-gifted-hammer)
 
 ## Overview
 In the age of streaming, sifting through new music can be overwhelming at times. You have to jump from
