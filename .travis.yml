@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - 12
-before_script: 
-  - "cd backend"
-  - "npm install"
+  - "12"
+env: 
+  global:
+    secure: "eJgSJy0J2bccqvjoerfv5HzXi0JMvoNQLaKWUX9FViCLQYZwLYy/SuvyUI/E4Oim22KzjJoo2zIY0SjUGqUO4XRoeEAVKeaO8mhqJs+02ZsYkOJ+r9TPJiptWOrceimfkkEjh/76kclPk/IxQ15xaLjCNJpRUM3B5xpsg0/QiNhcFF4yE3mL8fKEp/VF+9SeDR1ECs4zWI1ifAh/Huj/jHX9XsSOtCnSQIT1pSmEXTU0gHuDG9L9TX/C6kjzfd72dvTPd0Ezck0EYtvXaxremWTl3Uhh2jiXq6asCQhbxQ2mt4o4EBGsDS3HGjoxTNSjNW91Z4uJB/jJ5B55WcFh9A35HTr4f6G0X0UBVt1pDrkCQH3vlafDlSXeOzzhpkAAqeiiyL9ZWINzT+kzovujqIsAFEaevFE3TLr6Sp73EBDFx2Xr2BOIMghBkbFWB++4bBMQ6j+1SpWcwaK2xtf2gWOd/9kz7VCzixkwy2/rZkDAiVNQlY9vLpitDiNfGxSBizP/c/uwYRKC6l00JQlmbhsN/4xWyBO4aGEAu9Dm3VrnhFVf3U6/zLBOVJ7UFGFIFOv2sL0+i9wJkCQw8lozrCQmxKWMK9Vs+yGQ7K3eNEs9FtgNgb+AmI3m7FcusLCtwG7tlgReYR8sXUnbsg90Yyi1GlVokDQclVYIp6VL4Cs="
