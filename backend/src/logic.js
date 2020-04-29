@@ -1,9 +1,13 @@
 const https = require('https');
 const config = require('./config.json')
 const got = require('got')
+const db = require('./db');
+const mongoose = require('mongoose');
+const Tracks = mongoose.model('Tracks');
+const Moods = mongoose.model('Moods');
+const TopSong = mongoose.model('TopSong');
 
 exports.getToken = async () => {
-    console.log('getting token....')
     let options = config.spotify.tokenOptions
     let tokenUrl = config.spotify.tokenURL
     try {
@@ -41,6 +45,30 @@ exports.getArtistId = (token, name) => {
 
 }
 
+exports.getUserId = (token) => {
+    return new Promise(resolve => {
+        let search = config.spotify.userIdEnpoint
+        https.get(search, {headers : { Authorization: 'Bearer ' + token } }, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try{
+                    const parsedData = JSON.parse(rawData);
+                    const id = parsedData.id;
+                    resolve(id);
+                    return id;
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+
+}
+
 exports.getRecs = (token, artistId, params) => {
 
     return new Promise(resolve => {
@@ -63,7 +91,6 @@ exports.getRecs = (token, artistId, params) => {
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    // console.log(parsedData);
                     resolve(parsedData.tracks)
                 } catch (e) {
                     console.error(e.message);
@@ -81,14 +108,14 @@ exports.processFace = (path) => {
         var process = spawn('python', ["./python/face-analysis.py",
              path]);
         process.stdout.on('data', function (data) {
-            console.log(data.toString());
+
             resolve({ emotion: data.toString().trim() });
 
         })
 
         process.stderr.on('data', (data) => {
             // As said before, convert the Uint8Array to a readable string.
-            console.log(new TextDecoder("utf-8").decode(data));
+            // console.log(new TextDecoder("utf-8").decode(data));
         });
 
     })
@@ -153,18 +180,23 @@ exports.getNearbyArtists = async (locationObj, token) => {
         let rawEvents = result.resultsPage.results.event
         let events = []
         for (let event of rawEvents) {
-            artistObj = await this.getArtistInfo(event.performance[0].artist.displayName, token)
-            eventObj = {
-                event: {
-                    link: event.uri,
-                    popularity: event.popularity,
-                    status: event.status,
-                    date: event.start.date,
-                    artist: event.performance[0].artist.displayName
-                },
-                artist: artistObj
+            if (event.performance[0]) {
+                artistObj = await this.getArtistInfo(event.performance[0].artist.displayName, token)
+                if (artistObj) {
+                    eventObj = {
+                        event: {
+                            link: event.uri,
+                            popularity: event.popularity,
+                            status: event.status,
+                            date: event.start.date,
+                            artist: event.performance[0].artist.displayName
+                        },
+                        artist: artistObj
+                    }
+                    events.push(eventObj)
+                }
             }
-            events.push(eventObj)
+
         }
         let eventsObj = { events: events }
         return eventsObj
@@ -197,6 +229,7 @@ exports.getTracks = async (artistObj, token) => {
     return artistObj
 
 }
+
 
 exports.getMonthlyArtist = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
@@ -245,7 +278,7 @@ exports.getMonthlyTrack = (userToken) => {
 exports.getArtist = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
         let search = config.spotify.monthlyEndPointArtist + 'time_range=' + timeRange + '&limit=' + limit
-        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -266,7 +299,7 @@ exports.getArtist = (userToken, timeRange, limit) => {
 exports.getTrack = (userToken, timeRange, limit) => {
     return new Promise(resolve => {
         let search = config.spotify.monthlyEndPointTrack + 'time_range=' + timeRange + '&limit=' + limit
-        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -287,14 +320,13 @@ exports.getTrack = (userToken, timeRange, limit) => {
 exports.getTrackMood = (trackID, userToken) => {
     return new Promise(resolve => {
         let search = config.spotify.trackMoodEndPoint + trackID
-        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData);
                     resolve(parsedData);
                 } catch (e) {
                     console.error(e.message);
@@ -306,20 +338,18 @@ exports.getTrackMood = (trackID, userToken) => {
     })
 }
 
-exports.getTrackFeatures = (trackID, userToken) => {
+
+exports.getRecentlyPlayed = async (userToken, limit) => {
     return new Promise(resolve => {
-        trackID = trackID.replace(/,/g, '%2C');
-        let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
-        console.log(search);
-        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        let search = config.spotify.recentlyPlayedEndPoint + '&limit=' + limit
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
             res.on('end', () => {
                 try {
                     const parsedData = JSON.parse(rawData);
-                    console.log(parsedData);
-                    resolve(parsedData);
+                    resolve(parsedData.items);
                 } catch (e) {
                     console.error(e.message);
                 }
@@ -328,4 +358,92 @@ exports.getTrackFeatures = (trackID, userToken) => {
             console.error(`Got error: ${e.message}`);
         });
     })
+}
+
+exports.getTrackAverageMood = (trackID, userToken) => {
+    return new Promise(resolve => {
+        trackID = trackID.replace(/,/g, '%2C');
+        let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
+        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+            res.setEncoding('utf8');
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                try {
+                    let moodSum = 0;
+                    let count = 0;
+                    const parsedData = JSON.parse(rawData);
+                    for(let i =0; i<parsedData.audio_features.length; i++){
+                        moodSum += parsedData.audio_features[i].valence;
+                        count++;
+                    }
+                    let averageMood = moodSum/count;
+                    resolve(averageMood);
+                } catch (e) {
+                    console.error(e.message);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    })
+}
+
+
+
+
+//DATABASE 
+// Discovery - Location
+exports.uploadTracks = (locationCode, events) => {
+    const tracks = new Tracks({ locationCode: locationCode, events: events })
+    let res = tracks.save()
+    return res
+}
+exports.findTracks = async (locationCode) => {
+    let res = await Tracks.find({ "locationCode": locationCode })
+    
+    return res[0]
+}
+
+// Analytics - Mood
+exports.updateMoods = async (userId, moodInput) => {
+    let res = await this.findMoods(userId)
+    console.log(res)
+    if (!res[0]){
+        const moods = new Moods({ userId: userId, moods: moodInput})
+        let res2 = await moods.save()
+        console.log("new mood was saved " + res2)
+        return res2
+    } else{
+        let pastMoods = res[0]["moods"]
+        pastMoods.push(moodInput)
+        console.log(pastMoods)
+        let update = await Moods.findOneAndUpdate( { userId: userId } , {moods: pastMoods}, {new: true})
+        return update
+    }
+
+}
+
+exports.findMoods = async (userId) => {
+
+    let res = await Moods.find({ "userId": userId })
+    return res
+}
+
+// Analytics - Top Song
+exports.uploadTopSong = async (userId, topSongInput) => {
+    let res = await this.findTopSong(userId)
+    if(!res) {
+        const topSong = new TopSong({userId: userId, songs: topSongInput})
+        let res2 = await topSong.save();
+        console.log("top song saved " + res2)
+        return res2
+    } else {
+        return res;
+    }
+}
+
+exports.findTopSong = async (userId) => {
+    let res = await TopSong.find({ "userId": userId })
+    return res[0]
 }

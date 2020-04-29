@@ -7,7 +7,8 @@ const scopes = [
   "user-top-read",
   "streaming", 
   "user-read-email", 
-  "user-read-private"
+  "user-read-private",
+  "user-read-recently-played"
 ];
 
 

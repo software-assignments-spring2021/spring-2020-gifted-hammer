@@ -3,3 +3,4 @@
 backend/uploads
 .vscode
 backend/.nyc_output/
+backend/env
