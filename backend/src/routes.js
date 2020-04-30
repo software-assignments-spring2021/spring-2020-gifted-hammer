@@ -6,6 +6,7 @@ const logic = require('./logic.js')
 const multer = require('./python/multer.js')
 const db = require('./db')
 const { check, validationResult } = require('express-validator');
+var cors = require('cors')
 
 db.connect()
 
@@ -14,10 +15,7 @@ app.use(bodyParser.json()); // decode JSON-formatted incoming POST data
 var storage = multer.storage
 var upload = multer.upload
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-});
+app.use(cors())
   
 //GET GENERAL TOKEN
 app.get('/token', async (req, res) => {
