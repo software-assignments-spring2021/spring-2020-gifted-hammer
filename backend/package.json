@@ -4,8 +4,8 @@
   "description": "",
   "main": "../server.js",
   "scripts": {
-    "test": "mocha",
-    "test-with-coverage": "nyc mocha"
+    "test": "mocha --exit",
+    "test-with-coverage": "nyc mocha --exit"
   },
   "author": "",
   "license": "ISC",
