@@ -32,6 +32,10 @@ describe('Discovery', function () {
                 mood: .5,
                 vocals: .5,
                 danceability: .5
+            },
+            location: {
+                city: 'New York',
+                state: 'NY'
             }
         }
 
@@ -39,6 +43,8 @@ describe('Discovery', function () {
             .post('/search')
             .send(data)
             .end(function (err, res) {
+                console.log('\n\n\n\nRESPONSE', res)
+                
                 expect(res.body[0]).to.have.all.keys(
                     "album",
                     "artists",
@@ -57,8 +63,8 @@ describe('Discovery', function () {
                     "track_number",
                     "type",
                     "uri")
-                done();
             });
+        done()
     }).timeout(5000);
 
     it('gets nearby artists', function (done) { // <= Pass in done callback
@@ -91,9 +97,7 @@ describe('Analytics', function () {
                 done();
             });
     }).timeout(5000);
-})
 
-describe('Analytics', function () {
     it('monthly artist', function (done) {
         chai.request(app)
             .post('/monthlyArtist')
