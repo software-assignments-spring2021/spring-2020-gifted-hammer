@@ -14,7 +14,7 @@ import {
   Route,
 } from "react-router-dom";
 const reverse = require('reverse-geocode')
-
+require('dotenv').config()
 
 
 function App(props) {
@@ -24,7 +24,9 @@ function App(props) {
   
   useEffect(() => {
 
-    fetch('/token')
+    console.log(process.env.REACT_APP_SERVER);
+    
+    fetch('{$process.env.SERVER_IP}/token')
       .then(response => response.json())
       .then(data => setToken(data.token));
   }, []);
