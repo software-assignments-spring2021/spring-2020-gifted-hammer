@@ -1,0 +1,1 @@
+docker build -t spotilytics_backend .

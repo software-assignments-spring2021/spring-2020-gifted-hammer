@@ -8,7 +8,13 @@ COPY package*.json ./
 
 USER node
 
+ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+
+ENV PATH=$PATH:/home/node/.npm-global/bin
+
 RUN npm install
+
+RUN npm install pm2 -g
 
 COPY --chown=node:node . .
 
@@ -16,4 +22,5 @@ EXPOSE 3001
 
 CMD ["ls"]
 
-CMD [ "node", "src/server.js" ]
+# pm2 start src/server.js --name server
+CMD pm2 start src/server.js --name server
