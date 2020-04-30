@@ -23,4 +23,4 @@ EXPOSE 3001
 CMD ["ls"]
 
 # pm2 start src/server.js --name server
-CMD pm2 start src/server.js --name server
+CMD pm2-runtime start src/server.js --name server
