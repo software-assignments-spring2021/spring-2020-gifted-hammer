@@ -30,7 +30,7 @@ function Filters(props) {
             method: 'POST',
             body: formData
         }
-        fetch('/face', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/face', requestOptions)
         .then(response => response.json())
         .then(data => {
             const emotion = data.emotion.toLowerCase();

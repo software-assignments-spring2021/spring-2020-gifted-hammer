@@ -13,6 +13,12 @@ app.use(bodyParser.json()); // decode JSON-formatted incoming POST data
 
 var storage = multer.storage
 var upload = multer.upload
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
+  
 //GET GENERAL TOKEN
 app.get('/token', async (req, res) => {
     const token = await logic.getToken();

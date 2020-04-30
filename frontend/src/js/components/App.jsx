@@ -23,10 +23,8 @@ function App(props) {
   const [location, setLocation] = useState({city: '', state: 'null'})
   
   useEffect(() => {
-
-    console.log(process.env.REACT_APP_SERVER);
     
-    fetch('{$process.env.SERVER_IP}/token')
+    fetch(process.env.REACT_APP_SERVER+'/token')
       .then(response => response.json())
       .then(data => setToken(data.token));
   }, []);

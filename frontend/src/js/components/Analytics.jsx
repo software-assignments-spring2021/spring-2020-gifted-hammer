@@ -30,31 +30,31 @@ let Analytics = (props) => {
         };
 
         // console.log((await fetch('/topSong', requestOptions)).json());
-        fetch('/topSong', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/topSong', requestOptions)
         .then(response => response.json())
         .then(data => formatTopSong(data));
 
-        fetch('/topGenres', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/topGenres', requestOptions)
         .then(response => response.json())
         .then(data => formatMonthlyGenre(data));
 
-        fetch('/genreBreakdown', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/genreBreakdown', requestOptions)
         .then(response => response.json())
         .then(data => setGenreBreakdown(data));
 
-        fetch('/trackMoods', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/trackMoods', requestOptions)
         .then(response => response.json())
         .then(data => setTrackMoods(data));
 
-        fetch('/areaSearch', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/areaSearch', requestOptions)
         .then(response => response.json())
         .then(data => setTopArtistsInArea(data));
 
-        fetch('/yourMood', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/yourMood', requestOptions)
         .then(response => response.json())
         .then(data => setYourMoods(data));
 
-        fetch('/yourTopSongs', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/yourTopSongs', requestOptions)
         .then(response => response.json())
         .then(data => setYourTopSongs(data));
     }
