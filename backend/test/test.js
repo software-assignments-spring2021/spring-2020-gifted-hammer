@@ -43,8 +43,6 @@ describe('Discovery', function () {
             .post('/search')
             .send(data)
             .end(function (err, res) {
-                console.log('\n\n\n\nRESPONSE', res)
-                
                 expect(res.body[0]).to.have.all.keys(
                     "album",
                     "artists",

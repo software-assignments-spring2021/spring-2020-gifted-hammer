@@ -51,7 +51,7 @@ function Discover(props) {
             body: JSON.stringify(data)
         };
 
-        fetch('/nearby', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/nearby', requestOptions)
             .then(response => response.json())
             .then(data => processData(data));
     }
@@ -71,7 +71,7 @@ function Discover(props) {
             body: JSON.stringify(data)
         };
 
-        fetch('/search', requestOptions)
+        fetch(process.env.REACT_APP_SERVER+'/search', requestOptions)
             .then(response => response.json())
             .then(data => processData(data));
     }
