@@ -56,7 +56,8 @@ function App(props) {
           </Route>
           <Route path="/analytics">
             <AppHeader key='header' pageTitle='ANALYTICS' />
-            <Analytics token={token} accessToken={accessToken} location={location}/>
+            {accessToken ? <Analytics token={token} accessToken={accessToken} location={location}/> : <h1>Please connect to Spotify to use this feature</h1>}
+            
           </Route>
         </Switch>
         <AppFooter />
