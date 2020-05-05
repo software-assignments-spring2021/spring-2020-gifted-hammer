@@ -103,6 +103,46 @@
     animation: loading-image-spin infinite 1s linear;
 }
 
+.labels {
+    display: flex;
+    justify-content: space-between;
+    font-style: italic;
+}
+
+.range-container {
+    display: flex;
+    align-items: center;
+    width: 90%;
+}
+  
+.left-arrow, .right-arrow {
+    height: 1px;
+    background-color: white;
+    flex-grow: 1;
+    position: relative;
+}
+
+.left-arrow:after, .right-arrow:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+.left-arrow:after {
+    top: -5px;
+    left: 0;
+    border-right: 5px solid white;
+}
+
+.right-arrow:after {
+    bottom: -5px;
+    right: 0;
+    border-left: 5px solid white;
+}
+
 @keyframes loading-image-spin {
     from {
         transform: rotate(0deg);

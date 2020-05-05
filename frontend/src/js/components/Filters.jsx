@@ -56,6 +56,14 @@ function Filters(props) {
         
         return (
             <div className={visible ? 'filterSliders visible' : 'filterSliders'}>
+                <div class="labels">
+                    <p>low</p>
+                    <div class="range-container">
+                        <span class="left-arrow"></span>
+                        <span class="right-arrow"></span>
+                    </div>
+                    <p>high</p>
+                </div>
                 {
                     filterNames.map((filter, index) => (
                         <div className="filterSliderPair" key={filter}>
