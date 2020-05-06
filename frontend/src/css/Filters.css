@@ -109,10 +109,18 @@
     font-style: italic;
 }
 
+.low {
+    padding: 0px 0px 0px 15px;
+}
+
+.high {
+    padding: 0px 15px 0px 0px;
+}
+
 .range-container {
     display: flex;
     align-items: center;
-    width: 90%;
+    width: 87%;
 }
   
 .left-arrow, .right-arrow {
