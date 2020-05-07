@@ -51,7 +51,7 @@ function Discover(props) {
             body: JSON.stringify(data)
         };
 
-        fetch(process.env.REACT_APP_SERVER+'/nearby', requestOptions)
+        fetch(process.env.REACT_APP_SERVER + '/nearby', requestOptions)
             .then(response => response.json())
             .then(data => processData(data));
     }
@@ -71,7 +71,7 @@ function Discover(props) {
             body: JSON.stringify(data)
         };
 
-        fetch(process.env.REACT_APP_SERVER+'/search', requestOptions)
+        fetch(process.env.REACT_APP_SERVER + '/search', requestOptions)
             .then(response => response.json())
             .then(data => processData(data));
     }
@@ -180,7 +180,7 @@ function Discover(props) {
                     />
                 </form>
 
-                <Filters sliderValueChanged={sliderValueChanged} />
+                {type == 'location' ? null : <Filters sliderValueChanged={sliderValueChanged} />}
                 {userSearched ? createTracks() : null}
 
             </div>
