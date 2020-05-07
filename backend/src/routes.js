@@ -154,7 +154,6 @@ app.post('/trackMoods', async (req, res) => {
     const limit = "50";
     const allMonthlyTracks = await logic.getTrack(userToken, timeRange, limit);
     const trackIDs = allMonthlyTracks.map(data => data.id);
-    //console.log(trackIDs);
     const allTrackMoods = await Promise.all(trackIDs.map(async (data) => await logic.getTrackMood(data, userToken)));
     res.send(allTrackMoods);
 })

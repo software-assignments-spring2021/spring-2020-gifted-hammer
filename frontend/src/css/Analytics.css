@@ -94,3 +94,15 @@
     justify-content: center;
     align-items: center;
 }
+#happyLabel{
+    position: relative;
+    bottom : 60px;
+    left: 52px;
+    color: rgb(114, 123, 228);
+}
+#sadLabel{
+    position: relative;
+    top : 40px;
+    left: 68px;
+    color: rgb(114, 123, 228);
+}

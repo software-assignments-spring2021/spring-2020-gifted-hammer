@@ -121,6 +121,10 @@ let Analytics = (props) => {
             <div className='section'>
                 <SectionHeading name='Moods of Your Top Songs'></SectionHeading>
                 <div className='moodChart'>
+                    <div id = "label">
+                        <p id="happyLabel">Happy</p>
+                        <p id="sadLabel">Sad</p>
+                    </div>
                     <MoodChart data={trackMoods}></MoodChart>
                 </div>
             </div>
@@ -209,7 +213,6 @@ let Song = (props) => {
     )
 }
 let MoodChart = (props) => {
-    // console.log(props)
     const data= [];
     for (let i = 0; i< props["data"].length; i++){
         const dataval = {};
@@ -228,7 +231,7 @@ let MoodChart = (props) => {
             }}
         >
         <XAxis dataKey="name" tick={false}/>
-        <YAxis />
+        <YAxis tick={false}/>
         <Tooltip/>
         <Bar dataKey="moodScore" fill="#8884d8" />
         </BarChart>
@@ -266,6 +269,9 @@ let MoodChart2 = (props) => {
 let GenereChart = (props) => {
     const data01 = [];
     for (let i = 0; i< props["data"].length; i++){
+        if(i>10){
+            break;
+        }
         const dataval = {};
         dataval.name = props["data"][i].name;
         dataval.value = props["data"][i].value;
