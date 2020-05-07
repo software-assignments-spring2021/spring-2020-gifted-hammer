@@ -57,12 +57,12 @@ function Filters(props) {
         return (
             <div className={visible ? 'filterSliders visible' : 'filterSliders'}>
                 <div class="labels">
-                    <p class="low">low</p>
-                    <div class="range-container">
-                        <span class="left-arrow"></span>
-                        <span class="right-arrow"></span>
+                    <p className="low">low</p>
+                    <div className="range-container">
+                        <span claclassNamess="left-arrow"></span>
+                        <span className="right-arrow"></span>
                     </div>
-                    <p class="high">high</p>
+                    <p className="high">high</p>
                 </div>
                 {
                     filterNames.map((filter, index) => (

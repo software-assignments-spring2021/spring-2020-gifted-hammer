@@ -140,6 +140,7 @@ exports.getLocationID = async (locationString) => {
 }
 exports.getArtistInfo = async (artist, token) => {
     let artist_string = replaceAll(artist, ' ', '%20')
+    artist_string = encodeURI(artist_string)
     let artistQuery = `https://api.spotify.com/v1/search?q=${artist_string}&type=artist`
     let artistObj = {}
     let headers = {
