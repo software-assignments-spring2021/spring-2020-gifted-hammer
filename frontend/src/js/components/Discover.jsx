@@ -8,7 +8,7 @@ import SearchType from "./SearchType";
 
 function Discover(props) {
     const [userSearched, setUserSearched] = useState(false);
-    const [textValue, setTextValue] = useState('Search Artist or Track');
+    const [textValue, setTextValue] = useState('Search an Artist');
     const [tracks, setTracks] = useState([]);
     const [selectedTrack, setSelectedTrack] = useState(-1);
     const [audioPlayer] = useState(new Audio());
@@ -175,7 +175,7 @@ function Discover(props) {
                     <Input
                         inputType={"text"}
                         title={"Find New Music:"}
-                        placeholder={type == 'location' ? 'Enter City Name' : 'Enter Song Name or Track Name'}
+                        placeholder={type == 'location' ? 'Enter US City Name' : 'Enter Artist Name'}
                         handleChange={handleChange}
                     />
                 </form>

@@ -30,13 +30,13 @@ function Filters(props) {
             method: 'POST',
             body: formData
         }
-        fetch(process.env.REACT_APP_SERVER+'/face', requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            const emotion = data.emotion.toLowerCase();
-            setIsLoading(false);
-            setSliderValues(EmotionFilters[emotion]);
-        });
+        // fetch(process.env.REACT_APP_SERVER+'/face', requestOptions)
+        // .then(response => response.json())
+        // .then(data => {
+        //     const emotion = data.emotion.toLowerCase();
+        //     setIsLoading(false);
+        //     setSliderValues(EmotionFilters[emotion]);
+        // });
         
         setIsLoading(true);
 
@@ -56,6 +56,14 @@ function Filters(props) {
         
         return (
             <div className={visible ? 'filterSliders visible' : 'filterSliders'}>
+                <div class="labels">
+                    <p className="low">low</p>
+                    <div className="range-container">
+                        <span className="left-arrow"></span>
+                        <span className="right-arrow"></span>
+                    </div>
+                    <p className="high">high</p>
+                </div>
                 {
                     filterNames.map((filter, index) => (
                         <div className="filterSliderPair" key={filter}>
@@ -83,13 +91,6 @@ function Filters(props) {
         <div className={visible ? 'Filters visible' : 'Filters'}>
             <img className='filterButton' src={filterButton} onClick={e => setVisible(!visible)} alt='filter-sliders'/>
             {createSliders()}
-            <form onSubmit={handleSubmit} className='imageForm'>
-                select photo for mood detection<input onChange={handleImageUpload} name='face' className='fileChooser' type="file" capture="camera"></input>
-                <input type='submit' value='Upload' ></input>
-                <div className='loadingContainer'>
-                    {isLoading ? <img className='loadingImage' src={loadingImage} alt='loading'/> : null}
-                </div>
-            </form>
         </div>
     )
 }
