@@ -2,7 +2,7 @@
 import React from 'react';
 import '../../css/Analytics.css'
 import {
-   XAxis, YAxis, Tooltip, Legend, PieChart, Pie, BarChart, Bar, Cell, CartesianGrid
+    XAxis, YAxis, Tooltip, Legend, PieChart, Pie, BarChart, Bar, Cell, CartesianGrid
 } from 'recharts';
 import { useState, useEffect } from 'react';
 let Analytics = (props) => {
@@ -30,57 +30,57 @@ let Analytics = (props) => {
         };
 
         // console.log((await fetch('/topSong', requestOptions)).json());
-        fetch(process.env.REACT_APP_SERVER+'/topSong', requestOptions)
-        .then(response => response.json())
-        .then(data => formatTopSong(data));
+        fetch(process.env.REACT_APP_SERVER + '/topSong', requestOptions)
+            .then(response => response.json())
+            .then(data => formatTopSong(data));
 
-        fetch(process.env.REACT_APP_SERVER+'/topGenres', requestOptions)
-        .then(response => response.json())
-        .then(data => formatMonthlyGenre(data));
+        fetch(process.env.REACT_APP_SERVER + '/topGenres', requestOptions)
+            .then(response => response.json())
+            .then(data => formatMonthlyGenre(data));
 
-        fetch(process.env.REACT_APP_SERVER+'/genreBreakdown', requestOptions)
-        .then(response => response.json())
-        .then(data => setGenreBreakdown(data));
+        fetch(process.env.REACT_APP_SERVER + '/genreBreakdown', requestOptions)
+            .then(response => response.json())
+            .then(data => setGenreBreakdown(data));
 
-        fetch(process.env.REACT_APP_SERVER+'/trackMoods', requestOptions)
-        .then(response => response.json())
-        .then(data => setTrackMoods(data));
+        fetch(process.env.REACT_APP_SERVER + '/trackMoods', requestOptions)
+            .then(response => response.json())
+            .then(data => setTrackMoods(data));
 
-        fetch(process.env.REACT_APP_SERVER+'/areaSearch', requestOptions)
-        .then(response => response.json())
-        .then(data => setTopArtistsInArea(data));
+        fetch(process.env.REACT_APP_SERVER + '/areaSearch', requestOptions)
+            .then(response => response.json())
+            .then(data => setTopArtistsInArea(data));
 
-        fetch(process.env.REACT_APP_SERVER+'/yourMood', requestOptions)
-        .then(response => response.json())
-        .then(data => setYourMoods(data));
+        fetch(process.env.REACT_APP_SERVER + '/yourMood', requestOptions)
+            .then(response => response.json())
+            .then(data => setYourMoods(data));
 
-        fetch(process.env.REACT_APP_SERVER+'/yourTopSongs', requestOptions)
-        .then(response => response.json())
-        .then(data => setYourTopSongs(data));
+        fetch(process.env.REACT_APP_SERVER + '/yourTopSongs', requestOptions)
+            .then(response => response.json())
+            .then(data => setYourTopSongs(data));
     }
-        
 
-        const formatTopSong = data => {
-            let topSong = {};
-            topSong.name = data[0].name;
-            topSong.artist = data[0].artists[0].name;
-            topSong.image = data[0].album.images[0].url;
-            setTopSongData(topSong);
-        }
 
-        const formatMonthlyGenre = data => {
-            let topGenre = {};
-            topGenre.firstName = data[0].genre;
-            const random1 = Math.floor((Math.random() * data[0].image.length-1) + 1);
-            topGenre.firstImage = data[0].image[random1];
-            topGenre.secondName = data[1].genre;
-            const random2 = Math.floor((Math.random() * data[1].image.length-1) + 1);
-            topGenre.secondImage = data[1].image[random2];
-            topGenre.thirdName = data[2].genre;
-            const random3 = Math.floor((Math.random() * data[2].image.length-1) + 1);
-            topGenre.thirdImage = data[2].image[random3];
-            setTopGenres(topGenre);
-        }
+    const formatTopSong = data => {
+        let topSong = {};
+        topSong.name = data[0].name;
+        topSong.artist = data[0].artists[0].name;
+        topSong.image = data[0].album.images[0].url;
+        setTopSongData(topSong);
+    }
+
+    const formatMonthlyGenre = data => {
+        let topGenre = {};
+        topGenre.firstName = data[0].genre;
+        const random1 = Math.floor((Math.random() * data[0].image.length - 1) + 1);
+        topGenre.firstImage = data[0].image[random1];
+        topGenre.secondName = data[1].genre;
+        const random2 = Math.floor((Math.random() * data[1].image.length - 1) + 1);
+        topGenre.secondImage = data[1].image[random2];
+        topGenre.thirdName = data[2].genre;
+        const random3 = Math.floor((Math.random() * data[2].image.length - 1) + 1);
+        topGenre.thirdImage = data[2].image[random3];
+        setTopGenres(topGenre);
+    }
 
     useEffect(() => {
         fetchData();
@@ -103,9 +103,9 @@ let Analytics = (props) => {
             <div className='section'>
                 <SectionHeading name="This Month's Top 3 Genres"></SectionHeading>
                 <div className='genres'>
-                    <Genere name={topGenres.firstName} image ={topGenres.firstImage}></Genere>
-                    <Genere name={topGenres.secondName} image ={topGenres.secondImage}></Genere>
-                    <Genere name={topGenres.thirdName} image ={topGenres.thirdImage}></Genere>
+                    <Genere name={topGenres.firstName} image={topGenres.firstImage}></Genere>
+                    <Genere name={topGenres.secondName} image={topGenres.secondImage}></Genere>
+                    <Genere name={topGenres.thirdName} image={topGenres.thirdImage}></Genere>
                 </div>
             </div>
             <div className='section'>
@@ -121,7 +121,7 @@ let Analytics = (props) => {
             <div className='section'>
                 <SectionHeading name='Moods of Your Top Songs'></SectionHeading>
                 <div className='moodChart'>
-                    <div id = "label">
+                    <div id="label">
                         <p id="happyLabel">Happy</p>
                         <p id="sadLabel">Sad</p>
                     </div>
@@ -151,11 +151,11 @@ let Analytics = (props) => {
                 <SectionHeading name="Past Top Songs"></SectionHeading>
                 <div className='songs'>
                     {!yourTopSongs.songs ? null :
-                    <>
-                        <Song name={yourTopSongs.songs[0][0]} image = {yourTopSongs.songs[0][1]} time="Past 1 Month"></Song>
-                        <Song name={yourTopSongs.songs[1][0]} image = {yourTopSongs.songs[1][1]} time="Past 6 Months"></Song>
-                        <Song name={yourTopSongs.songs[2][0]} image = {yourTopSongs.songs[2][1]} time="Past 2 Years"></Song>
-                    </>
+                        <>
+                            <Song name={yourTopSongs.songs[0][0]} image={yourTopSongs.songs[0][1]} time="Past 1 Month"></Song>
+                            <Song name={yourTopSongs.songs[1][0]} image={yourTopSongs.songs[1][1]} time="Past 6 Months"></Song>
+                            <Song name={yourTopSongs.songs[2][0]} image={yourTopSongs.songs[2][1]} time="Past 2 Years"></Song>
+                        </>
                     }
                 </div>
             </div>
@@ -213,8 +213,8 @@ let Song = (props) => {
     )
 }
 let MoodChart = (props) => {
-    const data= [];
-    for (let i = 0; i< props["data"].length; i++){
+    const data = [];
+    for (let i = 0; i < props["data"].length; i++) {
         const dataval = {};
         dataval.moodScore = props["data"][i]["valence"];
         dataval.name = props["data"][i]["id"];
@@ -230,21 +230,21 @@ let MoodChart = (props) => {
                 top: 10, right: 10, left: 0, bottom: 5,
             }}
         >
-        <XAxis dataKey="name" tick={false}/>
-        <YAxis tick={false}/>
-        <Tooltip/>
-        <Bar dataKey="moodScore" fill="#8884d8" />
+            <XAxis dataKey="name" tick={false} />
+            <YAxis tick={false} />
+            <Tooltip label='cum' />
+            <Bar dataKey="moodScore" fill="#8884d8" />
         </BarChart>
     )
 }
 
 let MoodChart2 = (props) => {
     // console.log(props)
-    const data= [];
-    if(props.data.length === 0){
+    const data = [];
+    if (props.data.length === 0) {
         return null
     }
-    for (let i = 0; i< props.data[0].moods.length; i++){
+    for (let i = 0; i < props.data[0].moods.length; i++) {
         const dataval = {};
         dataval.moodScore = props.data[0].moods[i];
         dataval.name = i;
@@ -259,17 +259,17 @@ let MoodChart2 = (props) => {
                 top: 10, right: 10, left: 0, bottom: 5,
             }}
         >
-        <XAxis dataKey="name" tick={false}/>
-        <YAxis />
-        <Tooltip/>
-        <Bar dataKey="moodScore" fill="#8884d8" />
+            <XAxis dataKey="name" tick={false} />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="moodScore" fill="#8884d8" />
         </BarChart>
     )
 }
 let GenereChart = (props) => {
     const data01 = [];
-    for (let i = 0; i< props["data"].length; i++){
-        if(i>10){
+    for (let i = 0; i < props["data"].length; i++) {
+        if (i > 10) {
             break;
         }
         const dataval = {};
