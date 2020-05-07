@@ -8,7 +8,7 @@ import SearchType from "./SearchType";
 
 function Discover(props) {
     const [userSearched, setUserSearched] = useState(false);
-    const [textValue, setTextValue] = useState('Search Artist or Track');
+    const [textValue, setTextValue] = useState('Search an Artist');
     const [tracks, setTracks] = useState([]);
     const [selectedTrack, setSelectedTrack] = useState(-1);
     const [audioPlayer] = useState(new Audio());
