@@ -48,12 +48,12 @@ exports.getArtistId = (token, name) => {
 exports.getUserId = (token) => {
     return new Promise(resolve => {
         let search = config.spotify.userIdEnpoint
-        https.get(search, {headers : { Authorization: 'Bearer ' + token } }, res => {
+        https.get(search, { headers: { Authorization: 'Bearer ' + token } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
             res.on('end', () => {
-                try{
+                try {
                     const parsedData = JSON.parse(rawData);
                     const id = parsedData.id;
                     resolve(id);
@@ -106,7 +106,7 @@ exports.processFace = (path) => {
     return new Promise(resolve => {
         var spawn = require("child_process").spawn;
         var process = spawn('python', ["./python/face-analysis.py",
-             path]);
+            path]);
         process.stdout.on('data', function (data) {
 
             resolve({ emotion: data.toString().trim() });
@@ -217,10 +217,15 @@ exports.getTracks = async (artistObj, token) => {
                 let resp = await got(trackQuery, { headers: headers })
                 let result = JSON.parse(resp.body)
                 let tracks = []
+                let randTrack = Math.floor(Math.random() * (result.tracks).length);
+                let track = result.tracks[randTrack]
+                let trackObj = { name: track['name'], artist: track['album']['artists'][0]['name'], album: track['album']['name'], art: track['album']['images'][0]['url'], duration: track['duration_ms'], popularity: track['popularity'], audio: track['preview_url'] }
+                tracks.push(trackObj)
+                /*
                 for (let track of result.tracks) {
-                    let trackObj = { name: track['name'], artist: track['album']['artists'][0]['name'], album: track['album']['name'], art: track['album']['images'][0]['url'], duration: track['duration_ms'], popularity: track['popularity'], audio: ['preview_url'] }
-                    tracks.push(trackObj)
+                    let trackObj = { name: track['name'], artist: track['album']['artists'][0]['name'], album: track['album']['name'], art: track['album']['images'][0]['url'], duration: track['duration_ms'], popularity: track['popularity'], audio: track['preview_url'] }
                 }
+                */
                 obj['tracks'] = tracks
             }
             catch (error) { console.log(error) }
@@ -364,7 +369,7 @@ exports.getTrackAverageMood = (trackID, userToken) => {
     return new Promise(resolve => {
         trackID = trackID.replace(/,/g, '%2C');
         let search = config.spotify.trackFeaturesEndPoint + 'ids=' + trackID;
-        https.get(search,{ headers: {Authorization: 'Bearer ' + userToken}}, res => {
+        https.get(search, { headers: { Authorization: 'Bearer ' + userToken } }, res => {
             res.setEncoding('utf8');
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
@@ -373,11 +378,11 @@ exports.getTrackAverageMood = (trackID, userToken) => {
                     let moodSum = 0;
                     let count = 0;
                     const parsedData = JSON.parse(rawData);
-                    for(let i =0; i<parsedData.audio_features.length; i++){
+                    for (let i = 0; i < parsedData.audio_features.length; i++) {
                         moodSum += parsedData.audio_features[i].valence;
                         count++;
                     }
-                    let averageMood = moodSum/count;
+                    let averageMood = moodSum / count;
                     resolve(averageMood);
                 } catch (e) {
                     console.error(e.message);
@@ -401,7 +406,7 @@ exports.uploadTracks = (locationCode, events) => {
 }
 exports.findTracks = async (locationCode) => {
     let res = await Tracks.find({ "locationCode": locationCode })
-    
+
     return res[0]
 }
 
@@ -409,16 +414,16 @@ exports.findTracks = async (locationCode) => {
 exports.updateMoods = async (userId, moodInput) => {
     let res = await this.findMoods(userId)
     console.log(res)
-    if (!res[0]){
-        const moods = new Moods({ userId: userId, moods: moodInput})
+    if (!res[0]) {
+        const moods = new Moods({ userId: userId, moods: moodInput })
         let res2 = await moods.save()
         console.log("new mood was saved " + res2)
         return res2
-    } else{
+    } else {
         let pastMoods = res[0]["moods"]
         pastMoods.push(moodInput)
         console.log(pastMoods)
-        let update = await Moods.findOneAndUpdate( { userId: userId } , {moods: pastMoods}, {new: true})
+        let update = await Moods.findOneAndUpdate({ userId: userId }, { moods: pastMoods }, { new: true })
         return update
     }
 
@@ -433,8 +438,8 @@ exports.findMoods = async (userId) => {
 // Analytics - Top Song
 exports.uploadTopSong = async (userId, topSongInput) => {
     let res = await this.findTopSong(userId)
-    if(!res) {
-        const topSong = new TopSong({userId: userId, songs: topSongInput})
+    if (!res) {
+        const topSong = new TopSong({ userId: userId, songs: topSongInput })
         let res2 = await topSong.save();
         console.log("top song saved " + res2)
         return res2
