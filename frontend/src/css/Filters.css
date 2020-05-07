@@ -23,7 +23,7 @@
 .filterSliders.visible {
     visibility: visible;
     width: 85vw;
-    height: 55vh;
+    height: 58vh;
     transition: height 0.2s linear;
 }
 

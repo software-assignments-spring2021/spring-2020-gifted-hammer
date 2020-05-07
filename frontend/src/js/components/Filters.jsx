@@ -59,7 +59,7 @@ function Filters(props) {
                 <div class="labels">
                     <p className="low">low</p>
                     <div className="range-container">
-                        <span claclassNamess="left-arrow"></span>
+                        <span className="left-arrow"></span>
                         <span className="right-arrow"></span>
                     </div>
                     <p className="high">high</p>
