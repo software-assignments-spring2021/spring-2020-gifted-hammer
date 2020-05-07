@@ -8,7 +8,7 @@ import SearchType from "./SearchType";
 
 function Discover(props) {
     const [userSearched, setUserSearched] = useState(false);
-    const [textValue, setTextValue] = useState('Search Artist or Track');
+    const [textValue, setTextValue] = useState('Search an Artist');
     const [tracks, setTracks] = useState([]);
     const [selectedTrack, setSelectedTrack] = useState(-1);
     const [audioPlayer] = useState(new Audio());
@@ -51,7 +51,7 @@ function Discover(props) {
             body: JSON.stringify(data)
         };
 
-        fetch(process.env.REACT_APP_SERVER+'/nearby', requestOptions)
+        fetch(process.env.REACT_APP_SERVER + '/nearby', requestOptions)
             .then(response => response.json())
             .then(data => processData(data));
     }
@@ -71,7 +71,7 @@ function Discover(props) {
             body: JSON.stringify(data)
         };
 
-        fetch(process.env.REACT_APP_SERVER+'/search', requestOptions)
+        fetch(process.env.REACT_APP_SERVER + '/search', requestOptions)
             .then(response => response.json())
             .then(data => processData(data));
     }
@@ -175,12 +175,12 @@ function Discover(props) {
                     <Input
                         inputType={"text"}
                         title={"Find New Music:"}
-                        placeholder={type == 'location' ? 'Enter City Name' : 'Enter Song Name or Track Name'}
+                        placeholder={type == 'location' ? 'Enter US City Name' : 'Enter Artist Name'}
                         handleChange={handleChange}
                     />
                 </form>
 
-                <Filters sliderValueChanged={sliderValueChanged} />
+                {type == 'location' ? null : <Filters sliderValueChanged={sliderValueChanged} />}
                 {userSearched ? createTracks() : null}
 
             </div>
