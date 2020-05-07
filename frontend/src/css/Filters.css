@@ -5,8 +5,8 @@
     width: 85%;
     margin: auto;
     padding: 10px;
-    margin-top: 10vh;
     border-radius: 5px;
+    margin-top: 20px;
 }
 
 .Filters.visible {
@@ -23,7 +23,7 @@
 .filterSliders.visible {
     visibility: visible;
     width: 85vw;
-    height: 50vh;
+    height: 55vh;
     transition: height 0.2s linear;
 }
 
