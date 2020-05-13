@@ -42,7 +42,6 @@ exports.getArtistId = (token, name) => {
             console.error(`Got error: ${e.message}`);
         });
     })
-
 }
 
 exports.getUserId = (token) => {
@@ -120,6 +119,8 @@ exports.processFace = (path) => {
 
     })
 }
+
+
 exports.getLocationID = async (locationString) => {
     locationString = replaceAll(locationString, " ", "_")
     locationIDQuery = `https://api.songkick.com/api/3.0/search/locations.json?query=${locationString}&apikey=${config.songKick.apiKey}`
@@ -204,6 +205,12 @@ exports.getNearbyArtists = async (locationObj, token) => {
     }
     catch (error) { console.log(error) }
 }
+
+// exports.getCurrentlyPlaying( {
+    
+// })
+
+
 
 exports.getTracks = async (artistObj, token) => {
     let headers = {
@@ -394,9 +401,6 @@ exports.getTrackAverageMood = (trackID, userToken) => {
         });
     })
 }
-
-
-
 
 //DATABASE 
 // Discovery - Location

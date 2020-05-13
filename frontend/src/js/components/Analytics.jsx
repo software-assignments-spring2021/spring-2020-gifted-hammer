@@ -18,7 +18,7 @@ let Analytics = (props) => {
 
     const [hasError, setErrors] = useState(false);
     async function fetchData() {
-        // console.log(accessToken);
+        console.log(accessToken);
 
         const requestOptions = {
             method: 'POST',

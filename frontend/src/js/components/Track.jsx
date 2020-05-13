@@ -21,8 +21,10 @@ function Track(props) {
                         <p className="length">{props.duration}</p>
                     </div>
                 </div>
+                
             </div>
-        </>)
+        </>
+        )
 }
 
 export default Track;

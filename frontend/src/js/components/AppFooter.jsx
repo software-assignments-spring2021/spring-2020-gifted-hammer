@@ -11,6 +11,9 @@ const AppFooter = (props) => {
         <div className="AppFooter">
             <Link className="footerLink" to='/discover'><img className="footerImage" src={discoverImage} alt='magnifying class'/></Link>
             <Link className="footerLink" to='/analytics'><img className="footerImage" src={analyticsImage} alt='graph'/></Link>
+            <div className="Player">
+                
+            </div>
         </div>
     )
 }

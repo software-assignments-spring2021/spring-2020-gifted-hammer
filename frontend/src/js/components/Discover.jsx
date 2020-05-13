@@ -180,11 +180,13 @@ function Discover(props) {
                     />
                 </form>
 
-                {type == 'location' ? null : <Filters sliderValueChanged={sliderValueChanged} />}
-                {userSearched ? createTracks() : null}
-
             </div>
+    <div className="filters">
+        {type == 'location' ? null : <Filters sliderValueChanged={sliderValueChanged} />}
+        {userSearched ? createTracks() : null}
+    </div>
         </div>
+
     )
 }
 

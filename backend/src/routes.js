@@ -23,6 +23,10 @@ app.get('/token', async (req, res) => {
     res.send(token);
 });
 
+app.get('/', async (req, res) => {
+    
+})
+
 //RECOMMENDATIONS
 app.post("/search", [check('location.state').isLength({min: 2})], async (req, res) => {
     const errors = validationResult(req);

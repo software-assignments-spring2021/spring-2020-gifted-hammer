@@ -4,8 +4,10 @@ import Discover from './Discover.jsx'
 import Analytics from './Analytics.jsx'
 import AppHeader from './AppHeader.jsx'
 import AppFooter from './AppFooter.jsx'
+import Current from './Current.jsx'
 import hash from '../util/hash'
 import { geolocated } from "react-geolocated";
+
 
 import {
   BrowserRouter as Router,
@@ -21,9 +23,9 @@ function App(props) {
   const [token, setToken] = useState(null);
   const [accessToken, setAccessToken] = useState(null)
   const [location, setLocation] = useState({city: '', state: 'null'})
+  const [currentlyPlaying, setCurrentlyPlaying] = useState();
   
-  useEffect(() => {
-    
+  useEffect(() => { 
     fetch(process.env.REACT_APP_SERVER+'/token')
       .then(response => response.json())
       .then(data => setToken(data.token));
@@ -44,6 +46,12 @@ function App(props) {
       setLocation({city: location.city, state: location.state_abbr})
     }
   }, [props.coords, location.city])
+
+  // useEffect(() => {
+  //   fetch("https://api.spotify.com/v1/me/player")
+  //     .then(response => response.json())
+  //     .then(data => setCurrentlyPlaying({item:data.item, is_playing: data.is_playing, progress_ms: data.progress_ms}));
+  // })
 
   return (
     <Router>

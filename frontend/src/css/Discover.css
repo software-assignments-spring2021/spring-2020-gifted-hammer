@@ -11,9 +11,8 @@
 }
 
 .discoverBody{
-    height: 50%;
-    display: flex;
-    flex-direction: column;
+    height: 20%;
+    position: relative;
 }
 
 .AppHeader{
@@ -51,4 +50,8 @@
 
 .tracks:last-child{
     margin-bottom: 15vh;
+}
+
+.filters {
+    position: relative;
 }
