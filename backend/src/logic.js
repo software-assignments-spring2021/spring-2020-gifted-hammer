@@ -418,16 +418,16 @@ exports.findTracks = async (locationCode) => {
 // Analytics - Mood
 exports.updateMoods = async (userId, moodInput) => {
     let res = await this.findMoods(userId)
-    console.log(res)
+    // console.log(res)
     if (!res[0]) {
         const moods = new Moods({ userId: userId, moods: moodInput })
         let res2 = await moods.save()
-        console.log("new mood was saved " + res2)
+        // console.log("new mood was saved " + res2)
         return res2
     } else {
         let pastMoods = res[0]["moods"]
         pastMoods.push(moodInput)
-        console.log(pastMoods)
+        // console.log(pastMoods)
         let update = await Moods.findOneAndUpdate({ userId: userId }, { moods: pastMoods }, { new: true })
         return update
     }

@@ -52,7 +52,7 @@ function Filters(props) {
     }
 
     let createSliders = () => {
-        console.log(sliderValues);
+        // console.log(sliderValues);
         
         return (
             <div className={visible ? 'filterSliders visible' : 'filterSliders'}>
@@ -70,7 +70,7 @@ function Filters(props) {
                            
                             <p>{filterNames[index]}</p>
                             <input className="filterSlider"
-                                id={filter}
+                                id = {filter}
                                 onChange={handleChange}
                                 onMouseUp={props.sliderValueChanged}
                                 onTouchEnd={props.sliderValueChanged}

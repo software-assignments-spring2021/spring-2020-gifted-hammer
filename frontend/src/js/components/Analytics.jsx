@@ -2,7 +2,11 @@
 import React from 'react';
 import '../../css/Analytics.css'
 import {
+<<<<<<< Updated upstream
    XAxis, YAxis, Tooltip, Legend, PieChart, Pie, BarChart, Bar, Cell, CartesianGrid
+=======
+    XAxis, YAxis, Tooltip, Legend, PieChart, Pie, BarChart, Bar, Cell, CartesianGrid, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
+>>>>>>> Stashed changes
 } from 'recharts';
 import { useState, useEffect } from 'react';
 let Analytics = (props) => {
@@ -101,6 +105,7 @@ let Analytics = (props) => {
                 </div>
             </div> */}
             <div className='section'>
+<<<<<<< Updated upstream
                 <SectionHeading name="This Month's Top 3 Genres"></SectionHeading>
                 <div className='genres'>
                     <Genere name={topGenres.firstName} image ={topGenres.firstImage}></Genere>
@@ -109,6 +114,8 @@ let Analytics = (props) => {
                 </div>
             </div>
             <div className='section'>
+=======
+>>>>>>> Stashed changes
                 <SectionHeading name='Top Song'></SectionHeading>
                 <div className='topSong'>
                     <div className="topSongOne">
@@ -116,6 +123,14 @@ let Analytics = (props) => {
                         {/* <p>You listened 500 times!</p> */}
                     </div>
                     <img className="topImg" src={topSongData.image} alt="album art"></img>
+                </div>
+            </div>
+            <div className='section'>
+                <SectionHeading name="This Month's Top 3 Genres"></SectionHeading>
+                <div className='genres'>
+                    <Genere name={topGenres.firstName} image={topGenres.firstImage}></Genere>
+                    <Genere name={topGenres.secondName} image={topGenres.secondImage}></Genere>
+                    <Genere name={topGenres.thirdName} image={topGenres.thirdImage}></Genere>
                 </div>
             </div>
             <div className='section'>
@@ -142,7 +157,7 @@ let Analytics = (props) => {
 
             <div className='section'>
                 <SectionHeading name='Average Mood of Songs'></SectionHeading>
-                <div className='moodChart'>
+                <div className='moodChart2'>
                     <MoodChart2 data={yourMoods}></MoodChart2>
                 </div>
             </div>
@@ -212,36 +227,50 @@ let Song = (props) => {
         </div>
     )
 }
+
 let MoodChart = (props) => {
     const data= [];
     for (let i = 0; i< props["data"].length; i++){
         const dataval = {};
-        dataval.moodScore = props["data"][i]["valence"];
         dataval.name = props["data"][i]["id"];
+        dataval.moodScore = props["data"][i]["valence"];
         data.push(dataval);
     }
 
     return (
         <BarChart
             width={800}
-            height={200}
+            height={300}
             data={data}
             margin={{
-                top: 10, right: 10, left: 0, bottom: 5,
+                top: 10, right: 30, left: 20, bottom: 5,
             }}
         >
+<<<<<<< Updated upstream
         <XAxis dataKey="name" tick={false}/>
         <YAxis tick={false}/>
         <Tooltip/>
         <Bar dataKey="moodScore" fill="#8884d8" />
+=======
+            <XAxis dataKey="name" tick={false} />
+            <YAxis tick={false} />
+            <Tooltip label='cum'/>
+            <Bar dataKey="moodScore" fill="#8884d8"/>
+>>>>>>> Stashed changes
         </BarChart>
     )
 }
 
 let MoodChart2 = (props) => {
+<<<<<<< Updated upstream
     // console.log(props)
     const data= [];
     if(props.data.length === 0){
+=======
+    console.log(props)
+    const data = [];
+    if (props.data.length === 0) {
+>>>>>>> Stashed changes
         return null
     }
     for (let i = 0; i< props.data[0].moods.length; i++){
@@ -266,7 +295,9 @@ let MoodChart2 = (props) => {
         </BarChart>
     )
 }
-let GenereChart = (props) => {
+
+// pie chart
+let GenereChart1 = (props) => {
     const data01 = [];
     for (let i = 0; i< props["data"].length; i++){
         if(i>10){
@@ -289,6 +320,29 @@ let GenereChart = (props) => {
         </PieChart>
     )
 
+}
+
+// radar chart
+let GenereChart = (props) => {
+    const data = [];
+    for (let i = 0; i < props["data"].length; i++) {
+        if (i > 10) {
+            break;
+        }
+        const dataval = {};
+        dataval.name = props["data"][i].name;
+        dataval.value =  props["data"][i].value;
+        data.push(dataval);
+    }
+
+    return (
+        <RadarChart cx={300} xy = {250} outerRadius={150} width={600} height={500} data={data}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="name" />
+            <PolarRadiusAxis angle={50}/>
+            <Radar name="genre" stroke="#8884d8" fill="#8884d8" dataKey="value"/>
+        </RadarChart>
+    )
 }
 
 export default Analytics

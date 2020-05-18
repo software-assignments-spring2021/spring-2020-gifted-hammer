@@ -55,15 +55,15 @@ const updateSearch = async (city, state, artist) => {
     let location = await Locations.findOne({city, state})
     
     if (location) {
-        console.log(location);
+        // console.log(location);
         
         let found = false
         for (let i = 0; i < location.artists.length; i++) {
             if (location.artists[i].name === artist) {
-                console.log('FOUND ARTIST');
+                // console.log('FOUND ARTIST');
                 
                 location.artists[i].count++   
-                console.log(location.artists[i]);   
+                // console.log(location.artists[i]);   
                 found = true
                 location.markModified('artists');
 
@@ -72,7 +72,7 @@ const updateSearch = async (city, state, artist) => {
             }
         }
         if (!found) {
-            console.log("No artist founding, adding");
+            // console.log("No artist founding, adding");
             
             location.artists.push(new Artist({
                 name: artist.toLowerCase(),
@@ -83,11 +83,11 @@ const updateSearch = async (city, state, artist) => {
         }
 
         
-        console.log('updated location');
+        // console.log('updated location');
         
     }
     else {
-        console.log('added location');
+        // console.log('added location');
         
         const newLocation = new Locations({
             city,

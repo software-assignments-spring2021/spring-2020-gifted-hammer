@@ -48,20 +48,20 @@ app.post('/nearby', async (req, res) => {
         let locationId = ((JSON.parse(locationResp)).id).toString()
         let cachedResults = await logic.findTracks(locationId)
         if (cachedResults) {
-            console.log('cache hit!')
+            // console.log('cache hit!')
             res.send(cachedResults)
         }
         else {
-            console.log('cache miss')
+            // console.log('cache miss')
             let artistsResp = await logic.getNearbyArtists(locationResp, req.body.token)
             let tracksResp = await logic.getTracks(artistsResp, req.body.token)
             try {
                 let upload = await logic.uploadTracks(locationId, tracksResp.events)
-                console.log('upload success')
+                // console.log('upload success')
                 res.send(tracksResp)
             }
             catch{
-                console.log('upload failed')
+                // console.log('upload failed')
                 res.send(undefined)
             }
         }
@@ -187,12 +187,12 @@ app.post('/yourMood', async (req, res) => {
         let cachedResults = await logic.findMoods(userId).catch(err=>console.log(err))
         
         if (cachedResults) {
-            console.log('cache hit in mood!')
-            console.log(cachedResults)
+            // console.log('cache hit in mood!')
+            // console.log(cachedResults)
             res.send(cachedResults)
         }
         else {
-            console.log('cache miss')
+            // console.log('cache miss')
             res.send("oh")
         }
     }
@@ -214,12 +214,12 @@ app.post('/yourTopSongs', async (req, res) => {
         let cachedResults = await logic.findTopSong(userId)
 
         if (cachedResults) {
-            console.log('cache hit!')
-            console.log(cachedResults)
+            // console.log('cache hit!')
+            // console.log(cachedResults)
             res.send(cachedResults)
         }
         else {
-            console.log('cache miss')
+            // console.log('cache miss')
             res.send("oh")
         }
     }
